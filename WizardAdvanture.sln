@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WizardAdvanture", "WizardAd
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wizard2", "Wizard2\Wizard2.csproj", "{99FAFFDB-A1E5-474C-968B-931F14FE3BFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Destroy", "Destroy\Destroy\Destroy.csproj", "{29678C39-7511-4CE8-925F-08E663872CDA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{99FAFFDB-A1E5-474C-968B-931F14FE3BFF}.Release|x64.Build.0 = Release|Any CPU
 		{99FAFFDB-A1E5-474C-968B-931F14FE3BFF}.Release|x86.ActiveCfg = Release|Any CPU
 		{99FAFFDB-A1E5-474C-968B-931F14FE3BFF}.Release|x86.Build.0 = Release|Any CPU
+		{29678C39-7511-4CE8-925F-08E663872CDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29678C39-7511-4CE8-925F-08E663872CDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29678C39-7511-4CE8-925F-08E663872CDA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{29678C39-7511-4CE8-925F-08E663872CDA}.Debug|x64.Build.0 = Debug|Any CPU
+		{29678C39-7511-4CE8-925F-08E663872CDA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{29678C39-7511-4CE8-925F-08E663872CDA}.Debug|x86.Build.0 = Debug|Any CPU
+		{29678C39-7511-4CE8-925F-08E663872CDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29678C39-7511-4CE8-925F-08E663872CDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29678C39-7511-4CE8-925F-08E663872CDA}.Release|x64.ActiveCfg = Release|Any CPU
+		{29678C39-7511-4CE8-925F-08E663872CDA}.Release|x64.Build.0 = Release|Any CPU
+		{29678C39-7511-4CE8-925F-08E663872CDA}.Release|x86.ActiveCfg = Release|Any CPU
+		{29678C39-7511-4CE8-925F-08E663872CDA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

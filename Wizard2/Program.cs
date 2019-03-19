@@ -1,6 +1,6 @@
 ﻿using Destroy;
-using Destroy.Editor;
-using Destroy.Template;
+using Destroy.Winform;
+using Destroy.Example;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,6 @@ namespace Wizard2
             Config.TickPerSecond = 100;
             Config.ScreenWidth = 40;
             Config.ScreenHeight = 30;
-            Config.UseQueryPerformance = true;
 
             //将项目-属性-输出类型调整为windows应用程序
             //使用Winform模式开始游戏并打开Editor.
@@ -34,8 +33,7 @@ namespace Wizard2
             //ExampleScenePushBox scene = new ExampleScenePushBox("PushBox");
             GameScene scene = new GameScene("WA2Scene");
 
-            SceneSystem sceneSystem = RuntimeEngine.GetSystem<SceneSystem>();
-            sceneSystem.Load(scene, LoadSceneMode.Single);
+            SceneManager.Load(scene, LoadSceneMode.Single);
 
             Camera.Main.Position = new Vector2Int(0, 0);
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Destroy;
 namespace Wizard2
 {
+
     /// <summary>
     /// Layer划分,越上面的显示的越靠前,数字可以随意改动,但是最好使用枚举来进行数字排列避免出错
     /// </summary>
@@ -118,14 +119,14 @@ namespace Wizard2
         public MoveAera moveAera;
         public MoveRoute moveRoute;
 
-       
-
+      
         public override void Update()
         {
             if(Input.MousePosition == this.Position)
             {
-                if(Input.GetMouseButtonDown( MouseButton.Left))
+                if(Input.GetMouseButtonUp( MouseButton.Left))
                 {
+                    Debug.Log("Press");
                     moveAera.SetActive(true);
                     moveAera.ExpandAera(2);
                 }

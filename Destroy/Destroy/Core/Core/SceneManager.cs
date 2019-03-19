@@ -1,0 +1,208 @@
+﻿namespace Destroy
+{
+    using System;
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// 场景基类, 用于保存游戏物体的引用
+    /// </summary>
+    public abstract class Scene
+    {
+        /// <summary>
+        /// 场景的名字
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// 场景中的游戏对象的数量
+        /// </summary>
+        public int GameObjectCount => GameObjects.Count;
+
+        internal List<GameObject> GameObjects { get; private set; }
+
+        internal Dictionary<string, List<GameObject>> GameObjectsWithTag { get; private set; }
+
+        /// <summary>
+        /// 用类名当名字
+        /// </summary>
+        public Scene()
+        {
+            Name = GetType().Name;
+            GameObjects = new List<GameObject>();
+            GameObjectsWithTag = new Dictionary<string, List<GameObject>>();
+        }
+
+        /// <summary>
+        /// 指定名字
+        /// </summary>
+        public Scene(string name)
+        {
+            Name = name;
+            GameObjects = new List<GameObject>();
+            GameObjectsWithTag = new Dictionary<string, List<GameObject>>();
+        }
+
+        /// <summary>
+        /// 在创建的时候会进行调用
+        /// </summary>
+        public virtual void OnStart() { }
+
+        /// <summary>
+        /// 在销毁这个Scene时调用
+        /// </summary>
+        public virtual void OnDestroy() { }
+    }
+
+    /// <summary>
+    /// 这个属于默认场景,这个场景复制一份调用方法的对象,在转场的时候把自己保存的引用加入到新场景里
+    /// </summary>
+    internal class DontDestroyOnLoad : Scene
+    {
+        public override void OnStart()
+        {
+        }
+
+        public override void OnDestroy()
+        {
+        }
+    }
+
+    /// <summary>
+    /// 默认场景
+    /// </summary>
+    internal class DefaultScene : Scene
+    {
+        public override void OnStart()
+        {
+            //创建摄像机
+            GameObject camera = new GameObject("Camera", "MainCamera")
+            {
+                Position = new Vector2Int(0, 0)
+            };
+            Camera cam = camera.AddComponent<Camera>();
+        }
+
+        public override void OnDestroy() { }
+    }
+
+    /// <summary>
+    /// 场景加载模式
+    /// </summary>
+    public enum LoadSceneMode
+    {
+        /// <summary>
+        /// 创建之后只保留这个Scene 并把DontDestroyOnLoad放入这个Scene
+        /// </summary>
+        Single = 0,
+        /// <summary>
+        /// 这个Scene作为额外的Scene创建. 依然以之前场景作为主场景
+        /// </summary>
+        Additive = 1,
+    }
+
+    /// <summary>
+    /// 场景管理器
+    /// </summary>
+    public static class SceneManager
+    {
+        /// <summary>
+        /// 场景数量
+        /// </summary>
+        public static int SceneCount => Scenes.Count;
+
+        /// <summary>
+        /// 当前激活的场景,所有新创建的对象都自动属于当前激活的场景
+        /// </summary>
+        internal static Scene ActiveScene { get; set; }
+
+        /// <summary>
+        /// 字符串索引,保存着所有场景
+        /// </summary>
+        internal static Dictionary<string, Scene> Scenes { get; set; }
+
+        internal static DontDestroyOnLoad DontDestroyOnLoad { get; set; }
+
+        internal static DefaultScene DefaultScene { get; set; }
+
+
+        /// <summary>
+        /// 在初始化的时候创建两个默认的Scene. 这两个Scene永远不会被销毁
+        /// </summary>
+        public static void Init()
+        {
+            Scenes = new Dictionary<string, Scene>();
+            DontDestroyOnLoad = new DontDestroyOnLoad();
+            DefaultScene = new DefaultScene();
+            Load(DefaultScene, LoadSceneMode.Additive);
+            Scenes.Add(DontDestroyOnLoad.Name, DontDestroyOnLoad);
+            ActiveScene = DefaultScene;
+        }
+
+
+        /// <summary>
+        /// 设置某个场景为活动场景
+        /// </summary>
+        public static void SetActiveScene(Scene scene)
+        {
+            ActiveScene = scene;
+        }
+
+        /// <summary>
+        /// 通过字符串,设置某个场景为活动场景
+        /// </summary>
+        public static void SetActiveScene(string str)
+        {
+            if (Scenes.ContainsKey(str))
+                ActiveScene = Scenes[str];
+        }
+
+        /// <summary>
+        /// 加载场景
+        /// </summary>
+        public static void Load(Scene newScene, LoadSceneMode loadSceneMode)
+        {
+            if (newScene == null)
+            {
+                throw new Exception("Null Exception");
+            }
+            if (loadSceneMode == LoadSceneMode.Single)
+            {
+                //如果原来激活的不是默认场景, 则销毁原来的场景
+                if (ActiveScene != DefaultScene)
+                {
+                    //销毁所有之前场景的游戏物体, 如果dontdestroy保存着它的对象,则不销毁
+                    foreach (GameObject gameObject in ActiveScene.GameObjects)
+                    {
+                        if (!DontDestroyOnLoad.GameObjects.Contains(gameObject))
+                            GameObject.Destroy(gameObject);
+                    }
+                    //移除之前场景的引用
+                    Scenes.Remove(ActiveScene.Name);
+                    //销毁回调事件
+                    ActiveScene.OnDestroy();
+                }
+                //设置新场景为激活场景
+                ActiveScene = newScene;
+                //将DontDestroyOnLoad中保存的对象加入新的激活场景
+                foreach (GameObject gameObject in DontDestroyOnLoad.GameObjects)
+                {
+                    gameObject.AddToScene(ActiveScene);
+                }
+                //初始化新场景
+                newScene.OnStart();
+            }
+            if (loadSceneMode == LoadSceneMode.Additive)
+            {
+                Scene lastScene = ActiveScene;
+                //切换当前Scene为Active, 然后新建的GameObject都是这个Scene的
+                ActiveScene = newScene;
+                //调用这个场景的初始化方法 创建属于这个场景的对象等等
+                ActiveScene.OnStart();
+                //切回之前的Scene作为主场景
+                ActiveScene = lastScene;
+            }
+            //将这个Scene加入dict
+            Scenes.Add(newScene.Name, newScene);
+        }
+    }
+}
