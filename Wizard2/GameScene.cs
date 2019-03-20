@@ -22,8 +22,11 @@ namespace Wizard2
 
         public override void OnStart()
         {
-            AgentFactory.CreatePlayerAgent(new Vector2Int(10,10));
-            SystemUIFactroy.GetTimerUI(new Vector2Int(20, 5));
+
+
+            Cursor.CreateCursor();
+            AgentFactory.CreatePlayerAgent(new Vector2(10,10));
+            //SystemUIFactroy.GetTimerUI(new Vector2Int(20, 5));
 
             Resource.Init();
             Debug.Log("查找目录Resouce,资源数量:" + Resource.Name_Path.Keys.Count);
@@ -34,6 +37,8 @@ namespace Wizard2
 
             string str = Resource.Load<string>("Map");
             Debug.Log(str);
+
+            Map.LoadMap();
         }
     }
 

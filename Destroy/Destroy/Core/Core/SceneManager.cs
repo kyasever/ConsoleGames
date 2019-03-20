@@ -77,7 +77,7 @@
             //创建摄像机
             GameObject camera = new GameObject("Camera", "MainCamera")
             {
-                Position = new Vector2Int(0, 0)
+                Position = new Vector2(0, 0)
             };
             Camera cam = camera.AddComponent<Camera>();
         }

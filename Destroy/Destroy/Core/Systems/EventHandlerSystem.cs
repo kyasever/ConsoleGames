@@ -11,10 +11,10 @@
         /// <summary>
         /// UI射线检测组件
         /// </summary>
-        public Dictionary<Vector2Int, List<RayCastTarget>> UITargets { get; private set; } = new Dictionary<Vector2Int, List<RayCastTarget>>();
+        public Dictionary<Vector2, List<RayCastTarget>> UITargets { get; private set; } = new Dictionary<Vector2, List<RayCastTarget>>();
 
         private bool KeyDown = false;
-        private Vector2Int mousePos = new Vector2Int(-100, -100);
+        private Vector2 mousePos = new Vector2(-100, -100);
 
         /// <summary>
         /// Update
@@ -22,7 +22,7 @@
         public override void Update()
         {
             bool k = Input.GetMouseButton(MouseButton.Left);
-            Vector2Int newPos = Input.MousePosition - Camera.Main.Position;
+            Vector2 newPos = Input.MousePosition - Camera.Main.Position;
 
             //当检测到按键抬起的时候,视作点击.检测点击回调.这里不能用getkeydown
             if (KeyDown == true && k == false)
@@ -93,11 +93,11 @@
         /// <summary>
         /// 加入系统
         /// </summary>
-        public void AddToSystem(RayCastTarget UITarget, Vector2Int position)
+        public void AddToSystem(RayCastTarget UITarget, Vector2 position)
         {
-            foreach (Vector2Int dis in UITarget.colliderList)
+            foreach (Vector2 dis in UITarget.colliderList)
             {
-                Vector2Int pos = position + dis;
+                Vector2 pos = position + dis;
                 if (UITargets.ContainsKey(pos))
                 {
                     UITargets[pos].Add(UITarget);
@@ -112,11 +112,11 @@
         /// <summary>
         /// 移除系统
         /// </summary>
-        public void RemoveFromSystem(RayCastTarget UITarget, Vector2Int position)
+        public void RemoveFromSystem(RayCastTarget UITarget, Vector2 position)
         {
-            foreach (Vector2Int dis in UITarget.colliderList)
+            foreach (Vector2 dis in UITarget.colliderList)
             {
-                Vector2Int pos = position + dis;
+                Vector2 pos = position + dis;
                 if (UITargets.ContainsKey(pos))
                 {
                     UITargets[pos].Remove(UITarget);

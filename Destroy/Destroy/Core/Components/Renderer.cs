@@ -113,7 +113,7 @@
         /// 渲染结果,允许直接操作它来进行渲染.没毛病
         /// </summary>
         [HideInInspector]
-        public virtual Dictionary<Vector2Int, RenderPoint> RendererPoints { get; set; }
+        public virtual Dictionary<Vector2, RenderPoint> RendererPoints { get; set; }
 
         /// <summary>
         /// 渲染深度 越低的渲染优先级越高
@@ -125,11 +125,11 @@
             {
                 depth = value;
                 SetDepth(value);
-                if(Mode == RendererMode.GameObject && value <= 0)
+                if (Mode == RendererMode.GameObject && value <= 0)
                 {
                     Debug.Warning(GameObject.Name + "不建议渲染模式为GameObject的对象渲染深度为负数");
                 }
-                else if(Mode == RendererMode.UI && value >= 0)
+                else if (Mode == RendererMode.UI && value >= 0)
                 {
                     Debug.Warning(GameObject.Name + "不建议渲染模式为UI的对象渲染深度为正数");
                 }
@@ -140,15 +140,16 @@
         private Mesh meshCom { get; set; }
 
         /// <summary>
-        /// 基于原点和Renderer的Depth
+        /// 修改这个API,变为使用这个点填充所有Mesh
         /// </summary>
         /// <param name="renderPoint">使用的RenderPoint参数</param>
         public void Rendering(RenderPoint renderPoint)
         {
-            RendererPoints = new Dictionary<Vector2Int, RenderPoint>
+            RendererPoints = new Dictionary<Vector2, RenderPoint>();
+            foreach (var v in GetComponent<Mesh>().PosList)
             {
-                { new Vector2Int(0, 0), new RenderPoint(renderPoint.Str, renderPoint.ForeColor, renderPoint.BackColor, depth) }
-            };
+                RendererPoints.Add(v, renderPoint);
+            }
         }
 
         /// <summary>
@@ -184,7 +185,7 @@
         /// </summary>
         public void Rendering(List<RenderPoint> list)
         {
-            RendererPoints = new Dictionary<Vector2Int, RenderPoint>();
+            RendererPoints = new Dictionary<Vector2, RenderPoint>();
             int length = meshCom.PosList.Count;
             for (int i = 0; i < length; i++)
             {
@@ -204,10 +205,11 @@
         /// <summary>
         /// 简单粗暴,自己来把.直接指定结果
         /// </summary>
-        public void Rendering(Dictionary<Vector2Int, RenderPoint> dic)
+        public void Rendering(Dictionary<Vector2, RenderPoint> dic)
         {
             RendererPoints = dic;
         }
+       
 
         /// <summary>
         /// 初始化的时候指定mode和深度.
@@ -226,8 +228,8 @@
             meshCom = GetComponent<Mesh>();
             if (meshCom == null)
                 meshCom = AddComponent<Mesh>();
-            RendererPoints = new Dictionary<Vector2Int, RenderPoint>();
-            foreach (Vector2Int pos in meshCom.PosList)
+            RendererPoints = new Dictionary<Vector2, RenderPoint>();
+            foreach (Vector2 pos in meshCom.PosList)
             {
                 RendererPoints.Add(pos, RenderPoint.Block);
             }
@@ -239,7 +241,7 @@
         public string GetString()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            foreach (Vector2Int pos in meshCom.PosList)
+            foreach (Vector2 pos in meshCom.PosList)
             {
                 if (RendererPoints.ContainsKey(pos) && !RendererPoints[pos].Equals(RenderPoint.Block))
                     stringBuilder.Append(RendererPoints[pos]);
@@ -253,8 +255,8 @@
         /// </summary>
         public void SetBackColor(Colour backColor)
         {
-            Dictionary<Vector2Int, RenderPoint> newdic = new Dictionary<Vector2Int, RenderPoint>();
-            foreach (Vector2Int point in RendererPoints.Keys)
+            Dictionary<Vector2, RenderPoint> newdic = new Dictionary<Vector2, RenderPoint>();
+            foreach (Vector2 point in RendererPoints.Keys)
             {
                 RenderPoint rp = RendererPoints[point];
                 rp.BackColor = backColor;
@@ -268,8 +270,8 @@
         /// </summary>
         public void SetForeColor(Colour foreColor)
         {
-            Dictionary<Vector2Int, RenderPoint> newdic = new Dictionary<Vector2Int, RenderPoint>();
-            foreach (Vector2Int point in RendererPoints.Keys)
+            Dictionary<Vector2, RenderPoint> newdic = new Dictionary<Vector2, RenderPoint>();
+            foreach (Vector2 point in RendererPoints.Keys)
             {
                 RenderPoint rp = RendererPoints[point];
                 rp.ForeColor = foreColor;
@@ -283,8 +285,8 @@
         /// </summary>
         public void SetDepth(int depth)
         {
-            Dictionary<Vector2Int, RenderPoint> newdic = new Dictionary<Vector2Int, RenderPoint>();
-            foreach (Vector2Int point in RendererPoints.Keys)
+            Dictionary<Vector2, RenderPoint> newdic = new Dictionary<Vector2, RenderPoint>();
+            foreach (Vector2 point in RendererPoints.Keys)
             {
                 RenderPoint rp = RendererPoints[point];
                 rp.Depth = depth;
@@ -300,7 +302,7 @@
         {
             List<string> list = CharUtils.DivideString(str);
             int i = 0;
-            foreach (Vector2Int point in RendererPoints.Keys)
+            foreach (Vector2 point in RendererPoints.Keys)
             {
                 RenderPoint rp = RendererPoints[point];
                 rp.Str = list[i];
@@ -328,11 +330,6 @@
     /// </summary>
     public struct RenderPoint
     {
-        /// <summary>
-        /// 比如被初始化,表示一个RenderPoint在屏幕上占有的像素点
-        /// 单宽推荐值8*16 双宽推荐值16*16
-        /// </summary>
-        public static Vector2Int Size = new Vector2Int(16, 16);
 
         /// <summary>
         /// 默认的空白渲染点,显示在最底层
@@ -389,7 +386,29 @@
             //考虑了一些乱七八糟的问题,目前先都删了,只保留深度比较
             if (left.Depth < right.Depth)
             {
-                return left;
+                RenderPoint rp = new RenderPoint();
+                if (left.BackColor == Config.DefaultBackColor)
+                {
+                    rp.BackColor = right.BackColor;
+                }
+                else
+                {
+                    rp.BackColor = left.BackColor;
+                }
+
+                if (left.ForeColor == Config.DefaultForeColor)
+                {
+                    rp.ForeColor = right.ForeColor;
+                    rp.Str = right.Str;
+                }
+                else
+                {
+                    rp.ForeColor = left.ForeColor;
+                    rp.Str = left.Str;
+                }
+                rp.Depth = left.Depth;
+
+                return rp;
             }
             else if (left.Depth == right.Depth)
             {
@@ -408,7 +427,29 @@
             }
             else
             {
-                return right;
+                RenderPoint rp = new RenderPoint();
+                if (right.BackColor == Config.DefaultBackColor)
+                {
+                    rp.BackColor = left.BackColor;
+                }
+                else
+                {
+                    rp.BackColor = right.BackColor;
+                }
+
+                if (right.ForeColor == Config.DefaultForeColor)
+                {
+                    rp.ForeColor = left.ForeColor;
+                    rp.Str = left.Str;
+                }
+                else
+                {
+                    rp.ForeColor = right.ForeColor;
+                    rp.Str = right.Str;
+                }
+                rp.Depth = right.Depth;
+
+                return rp;
             }
         }
 

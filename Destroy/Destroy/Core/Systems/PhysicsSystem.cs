@@ -19,7 +19,7 @@ namespace Destroy
         /// <summary>
         /// 发生碰撞的点的坐标
         /// </summary>
-        public Vector2Int HitPos { get; set; }
+        public Vector2 HitPos { get; set; }
         /// <summary>
         /// 发生碰撞的碰撞体的数量
         /// </summary>
@@ -35,7 +35,7 @@ namespace Destroy
         /// <summary>
         /// 使用一个碰撞体初始化
         /// </summary>
-        public Collision(Collider other,Vector2Int hitpos)
+        public Collision(Collider other,Vector2 hitpos)
         {
             HitPos = hitpos;
             ColliderList = new List<Collider>() { other };
@@ -43,7 +43,7 @@ namespace Destroy
         /// <summary>
         /// 使用很多个碰撞体初始化
         /// </summary>
-        public Collision(List<Collider> list,Vector2Int hitpos)
+        public Collision(List<Collider> list,Vector2 hitpos)
         {
             HitPos = hitpos;
             ColliderList = list;
@@ -72,7 +72,7 @@ namespace Destroy
         /// <summary>
         /// 每一个点都可以放很多碰撞体组件
         /// </summary>
-        public Dictionary<Vector2Int, List<Collider>> Colliders { get; private set; }
+        public Dictionary<Vector2, List<Collider>> Colliders { get; private set; }
 
         /// <summary>
         /// 
@@ -80,7 +80,7 @@ namespace Destroy
         public CollisionSystem()
         {
             needUpdate = false;
-            Colliders = new Dictionary<Vector2Int, List<Collider>>();
+            Colliders = new Dictionary<Vector2, List<Collider>>();
         }
 
         /// <summary>
@@ -94,16 +94,16 @@ namespace Destroy
         /// <summary>
         /// 将一个碰撞体加入系统,手动制定加入的位置
         /// </summary>
-        public void AddToSystem(Collider collider,Vector2Int position)
+        public void AddToSystem(Collider collider,Vector2 position)
         {
             //一个碰撞体在一次加入中只会与另一个碰撞体碰撞一次 不能与自己碰撞
-            Dictionary<Collider, Vector2Int> chash = new Dictionary<Collider, Vector2Int>();
+            Dictionary<Collider, Vector2> chash = new Dictionary<Collider, Vector2>();
             chash.Add(collider, position);
 
             //两个大碰撞体多点接触不会触发多次,可能发生多次位置不同的接触产生多次回调
-            foreach (Vector2Int dis in collider.ColliderList)
+            foreach (Vector2 dis in collider.ColliderList)
             {
-                Vector2Int pos = position + dis;
+                Vector2 pos = position + dis;
                 if (Colliders.ContainsKey(pos))
                 {
                     List<Collider> onCollisionList = new List<Collider>();
@@ -144,11 +144,11 @@ namespace Destroy
         /// <summary>
         /// 将一个碰撞体移除系统,手动制定位置
         /// </summary>
-        public void RemoveFromSystem(Collider collider,Vector2Int position)
+        public void RemoveFromSystem(Collider collider,Vector2 position)
         {
-            foreach (Vector2Int dis in collider.ColliderList)
+            foreach (Vector2 dis in collider.ColliderList)
             {
-                Vector2Int pos = position + dis;
+                Vector2 pos = position + dis;
                 if (Colliders.ContainsKey(pos))
                 {
                     Colliders[pos].Remove(collider);
@@ -163,18 +163,18 @@ namespace Destroy
         /// <summary>
         /// 判断一个碰撞体是否可以在系统中移动,判断的时候会产生碰撞回调但是不会移动
         /// </summary>
-        public bool CanMoveInPos(Collider collider, Vector2Int from,Vector2Int to)
+        public bool CanMoveInPos(Collider collider, Vector2 from,Vector2 to)
         {
             //一个碰撞体在一次加入中只会与另一个碰撞体碰撞一次 不能与自己碰撞
-            Dictionary<Collider, Vector2Int> chash = new Dictionary<Collider, Vector2Int>();
+            Dictionary<Collider, Vector2> chash = new Dictionary<Collider, Vector2>();
             chash.Add(collider, from);
 
             bool canMoveFlag = true;
 
             //两个大碰撞体多点接触不会触发多次,可能发生多次位置不同的接触产生多次回调
-            foreach (Vector2Int colliderDis in collider.ColliderList)
+            foreach (Vector2 colliderDis in collider.ColliderList)
             {
-                Vector2Int pos = to + colliderDis;
+                Vector2 pos = to + colliderDis;
                 if (Colliders.ContainsKey(pos))
                 {
                     List<Collider> onCollisionList = new List<Collider>();
@@ -203,7 +203,7 @@ namespace Destroy
         /// <summary>
         /// 让一个碰撞体在系统中移动
         /// </summary>
-        public void MoveInSystem(Collider collider, Vector2Int from,Vector2Int to)
+        public void MoveInSystem(Collider collider, Vector2 from,Vector2 to)
         {
             RemoveFromSystem(collider,from);
             AddToSystem(collider, to);

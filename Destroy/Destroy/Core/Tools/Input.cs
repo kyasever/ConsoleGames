@@ -21,14 +21,14 @@
         /// <summary>
         /// 获取鼠标在游戏中的像素坐标
         /// </summary>
-        public static Vector2Int MousePositionInPixel
+        public static Vector2 MousePositionInPixel
         {
             get
             {
                 if (StandardIO.GetMousePositionInPixelEvent != null)
                     return StandardIO.GetMousePositionInPixelEvent.Invoke();
                 else
-                    return Vector2Int.DefaultInput;
+                    return Vector2.DefaultInput;
             }
         }
 
@@ -108,13 +108,13 @@
         /// <summary>
         /// 获取鼠标当前所处的位置(场景中世界坐标的位置)
         /// </summary>
-        public static Vector2Int MousePosition
+        public static Vector2 MousePosition
         {
             get
             {
-                Vector2Int posPixel = MousePositionInPixel;
-                Vector2Int pos = new Vector2Int(posPixel.X / RenderPoint.Size.X,
-                    posPixel.Y / RenderPoint.Size.Y);
+                Vector2 posPixel = MousePositionInPixel;
+                Vector2 pos = new Vector2(posPixel.X / Config.RendererSize.X,
+                    posPixel.Y / Config.RendererSize.Y);
                 //改变坐标系
                 pos.Y = Config.ScreenHeight - pos.Y - 1;
                 //加上摄像机的坐标

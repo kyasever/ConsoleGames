@@ -46,7 +46,7 @@ namespace Destroy.Winform
         private int GameObjectPanelWide = 150;
         private int ComponentPanelMinWide = 250;
         private int MessagePanelMinHeight = 150;
-        private Vector2Int windowSize;
+        private Vector2 windowSize;
         /// <summary>
         /// 开始的时调用一次,设置窗口大小
         /// </summary>
@@ -58,7 +58,7 @@ namespace Destroy.Winform
             //panelGame.Visible = false;
 
             this.Location = new Point(20, 20);
-            windowSize = new Vector2Int(Config.ScreenWidth * (int)Config.CharWidth * 8, Config.ScreenHeight * 16);
+            windowSize = new Vector2(Config.ScreenWidth * (int)Config.CharWidth * Config.RendererSize.X/2, Config.ScreenHeight * Config.RendererSize.Y);
             //设置此窗口的位置
             //this.Location = new Point(windowPos.X - LocationDis.X, windowPos.Y - LocationDis.Y);
             int formWidth = windowSize.X + GameObjectPanelWide + ComponentPanelMinWide + 15;
@@ -232,15 +232,19 @@ namespace Destroy.Winform
                     //    font = new Font("新宋体", 14, FontStyle.Bold);
                     //}
 
-                    font = new Font("Consolas", 13, FontStyle.Bold);
+                    font = new Font("Consolas", 12, FontStyle.Bold);
+                    if(Config.RendererSize.Y >30)
+                    {
+                        font = new Font("Consolas", 20, FontStyle.Bold);
+                    }
 
-                    int pixelX = i % (Config.ScreenWidth * (int)Config.CharWidth) * RenderPoint.Size.X / 2;
-                    int pixelY = i / (Config.ScreenWidth * (int)Config.CharWidth) * RenderPoint.Size.Y;
+                    int pixelX = i % (Config.ScreenWidth * (int)Config.CharWidth) * Config.RendererSize.X / 2;
+                    int pixelY = i / (Config.ScreenWidth * (int)Config.CharWidth) * Config.RendererSize.Y;
                     //DebugLog(new Vector2Int(pixelX, pixelY).ToString());
                     Point point = new Point(pixelX, pixelY);
 
                     g.FillRectangle(solidBrushBack, new RectangleF(new Point(point.X + 4, point.Y),
-                        new SizeF(RenderPoint.Size.X, RenderPoint.Size.Y)));
+                        new SizeF(Config.RendererSize.X, Config.RendererSize.Y)));
                     g.DrawString(rp.Str, font, solidBrushFore, point);
 
 
@@ -294,9 +298,9 @@ namespace Destroy.Winform
 
             TreeNode node;
 
-            if (type == typeof(List<Vector2Int>))
+            if (type == typeof(List<Vector2>))
             {
-                List<Vector2Int> list = obj as List<Vector2Int>;
+                List<Vector2> list = obj as List<Vector2>;
                 info = name + " : " + type.Name + "[" + list.Count + "]";
                 node = AddNode(rootNode, info);
                 int i = 0;

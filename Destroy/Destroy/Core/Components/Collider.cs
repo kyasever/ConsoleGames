@@ -16,7 +16,7 @@
         /// <summary>
         /// 碰撞体包含的点的列表,通常情况下来说保持和Mesh的数据相同
         /// </summary>
-        public List<Vector2Int> ColliderList { get; private set; }
+        public List<Vector2> ColliderList { get; private set; }
 
         internal override void OnAdd()
         {
@@ -24,7 +24,7 @@
             GameObject.ChangePositionEvnet += OnMove;
         }
 
-        private bool OnMove(Vector2Int from, Vector2Int to)
+        private bool OnMove(Vector2 from, Vector2 to)
         {
             RuntimeEngine.GetSystem<CollisionSystem>().MoveInSystem(this, from, to);
             return true;

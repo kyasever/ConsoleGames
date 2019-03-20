@@ -107,9 +107,9 @@
             {
                 if (!renderer.Enable)
                     continue;
-                foreach (KeyValuePair<Vector2Int, RenderPoint> rendererPoint in renderer.RendererPoints)
+                foreach (KeyValuePair<Vector2, RenderPoint> rendererPoint in renderer.RendererPoints)
                 {
-                    Vector2Int pos = new Vector2Int();
+                    Vector2 pos = new Vector2();
                     if (renderer.Mode == RendererMode.GameObject)
                     {
                         //相对于摄像机的位置

@@ -16,7 +16,7 @@
         /// <param name="height">高度,不包含边框,表示这个文本框可以容纳几行字符</param>
         /// <param name="width">宽度,单条信息的宽度</param>
         /// <returns></returns>
-        public static TextBox CreateTextBox(Vector2Int pos, int height, int width)
+        public static TextBox CreateTextBox(Vector2 pos, int height, int width)
         {
             GameObject gameObject = new GameObject("TextBox", "UI");
             gameObject.Position = pos;
@@ -26,7 +26,7 @@
             //添加Label控件
             for (int i = height; i > 0; i--)
             {
-                Renderer label = CreateLabel(pos + new Vector2Int(1, i), "", width);
+                Renderer label = CreateLabel(pos + new Vector2(1, i), "", width);
                 label.GameObject.Parent = gameObject;
 
                 textBox.Labels.Add(label);
@@ -36,7 +36,7 @@
             Rectangle rectangle = new Rectangle(width + 2, height + 2);
             GameObject drawLine = new GameObject("BoxDrawing", "UI");
             drawLine.Parent = gameObject;
-            drawLine.LocalPosition = new Vector2Int(0, 0);
+            drawLine.LocalPosition = new Vector2(0, 0);
             Mesh mesh = drawLine.AddComponent<Mesh>();
             mesh.Init(rectangle.PosList);
             Renderer renderer = drawLine.AddComponent<Renderer>();
@@ -50,7 +50,7 @@
         /// <summary>
         /// 文本列表,可以使用光标选择,并带有滚动条.
         /// </summary>
-        public static ListBox CreateListBox(Vector2Int pos, int height, int width)
+        public static ListBox CreateListBox(Vector2 pos, int height, int width)
         {
             GameObject gameObject = new GameObject("ListBox", "UI");
             gameObject.Position = pos;
@@ -62,7 +62,7 @@
             Rectangle rectangle = new Rectangle(width + 2, height + 2);
             GameObject drawLine = new GameObject("BoxDrawing", "UI");
             drawLine.Parent = gameObject;
-            drawLine.LocalPosition = new Vector2Int(0, 0);
+            drawLine.LocalPosition = new Vector2(0, 0);
             Mesh mesh = drawLine.AddComponent<Mesh>();
             mesh.Init(rectangle.PosList);
             Renderer renderer = drawLine.AddComponent<Renderer>();
@@ -77,7 +77,7 @@
         /// <summary>
         /// 创建一个Lable组件,不带有默认文字
         /// </summary>
-        public static Renderer CreateLabel(Vector2Int pos, int width)
+        public static Renderer CreateLabel(Vector2 pos, int width)
         {
             GameObject lable = new GameObject("Label", "UI");
             //初始化位置
@@ -85,10 +85,10 @@
 
             //添加一个宽度等同于width的Mesh
             Mesh mesh = lable.AddComponent<Mesh>();
-            List<Vector2Int> meshList = new List<Vector2Int>();
+            List<Vector2> meshList = new List<Vector2>();
             for (int i = 0; i < width; i++)
             {
-                meshList.Add(new Vector2Int(i, 0));
+                meshList.Add(new Vector2(i, 0));
             }
             mesh.Init(meshList);
             //添加一个Renderer组件
@@ -101,7 +101,7 @@
         /// <summary>
         /// 创建一个Lable
         /// </summary>
-        public static Renderer CreateLabel(Vector2Int pos, string text, int width)
+        public static Renderer CreateLabel(Vector2 pos, string text, int width)
         {
             Renderer renderer = CreateLabel(pos, width);
             renderer.Rendering(text);
@@ -207,7 +207,7 @@
         /// </summary>
         public class ListBoxItemList : IList<ListBoxItem>
         {
-            private Vector2Int firstPos;
+            private Vector2 firstPos;
             /// <summary>
             /// 通过内部列表实现接口
             /// </summary>
@@ -217,7 +217,7 @@
             /// 构造的时候要告诉列表第一个字符串的位置在哪
             /// </summary>
             /// <param name="FirstPos"></param>
-            public ListBoxItemList(Vector2Int FirstPos)
+            public ListBoxItemList(Vector2 FirstPos)
             {
                 firstPos = FirstPos;
                 mList = new List<ListBoxItem>();
@@ -259,7 +259,7 @@
             public void Add(ListBoxItem item)
             {
                 if (LastListBoxItem != null)
-                    item.LocalPosition = LastListBoxItem.GameObject.LocalPosition + new Vector2Int(0, -1);
+                    item.LocalPosition = LastListBoxItem.GameObject.LocalPosition + new Vector2(0, -1);
                 else
                     item.LocalPosition = firstPos;
                 ((IList<ListBoxItem>)mList).Add(item);
@@ -318,7 +318,7 @@
                 item.Position = mList[index].Position;
                 for (int i = index; i < mList.Count; i++)
                 {
-                    mList[i].Position += new Vector2Int(0, -1);
+                    mList[i].Position += new Vector2(0, -1);
                 }
                 ((IList<ListBoxItem>)mList).Insert(index, item);
             }
@@ -348,7 +348,7 @@
                 GameObject.Destroy(mList[index].GameObject);
                 for (int i = index; i < mList.Count; i++)
                 {
-                    mList[i].Position += new Vector2Int(0, 1);
+                    mList[i].Position += new Vector2(0, 1);
                 }
                 ((IList<ListBoxItem>)mList).RemoveAt(index);
             }
@@ -416,7 +416,7 @@
         {
             TopIndex = 0; EndIndex = 1;
             Height = height; Width = width;
-            Items = new ListBoxItemList(new Vector2Int(1, height));
+            Items = new ListBoxItemList(new Vector2(1, height));
         }
 
         /// <summary>
@@ -430,10 +430,10 @@
 
             //添加一个宽度等同于width的Mesh
             Mesh mesh = label.AddComponent<Mesh>();
-            List<Vector2Int> meshList = new List<Vector2Int>();
+            List<Vector2> meshList = new List<Vector2>();
             for (int i = 0; i < Width; i++)
             {
-                meshList.Add(new Vector2Int(i, 0));
+                meshList.Add(new Vector2(i, 0));
             }
             mesh.Init(meshList);
             //添加一个Renderer组件
@@ -472,7 +472,7 @@
             //所有label向下移动一格
             foreach (ListBoxItem v in Items)
             {
-                v.LocalPosition += new Vector2Int(0, -1);
+                v.LocalPosition += new Vector2(0, -1);
             }
             TopIndex--;
             EndIndex--;
@@ -493,7 +493,7 @@
             //所有label向下移动一格
             foreach (ListBoxItem v in Items)
             {
-                v.LocalPosition += new Vector2Int(0, 1);
+                v.LocalPosition += new Vector2(0, 1);
             }
             TopIndex++;
             EndIndex++;

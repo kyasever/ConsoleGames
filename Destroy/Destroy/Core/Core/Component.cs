@@ -105,7 +105,7 @@
         /// 获取世界坐标,重载这个东西,然后加塞
         /// </summary>
         [HideInInspector]
-        public virtual Vector2Int Position
+        public virtual Vector2 Position
         {
             get => GameObject.Position;
             set => GameObject.Position = value;
@@ -115,7 +115,7 @@
         /// 获取本地坐标
         /// </summary>
         [HideInInspector]
-        public virtual Vector2Int LocalPosition
+        public virtual Vector2 LocalPosition
         {
             get => GameObject.LocalPosition;
             set => GameObject.LocalPosition = value;

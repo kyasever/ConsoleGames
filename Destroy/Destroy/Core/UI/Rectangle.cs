@@ -17,7 +17,7 @@
         /// <summary>
         /// 点列表
         /// </summary>
-        public List<Vector2Int> PosList;
+        public List<Vector2> PosList;
 
         /// <summary>
         /// 字符
@@ -31,7 +31,7 @@
         {
             this.Width = width;
             this.Height = height;
-            PosList = new List<Vector2Int>();
+            PosList = new List<Vector2>();
             AddMesh();
             AddTexture();
         }
@@ -44,14 +44,14 @@
             //添加上下边框的Mesh
             for (int i = 0; i < Width; i++)
             {
-                PosList.Add(new Vector2Int(i, 0));
-                PosList.Add(new Vector2Int(i, Height - 1));
+                PosList.Add(new Vector2(i, 0));
+                PosList.Add(new Vector2(i, Height - 1));
             }
             //添加左右边框的Mesh
             for (int i = 0; i < Height; i++)
             {
-                PosList.Add(new Vector2Int(0, i));
-                PosList.Add(new Vector2Int(Width - 1, i));
+                PosList.Add(new Vector2(0, i));
+                PosList.Add(new Vector2(Width - 1, i));
             }
             Sort();
         }
@@ -81,12 +81,12 @@
         public void Sort()
         {
             //使用HashSet去重复. 之后排序
-            HashSet<Vector2Int> set = new HashSet<Vector2Int>();
+            HashSet<Vector2> set = new HashSet<Vector2>();
             foreach (var v in PosList)
             {
                 set.Add(v);
             }
-            List<Vector2Int> newList = new List<Vector2Int>();
+            List<Vector2> newList = new List<Vector2>();
             foreach (var v in set)
             {
                 newList.Add(v);

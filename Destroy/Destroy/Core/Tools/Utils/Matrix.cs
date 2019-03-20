@@ -144,7 +144,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Int operator *(Vector2Int left, Matrix right)
+        public static Vector2 operator *(Vector2 left, Matrix right)
         {
             if (right.Row != 2)
                 throw new Exception("无法相乘");
@@ -154,7 +154,7 @@
             matrix[0, 1] = left.Y;
             Matrix result = matrix * right;
 
-            return new Vector2Int(result[0, 0], result[0, 1]);
+            return new Vector2(result[0, 0], result[0, 1]);
         }
     }
 }

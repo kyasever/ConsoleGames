@@ -17,7 +17,7 @@ namespace Destroy.Winform
         /// <summary>
         /// 用于指示当前鼠标所处位置
         /// </summary>
-        public static Vector2Int MousePosition = new Vector2Int(-8, -8);
+        public static Vector2 MousePosition = new Vector2(-8, -8);
         private static MainForm mainForm = MainForm.Instanse;
         private static Task updateTask, drawTask;
 
@@ -80,7 +80,7 @@ namespace Destroy.Winform
         /// <summary>
         /// 获得鼠标位置
         /// </summary>
-        public static Vector2Int GetMousePositionPixel() { return MousePosition; }
+        public static Vector2 GetMousePositionPixel() { return MousePosition; }
 
         /// <summary>
         /// Debug输出

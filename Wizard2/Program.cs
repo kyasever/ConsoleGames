@@ -35,7 +35,7 @@ namespace Wizard2
 
             SceneManager.Load(scene, LoadSceneMode.Single);
 
-            Camera.Main.Position = new Vector2Int(0, 0);
+            Camera.Main.Position = new Vector2(0, 0);
 
             Debug.Log("Hello Destroy");
 
@@ -49,7 +49,7 @@ namespace Wizard2
             //}
         }
 
-        private static bool Func(Vector2Int v)
+        private static bool Func(Vector2 v)
         {
             return true;
         }

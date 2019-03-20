@@ -4,8 +4,9 @@
 
     /// <summary>
     /// 二维向量
+    /// 原Vector2->Vector2Float
     /// </summary>
-    public struct Vector2
+    public struct Vector2Float
     {
         /// <summary>
         /// X值
@@ -32,17 +33,17 @@
         /// <summary>
         /// 单位向量
         /// </summary>
-        public Vector2 Normalized => this / Magnitude;
+        public Vector2Float Normalized => this / Magnitude;
 
         /// <summary>
         /// 反向
         /// </summary>
-        public Vector2 Negative => this * -1f;
+        public Vector2Float Negative => this * -1f;
 
         /// <summary>
         /// 构造
         /// </summary>
-        public Vector2(float x, float y)
+        public Vector2Float(float x, float y)
         {
             X = x;
             Y = y;
@@ -56,7 +57,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override bool Equals(object obj) => this == (Vector2)obj;
+        public override bool Equals(object obj) => this == (Vector2Float)obj;
 
         /// <summary>
         /// 
@@ -66,51 +67,51 @@
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2 Zero => new Vector2();
+        public static Vector2Float Zero => new Vector2Float();
 
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2 Up => new Vector2(0, 1);
+        public static Vector2Float Up => new Vector2Float(0, 1);
 
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2 Down => new Vector2(0, -1);
+        public static Vector2Float Down => new Vector2Float(0, -1);
 
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2 Left => new Vector2(-1, 0);
+        public static Vector2Float Left => new Vector2Float(-1, 0);
 
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2 Right => new Vector2(1, 0);
+        public static Vector2Float Right => new Vector2Float(1, 0);
 
         /// <summary>
         /// 向量之间的距离float
         /// </summary>
-        public static float Distance(Vector2 a, Vector2 b)
+        public static float Distance(Vector2Float a, Vector2Float b)
         {
-            Vector2 vector = a - b;
+            Vector2Float vector = a - b;
             return vector.Magnitude;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static bool operator ==(Vector2 left, Vector2 right) => left.X == right.X && left.Y == right.Y;
+        public static bool operator ==(Vector2Float left, Vector2Float right) => left.X == right.X && left.Y == right.Y;
 
         /// <summary>
         /// 
         /// </summary>
-        public static bool operator !=(Vector2 left, Vector2 right) => left.X != right.X || left.Y != right.Y;
+        public static bool operator !=(Vector2Float left, Vector2Float right) => left.X != right.X || left.Y != right.Y;
 
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2 operator +(Vector2 left, Vector2 right)
+        public static Vector2Float operator +(Vector2Float left, Vector2Float right)
         {
             left.X += right.X;
             left.Y += right.Y;
@@ -120,7 +121,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2 operator -(Vector2 left, Vector2 right)
+        public static Vector2Float operator -(Vector2Float left, Vector2Float right)
         {
             left.X -= right.X;
             left.Y -= right.Y;
@@ -130,7 +131,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2 operator *(Vector2 left, float right)
+        public static Vector2Float operator *(Vector2Float left, float right)
         {
             left.X *= right;
             left.Y *= right;
@@ -140,7 +141,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2 operator /(Vector2 left, float right)
+        public static Vector2Float operator /(Vector2Float left, float right)
         {
             if (right == 0)
                 throw new NaNException();
@@ -152,9 +153,9 @@
         /// <summary>
         /// 
         /// </summary>
-        public static explicit operator Vector2(Vector2Int vector)
+        public static explicit operator Vector2Float(Vector2 vector)
         {
-            Vector2 vector2 = new Vector2();
+            Vector2Float vector2 = new Vector2Float();
             vector2.X = vector.X;
             vector2.Y = vector.Y;
             return vector2;

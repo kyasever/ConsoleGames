@@ -18,7 +18,7 @@ namespace Destroy
         /// <summary>
         /// 结果路径
         /// </summary>
-        public List<Vector2Int> ResultList;
+        public List<Vector2> ResultList;
         /// <summary>
         /// 搜索一共搜了多少个点,用于评估算法的效率
         /// </summary>
@@ -35,7 +35,7 @@ namespace Destroy
         /// <summary>
         /// 默认搜索方法
         /// </summary>
-        public static SearchResult Search(Vector2Int start, Vector2Int end)
+        public static SearchResult Search(Vector2 start, Vector2 end)
         {
             return Search(start, end, CanMoveInPhysics);
         }
@@ -43,9 +43,9 @@ namespace Destroy
         /// <summary>
         /// 通常的一种搜寻判定,所有物理系统的物体均不可穿过
         /// </summary>
-        public static bool CanMoveInPhysics(Vector2Int v)
+        public static bool CanMoveInPhysics(Vector2 v)
         {
-            Dictionary<Vector2Int, List<Collider>> dic = RuntimeEngine.GetSystem<CollisionSystem>().Colliders;
+            Dictionary<Vector2, List<Collider>> dic = RuntimeEngine.GetSystem<CollisionSystem>().Colliders;
             if (dic.ContainsKey(v))
             {
                 return false;
@@ -59,7 +59,7 @@ namespace Destroy
         /// <summary>
         /// 搜寻判定,所有的点均可以穿过
         /// </summary>
-        public static bool CanMoveInAll(Vector2Int v)
+        public static bool CanMoveInAll(Vector2 v)
         {
             return true;
         }
@@ -72,14 +72,14 @@ namespace Destroy
         /// </summary>
         public class RouteDic
         {
-            private Dictionary<Vector2Int, int> SearchDic = new Dictionary<Vector2Int, int>();
+            private Dictionary<Vector2, int> SearchDic = new Dictionary<Vector2, int>();
 
             /// <summary>
             /// 这其实是一个可变列表
             /// 一定能通过key取到值,如果不存在则返回最大值
             /// 一定能给key赋值,如果不存在则创建新对
             /// </summary>
-            public int this[Vector2Int key]
+            public int this[Vector2 key]
             {
                 get
                 {
@@ -109,7 +109,7 @@ namespace Destroy
             /// <summary>
             /// 验证
             /// </summary>
-            public bool ContainsKey(Vector2Int key)
+            public bool ContainsKey(Vector2 key)
             {
                 return SearchDic.ContainsKey(key);
             }
@@ -191,7 +191,7 @@ namespace Destroy
             /// <summary>
             /// 位置
             /// </summary>
-            public Vector2Int vector;
+            public Vector2 vector;
             /// <summary>
             /// 值
             /// </summary>
@@ -200,7 +200,7 @@ namespace Destroy
             /// <summary>
             /// 使用坐标和数字初始化
             /// </summary>
-            public RouteData(Vector2Int v, int i)
+            public RouteData(Vector2 v, int i)
             {
                 vector = v;
                 depth = i;
@@ -209,7 +209,7 @@ namespace Destroy
             /// <summary>
             /// 使用路径字典初始化
             /// </summary>
-            public RouteData(Vector2Int v, RouteDic dic)
+            public RouteData(Vector2 v, RouteDic dic)
             {
                 vector = v;
                 depth = dic[v];
@@ -232,26 +232,26 @@ namespace Destroy
         /// <param name="start">起始点</param>
         /// <param name="stop">终点</param>
         /// <param name="canMoveFunc">一个方法用于指示目标点是否是可以穿过的</param>
-        public static SearchResult Search(Vector2Int start, Vector2Int stop, Func<Vector2Int, bool> canMoveFunc)
+        public static SearchResult Search(Vector2 start, Vector2 stop, Func<Vector2, bool> canMoveFunc)
         {
             SearchResult result = new SearchResult();
             //保存路径信息
             RouteDic SearchDic = new RouteDic();
             //待检测点队列
-            List<Vector2Int> queue = new List<Vector2Int>();
+            List<Vector2> queue = new List<Vector2>();
 
             SearchDic[start] = 0;
             queue.Add(start);
 
-            Vector2Int v = start;
+            Vector2 v = start;
             bool flag = true;
 
             //添加点进队列
-            bool AddNextRoute(Vector2Int ov)
+            bool AddNextRoute(Vector2 ov)
             {
                 if (canMoveFunc(v + ov) && !SearchDic.ContainsKey(v + ov))
                 {
-                    Vector2Int np = v + ov;
+                    Vector2 np = v + ov;
                     SearchDic[np] = SearchDic[v] + 1;
                     if (np == stop)
                     {
@@ -274,7 +274,7 @@ namespace Destroy
                 if (queue.Count == 0)
                 {
                     result.Success = false;
-                    result.ResultList = new List<Vector2Int>() { stop };
+                    result.ResultList = new List<Vector2>() { stop };
                     result.SearchAeraCount = SearchDic.Count;
                     return result;
                 }
@@ -283,16 +283,16 @@ namespace Destroy
                     //取第一个点,值最小的点
                     v = queue[0];
                     //添加周围的点
-                    AddNextRoute(new Vector2Int(1, 0));
-                    AddNextRoute(new Vector2Int(-1, 0));
-                    AddNextRoute(new Vector2Int(0, 1));
-                    AddNextRoute(new Vector2Int(0, -1));
+                    AddNextRoute(new Vector2(1, 0));
+                    AddNextRoute(new Vector2(-1, 0));
+                    AddNextRoute(new Vector2(0, 1));
+                    AddNextRoute(new Vector2(0, -1));
                     //去掉这个点
                     queue.Remove(v);
                 }
             }
             //结果路径
-            List<Vector2Int> path = new List<Vector2Int>();
+            List<Vector2> path = new List<Vector2>();
             path.Add(stop);
             while (true)
             {
@@ -304,10 +304,10 @@ namespace Destroy
                 }
                 //将周围最小的一个点加入下一步
                 List<RouteData> minSet = new List<RouteData>();
-                minSet.Add(new RouteData(v + Vector2Int.Left, SearchDic));
-                minSet.Add(new RouteData(v + Vector2Int.Right, SearchDic));
-                minSet.Add(new RouteData(v + Vector2Int.Up, SearchDic));
-                minSet.Add(new RouteData(v + Vector2Int.Down, SearchDic));
+                minSet.Add(new RouteData(v + Vector2.Left, SearchDic));
+                minSet.Add(new RouteData(v + Vector2.Right, SearchDic));
+                minSet.Add(new RouteData(v + Vector2.Up, SearchDic));
+                minSet.Add(new RouteData(v + Vector2.Down, SearchDic));
                 minSet.Sort();
                 path.Insert(0, minSet[0].vector);
             }
@@ -320,29 +320,29 @@ namespace Destroy
         /// <summary>
         /// 返回distanse范围内所有可以通过的点
         /// </summary>
-        /// <param name="distanse">搜索范围</param>
+        /// <param name="expandWidth">搜索范围</param>
         /// <param name="canMoveFunc">点是否是可以通过的</param>
         /// <returns>点列表</returns>
-        public static List<Vector2Int> ExpandAera(int distanse, Func<Vector2Int, bool> canMoveFunc)
+        public static List<Vector2> ExpandAera(Vector2 startPos, int expandWidth, Func<Vector2, bool> canMoveFunc)
         {
             RouteDic SearchDic = new RouteDic();
             //索引队列
-            List<Vector2Int> queue = new List<Vector2Int>();
-            List<Vector2Int> avaliablePos = new List<Vector2Int>();
+            List<Vector2> queue = new List<Vector2>();
+            List<Vector2> avaliablePos = new List<Vector2>(); 
 
-            Vector2Int start = new Vector2Int(0, 0);
+            Vector2 start = startPos;
 
             SearchDic[start] = 0;
             queue.Add(start);
 
-            Vector2Int p = start;
+            Vector2 p = start;
             bool flag = true;
 
-            bool AddNextRoute(Vector2Int ov)
+            bool AddNextRoute(Vector2 ov)
             {
                 if (canMoveFunc(p + ov) && !SearchDic.ContainsKey(p + ov))
                 {
-                    if (SearchDic[p] + 1 > distanse)
+                    if (SearchDic[p] + 1 > expandWidth)
                     {
                         //queue.Remove(p);
                         flag = false;
@@ -367,10 +367,10 @@ namespace Destroy
                     //初始化当前这个点
                     //取第一个点,值最小的点
                     p = queue[0];
-                    AddNextRoute(new Vector2Int(1, 0));
-                    AddNextRoute(new Vector2Int(-1, 0));
-                    AddNextRoute(new Vector2Int(0, 1));
-                    AddNextRoute(new Vector2Int(0, -1));
+                    AddNextRoute(new Vector2(1, 0));
+                    AddNextRoute(new Vector2(-1, 0));
+                    AddNextRoute(new Vector2(0, 1));
+                    AddNextRoute(new Vector2(0, -1));
 
                     //去掉这个点
                     queue.Remove(p);

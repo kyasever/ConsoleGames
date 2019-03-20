@@ -18,23 +18,23 @@ namespace Destroy.Winform
         /// <summary>
         /// Point转换为Vector2Int
         /// </summary>
-        public static Vector2Int ToVector2Int(this Point _Point)
+        public static Vector2 ToVector2Int(this Point _Point)
         {
-            return new Vector2Int(_Point.X, _Point.Y);
+            return new Vector2(_Point.X, _Point.Y);
         }
 
         /// <summary>
         /// Size 转换为Vector2Int
         /// </summary>
-        public static Vector2Int Size(this Size _Size)
+        public static Vector2 Size(this Size _Size)
         {
-            return new Vector2Int(_Size.Width, _Size.Height);
+            return new Vector2(_Size.Width, _Size.Height);
         }
 
         /// <summary>
         /// Vector2Int 转换为Point
         /// </summary>
-        public static Point ToPoint(this Vector2Int _Vector2Int)
+        public static Point ToPoint(this Vector2 _Vector2Int)
         {
             return new Point(_Vector2Int.X, _Vector2Int.Y);
         }
@@ -42,7 +42,7 @@ namespace Destroy.Winform
         /// <summary>
         /// 给Vector2扩展一个Distanse方法,求两个点的距离
         /// </summary>
-        public static int Distanse(this Vector2Int _Vector2Int, Vector2Int otherV)
+        public static int Distanse(this Vector2 _Vector2Int, Vector2 otherV)
         {
             return Math.Abs(otherV.X - _Vector2Int.X) + Math.Abs(otherV.Y - _Vector2Int.Y);
         }

@@ -12,7 +12,7 @@
         /// 显示系统中各个系统耗时
         /// 范围14*17
         /// </summary>
-        public static GameObject GetTimerUI(Vector2Int pos, int interval = 10)
+        public static GameObject GetTimerUI(Vector2 pos, int interval = 10)
         {
             TextBox textBox = UIFactroy.CreateTextBox(pos, 12, 15);
             TimerBox script = textBox.AddComponent<TimerBox>();
@@ -24,7 +24,7 @@
         /// 用于显示鼠标检测到的事件
         /// 范围5*10
         /// </summary>
-        public static GameObject GetMouseEventUI(Vector2Int pos)
+        public static GameObject GetMouseEventUI(Vector2 pos)
         {
             TextBox textBox = UIFactroy.CreateTextBox(pos, 5, 10);
             textBox.AddComponent<MouseEventBox>();
@@ -35,21 +35,21 @@
         /// 一片用于测试渲染器压力测试的组件,每帧都会进行200个彩色格子的刷新,刷新率取决于帧率
         /// 范围20*20
         /// </summary>
-        public static GameObject GetRendererTestAera(Vector2Int pos)
+        public static GameObject GetRendererTestAera(Vector2 pos)
         {
             Random random = new Random();
             string EsString = "临兵斗者皆阵列在前";
 
             GameObject testGameObject = new GameObject("RendererTest", "UI");
-            List<Vector2Int> posList = new List<Vector2Int>();
+            List<Vector2> posList = new List<Vector2>();
             for (int i = 0; i < 400; i++)
             {
-                posList.Add(new Vector2Int(i % 20, i / 20));
+                posList.Add(new Vector2(i % 20, i / 20));
             }
 
-            List<Vector2Int> posListC1 = new List<Vector2Int>();
-            List<Vector2Int> posListC2 = new List<Vector2Int>();
-            posListC2.Add(new Vector2Int(0, 0));
+            List<Vector2> posListC1 = new List<Vector2>();
+            List<Vector2> posListC2 = new List<Vector2>();
+            posListC2.Add(new Vector2(0, 0));
 
             for (int i = 0; i < 400; i++)
             {
@@ -83,7 +83,7 @@
                 return new RenderPoint(EsString[r].ToString(), fc, bc, -1);
             }
 
-            GameObject CreateChildR(List<Vector2Int> meshList, List<RenderPoint> rendererList)
+            GameObject CreateChildR(List<Vector2> meshList, List<RenderPoint> rendererList)
             {
                 GameObject childR = new GameObject("ChildTest", "UI");
                 childR.AddComponent<Mesh>().Init(meshList);

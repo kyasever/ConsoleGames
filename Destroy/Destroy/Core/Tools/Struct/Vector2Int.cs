@@ -4,8 +4,9 @@
 
     /// <summary>
     /// 整数型二维向量
+    /// 原Vector2Int更改为Vector2为了简化
     /// </summary>
-    public struct Vector2Int : IComparable
+    public struct Vector2 : IComparable
     {
         /// <summary>
         /// 
@@ -20,12 +21,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public Vector2Int Negative => this * -1;
+        public Vector2 Negative => this * -1;
 
         /// <summary>
         /// 
         /// </summary>
-        public Vector2Int(int x, int y)
+        public Vector2(int x, int y)
         {
             X = x;
             Y = y;
@@ -39,7 +40,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override bool Equals(object obj) => this == (Vector2Int)obj;
+        public override bool Equals(object obj) => this == (Vector2)obj;
 
         /// <summary>
         /// 
@@ -49,14 +50,14 @@
         /// <summary>
         /// 当检测到输入失灵的时候返回的默认值,不返回0,0为了加以区分
         /// </summary>
-        public static Vector2Int DefaultInput => new Vector2Int(-8, -8);
+        public static Vector2 DefaultInput => new Vector2(-8, -8);
 
         /// <summary>
         /// 比较原则, 左上角的小于右下角的, 按照从上到下, 从左到右排序
         /// </summary>
         public int CompareTo(object obj)
         {
-            Vector2Int right = (Vector2Int)obj;
+            Vector2 right = (Vector2)obj;
             if (Y < right.Y)
             {
                 return 1;
@@ -85,7 +86,7 @@
         /// <summary>
         /// 向量之间的距离
         /// </summary>
-        public static int Distance(Vector2Int a, Vector2Int b)
+        public static int Distance(Vector2 a, Vector2 b)
         {
             int x = Math.Abs(a.X - b.X);
             int y = Math.Abs(a.Y - b.Y);
@@ -95,42 +96,42 @@
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Int Zero => new Vector2Int();
+        public static Vector2 Zero => new Vector2();
 
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Int Up => new Vector2Int(0, 1);
+        public static Vector2 Up => new Vector2(0, 1);
 
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Int Down => new Vector2Int(0, -1);
+        public static Vector2 Down => new Vector2(0, -1);
 
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Int Left => new Vector2Int(-1, 0);
+        public static Vector2 Left => new Vector2(-1, 0);
 
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Int Right => new Vector2Int(1, 0);
+        public static Vector2 Right => new Vector2(1, 0);
 
         /// <summary>
         /// 
         /// </summary>
-        public static bool operator ==(Vector2Int left, Vector2Int right) => left.X == right.X && left.Y == right.Y;
+        public static bool operator ==(Vector2 left, Vector2 right) => left.X == right.X && left.Y == right.Y;
 
         /// <summary>
         /// 
         /// </summary>
-        public static bool operator !=(Vector2Int left, Vector2Int right) => left.X != right.X || left.Y != right.Y;
+        public static bool operator !=(Vector2 left, Vector2 right) => left.X != right.X || left.Y != right.Y;
 
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Int operator +(Vector2Int left, Vector2Int right)
+        public static Vector2 operator +(Vector2 left, Vector2 right)
         {
             left.X += right.X;
             left.Y += right.Y;
@@ -140,7 +141,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Int operator -(Vector2Int left, Vector2Int right)
+        public static Vector2 operator -(Vector2 left, Vector2 right)
         {
             left.X -= right.X;
             left.Y -= right.Y;
@@ -150,7 +151,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Int operator *(Vector2Int left, int right)
+        public static Vector2 operator *(Vector2 left, int right)
         {
             left.X *= right;
             left.Y *= right;
@@ -160,7 +161,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Int operator /(Vector2Int left, int right)
+        public static Vector2 operator /(Vector2 left, int right)
         {
             if (right == 0)
                 throw new NaNException();
@@ -172,9 +173,9 @@
         /// <summary>
         /// 
         /// </summary>
-        public static explicit operator Vector2Int(Vector2 vector)
+        public static explicit operator Vector2(Vector2Float vector)
         {
-            Vector2Int vector2Int = new Vector2Int();
+            Vector2 vector2Int = new Vector2();
             vector2Int.X = (int)vector.X;
             vector2Int.Y = (int)vector.Y;
             return vector2Int;

@@ -54,6 +54,12 @@
         /// 系统默认背景色
         /// </summary>
         public static Colour DefaultBackColor = Colour.Black;
+
+        /// <summary>
+        /// 比如被初始化,表示一个RenderPoint在屏幕上占有的像素点
+        /// 单宽推荐值8*16 双宽推荐值16*16
+        /// </summary>
+        public static Vector2 RendererSize = new Vector2(16, 16);
     }
 
     /// <summary>

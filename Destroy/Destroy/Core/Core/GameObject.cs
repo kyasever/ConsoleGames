@@ -62,7 +62,7 @@
         /// 当发生坐标改变时产生的回调事件,将自己的Position告诉组件,组件自行管理
         /// 参数一 发生改变之前所处的位置 参数二 发生改变之后所处的位置
         /// </summary>
-        public event Func<Vector2Int, Vector2Int, bool> ChangePositionEvnet;
+        public event Func<Vector2, Vector2, bool> ChangePositionEvnet;
 
         /// <summary>
         /// 碰撞回调事件.
@@ -72,7 +72,7 @@
         /// <summary>
         /// 世界坐标
         /// </summary>
-        public Vector2Int Position
+        public Vector2 Position
         {
             get => GetWorldPosition(this);
             set
@@ -84,11 +84,11 @@
             }
         }
 
-        private Vector2Int localPosition;
+        private Vector2 localPosition;
         /// <summary>
         /// 本地坐标
         /// </summary>
-        public Vector2Int LocalPosition
+        public Vector2 LocalPosition
         {
             get => localPosition; set
             {
@@ -130,17 +130,21 @@
         /// <summary>
         /// 创建一个游戏物体 (相当于在当前场景中实例化)
         /// </summary>
-        public GameObject(string name = "GameObject", string tag = "None", bool isStatic = false)
+        public GameObject(string name = "GameObject", string tag = "None", GameObject parent = null)
         {
             Name = name;
             Tag = tag;
             Active = true;
 
-            Parent = null;
-            Childs = new List<GameObject>();
+            this.parent = null;
+            this.localPosition = Vector2.Zero;
+            if (parent != null)
+            {
+                this.Parent = parent;
+                this.LocalPosition = Vector2.Zero;
+            }
 
-            Position = Vector2Int.Zero;
-            LocalPosition = Vector2Int.Zero;
+            Childs = new List<GameObject>();
 
             if (SceneManager.ActiveScene == null)
                 throw new Exception($"未初始化场景!");
@@ -362,7 +366,7 @@
         /// <summary>
         /// 通过递归查找物体的最终节点并相加,获得世界坐标
         /// </summary>
-        private Vector2Int GetWorldPosition(GameObject gameObject)
+        private Vector2 GetWorldPosition(GameObject gameObject)
         {
             if (gameObject.parent != null)
             {
@@ -373,7 +377,7 @@
         }
 
         //用于临时检测可能的位置,加入这个物体LocalPosition到了这个位置,那么它的WorldPos
-        private Vector2Int GetWorldPosition(GameObject gameObject, Vector2Int lPos)
+        private Vector2 GetWorldPosition(GameObject gameObject, Vector2 lPos)
         {
             if (gameObject.parent != null)
             {

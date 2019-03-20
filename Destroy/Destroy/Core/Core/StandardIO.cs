@@ -41,6 +41,6 @@
         /// Winform实现,鼠标指针在游戏面板控件的位置
         /// Windows实现,不怎么好用
         /// </summary>
-        public static Func<Vector2Int> GetMousePositionInPixelEvent;
+        public static Func<Vector2> GetMousePositionInPixelEvent;
     }
 }

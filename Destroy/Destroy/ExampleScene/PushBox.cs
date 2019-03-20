@@ -20,23 +20,23 @@
         /// </summary>
         public override void OnStart()
         {
-            GameObject player = TestAssetsFactroy.CreateStandardPlayer("吊", new Vector2Int(5, 10));
+            GameObject player = TestAssetsFactroy.CreateStandardPlayer("吊", new Vector2(5, 10));
 
-            TestAssetsFactroy.CreateBox(TestAssetsFactroy.BoxType.a, new Vector2Int(10, 10));
-            TestAssetsFactroy.CreateBox(TestAssetsFactroy.BoxType.b, new Vector2Int(15, 10));
+            TestAssetsFactroy.CreateBox(TestAssetsFactroy.BoxType.a, new Vector2(10, 10));
+            TestAssetsFactroy.CreateBox(TestAssetsFactroy.BoxType.b, new Vector2(15, 10));
             //StandardAssets.CreateBox(StandardAssets.BoxType.b, new Vector2Int(10, 10));
-            TestAssetsFactroy.CreateBox(TestAssetsFactroy.BoxType.c, new Vector2Int(10, 15));
-            TestAssetsFactroy.CreateBox(TestAssetsFactroy.BoxType.d, new Vector2Int(15, 15));
+            TestAssetsFactroy.CreateBox(TestAssetsFactroy.BoxType.c, new Vector2(10, 15));
+            TestAssetsFactroy.CreateBox(TestAssetsFactroy.BoxType.d, new Vector2(15, 15));
 
-            TestAssetsFactroy.CreateTestLable(new Vector2Int(11, 28));
+            TestAssetsFactroy.CreateTestLable(new Vector2(11, 28));
 
             //StandardAssets.CreateTestTextBox(new Vector2Int(10, 21));
-            ListBox listTextBox = TestAssetsFactroy.CreateTestListBox(new Vector2Int(10, 21));
+            ListBox listTextBox = TestAssetsFactroy.CreateTestListBox(new Vector2(10, 21));
 
 
-            SystemUIFactroy.GetTimerUI(new Vector2Int(22, 12));
+            SystemUIFactroy.GetTimerUI(new Vector2(22, 12));
 
-            SystemUIFactroy.GetMouseEventUI(new Vector2Int(22, 6));
+            SystemUIFactroy.GetMouseEventUI(new Vector2(22, 6));
 
             //SystemUIFactroy.GetRendererTestAera(new Vector2Int(1, 1));
         }
@@ -50,7 +50,7 @@
         /// <summary>
         /// 创建一个标准单格主角
         /// </summary>
-        public static GameObject CreateStandardPlayer(string str, Vector2Int pos)
+        public static GameObject CreateStandardPlayer(string str, Vector2 pos)
         {
             GameObject player = new GameObject("StandardPlayer")
             {
@@ -100,7 +100,7 @@
         /// <summary>
         /// 创建一个基于物理系统的标准箱子
         /// </summary>
-        public static GameObject CreateBox(BoxType boxType, Vector2Int pos)
+        public static GameObject CreateBox(BoxType boxType, Vector2 pos)
         {
             GameObject box = new GameObject("箱子" + boxType.ToString())
             {
@@ -113,16 +113,16 @@
             switch (boxType)
             {
                 case BoxType.a:
-                    mesh.Init(new List<Vector2Int>() { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(2, 0), new Vector2Int(0, -1) });
+                    mesh.Init(new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0), new Vector2(0, -1) });
                     break;
                 case BoxType.b:
-                    mesh.Init(new List<Vector2Int>() { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(0, 1), new Vector2Int(1, -1) });
+                    mesh.Init(new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, -1) });
                     break;
                 case BoxType.c:
-                    mesh.Init(new List<Vector2Int>() { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(2, 0), new Vector2Int(3, 0) });
+                    mesh.Init(new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0), new Vector2(3, 0) });
                     break;
                 case BoxType.d:
-                    mesh.Init(new List<Vector2Int>() { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(-1, 0), new Vector2Int(0, 1) });
+                    mesh.Init(new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 0), new Vector2(-1, 0), new Vector2(0, 1) });
                     break;
                 default:
                     break;
@@ -154,7 +154,7 @@
         /// <summary>
         /// 创建一个测试用字符串
         /// </summary>
-        public static Renderer CreateTestLable(Vector2Int pos)
+        public static Renderer CreateTestLable(Vector2 pos)
         {
             string str = "欢迎使用DestroyEngine";
             int length = CharUtils.GetStringWidth(str);
@@ -166,7 +166,7 @@
         /// <summary>
         /// 创建一个测试用文本框
         /// </summary>
-        public static TextBox CreateTestTextBox(Vector2Int pos)
+        public static TextBox CreateTestTextBox(Vector2 pos)
         {
             TextBox textBox = UIFactroy.CreateTextBox(pos, 5, 10);
             textBox.SetText("Destroy TextBox", 1);
@@ -182,7 +182,7 @@
         /// <summary>
         /// 创建一个测试用ListBox
         /// </summary>
-        public static ListBox CreateTestListBox(Vector2Int pos)
+        public static ListBox CreateTestListBox(Vector2 pos)
         {
             ListBox textBox = UIFactroy.CreateListBox(pos, 5, 10);
 
