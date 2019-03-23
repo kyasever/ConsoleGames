@@ -4,8 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Destroy;
+using Destroy.Example;
+
 namespace Wizard2
 {
+    public abstract class SingletonScript<T> : Script where T : new()
+    {
+        private static T instance;
+        /// <summary>
+        /// 单例
+        /// </summary>
+        public static T Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new T();
+                return instance;
+            }
+        }
+    }
 
     /// <summary>
     /// Layer划分,越上面的显示的越靠前,数字可以随意改动,但是最好使用枚举来进行数字排列避免出错
@@ -19,52 +37,68 @@ namespace Wizard2
         MoveAera = 12,
     }
 
+    public class GameMode
+    {
+        private static MoveIndicator moveIndicator;
+        public static MoveIndicator MoveIndicator
+        {
+            get
+            {
+                if(moveIndicator == null)
+                {
+                    moveIndicator = GameObject.CreateWith<MoveIndicator>("MoveIndicator", "World");
+                }
+                return moveIndicator;
+            }
+        }
+
+        private static RouteIndicator routeIndicator;
+        public static RouteIndicator RouteIndicator
+        {
+            get
+            {
+                if (routeIndicator == null)
+                {
+                    routeIndicator = GameObject.CreateWith<RouteIndicator>("RouteIndicator", "World");
+                }
+                return routeIndicator;
+            }
+        }
+
+        public static GameMode Instance; 
+    }
+
+
     public static class AgentFactory
     {
         public static WizardAgent CreatePlayerAgent(Vector2 Location)
         {
-            //这两个东西不应该属于某一个,而是公共的
-            //可移动区域
-            GameObject moveAera = new GameObject("MoveAera", "Player");
-            MoveAera moveAeraCom = moveAera.AddComponent<MoveAera>();
-
-            //移动轨迹区域
-            GameObject moveRoute = new GameObject("MoveRoute", "Player");
-            MoveRoute moveRouteCom = moveRoute.AddComponent<MoveRoute>();
-
-
             GameObject gameObject = new GameObject("PlayerAgent", "Player");
             gameObject.Position = Location;
 
             gameObject.AddComponent<Mesh>();
             Renderer renderer = gameObject.AddComponent<Renderer>();
             renderer.Depth = (int)Layer.Agent;
-            renderer.Rendering("岩", new Colour(222, 178, 222), Config.DefaultBackColor);
+            renderer.Rendering("岩", new Color(222, 178, 222), Config.DefaultBackColor);
 
             WizardAgent wizardAgent = gameObject.AddComponent<WizardAgent>();
-            moveAera.SetActive(false);
-            wizardAgent.moveAera = moveAeraCom;
-            moveRoute.SetActive(false);
-            wizardAgent.moveRoute = moveRouteCom;
             return wizardAgent;
-
         }
     }
 
     /// <summary>
-    /// 移动范围组件
+    /// 可移动范围指示器
     /// </summary>
-    public class MoveAera : Script
+    public class MoveIndicator : Script 
     {
         private Mesh mesh;
         private Renderer renderer;
 
         public override void Awake()
         {
-
             mesh = AddComponent<Mesh>();
             renderer = AddComponent<Renderer>();
-            renderer.Depth = (int)Layer.MoveAera;
+            SetActive(false);
         }
 
         public void ExpandAera(Vector2 center,int expandWidth)
@@ -72,7 +106,7 @@ namespace Wizard2
             List<Vector2> list = NavMesh.ExpandAera(center, expandWidth, NavMesh.CanMoveInPhysics);
             mesh.Init(list);
 
-            RenderPoint rp = new RenderPoint("  ", Colour.Blue, Colour.Blue, (int)Layer.MoveAera);
+            RenderPoint rp = new RenderPoint("  ", Color.Blue, Color.Blue, (int)Layer.MoveAera);
             renderer.Rendering(rp);
         }
 
@@ -87,7 +121,10 @@ namespace Wizard2
         }
     }
 
-    public class MoveRoute : Script
+    /// <summary>
+    /// 路径指示器
+    /// </summary>
+    public class RouteIndicator : Script
     {
         private Mesh mesh;
         private Renderer renderer;
@@ -104,7 +141,7 @@ namespace Wizard2
             List<Vector2> list = NavMesh.Search(beginPos, endPos).ResultList;
             mesh.Init(list);
 
-            RenderPoint rp = new RenderPoint("  ", Config.DefaultForeColor, Colour.Green, (int)Layer.MoveRoute);
+            RenderPoint rp = new RenderPoint("  ", Config.DefaultForeColor, Color.Green, (int)Layer.MoveRoute);
             renderer.Rendering(rp);
         }
 
@@ -116,8 +153,16 @@ namespace Wizard2
 
     public class WizardAgent : Script
     {
-        public MoveAera moveAera;
-        public MoveRoute moveRoute;
+        public MoveIndicator moveAera;
+        public RouteIndicator routeAera;
+        public GameMode gameMode;
+
+        public override void Awake()
+        {
+            moveAera = GameMode.MoveIndicator;
+            routeAera = GameMode.RouteIndicator;
+            gameMode = GameMode.Instance;
+        }
 
         public bool IsClicked
         {
@@ -143,7 +188,6 @@ namespace Wizard2
         [ShowInInspector]
         public State state = State.None;
 
-
         private Vector2 lastPos = Vector2.Zero;
         public override void Update()
         {
@@ -160,26 +204,26 @@ namespace Wizard2
                     break;
                 case State.Move:
                     //Debug.Log(Cursor.Instanse.Position.ToString() + moveAera.Contains(Cursor.Instanse.Position).ToString());
-                    Vector2 cursorPos = Cursor.Instanse.Position;
-                    if (moveAera.Contains(Cursor.Instanse.Position))
+                    Vector2 cursorPos = Cursor.Instance.Position;
+                    if (moveAera.Contains(Cursor.Instance.Position))
                     {
                         if(cursorPos != lastPos)
                         {
-                            moveRoute.SetActive(true);
-                            moveRoute.SearchRoute(Position, Cursor.Instanse.Position);
+                            routeAera.SetActive(true);
+                            routeAera.SearchRoute(Position, Cursor.Instance.Position);
                         }
                         if (Input.GetMouseButtonUp(MouseButton.Left))
                         {
                             Debug.Log(GameObject.Name + "MoveTo:" + cursorPos.ToString());
                             Position = cursorPos;
-                            moveRoute.SetActive(false);
+                            routeAera.SetActive(false);
                             moveAera.SetActive(false);
                             state = State.None;
                         }
                     }
                     else
                     {
-                        moveRoute.SetActive(false);
+                        routeAera.SetActive(false);
                     }
                     lastPos = cursorPos;
                     break;

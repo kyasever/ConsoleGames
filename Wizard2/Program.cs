@@ -20,7 +20,7 @@ namespace Wizard2
             Config.TickPerSecond = 100;
             Config.ScreenWidth = 40;
             Config.ScreenHeight = 30;
-
+            Config.RendererSize = new Vector2(24, 24);
             //将项目-属性-输出类型调整为windows应用程序
             //使用Winform模式开始游戏并打开Editor.
             //TODO:Winform纯净模式开始游戏,不包含Editor.新建一个Form来干这个

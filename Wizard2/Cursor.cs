@@ -13,15 +13,15 @@ namespace Wizard2
         private float MoveInterval;
         private float MoveTime = 0f;
 
-        public static Cursor Instanse;
+        public static Cursor Instance;
         public static Cursor CreateCursor()
         {
             GameObject gameObject = new GameObject("Cursor", "Cursor");
             var renderer =  gameObject.AddComponent<Renderer>();
             renderer.Depth = (int)Layer.Cursor;
-            renderer.Rendering("  ", Config.DefaultForeColor, Colour.DarkRed);
+            renderer.Rendering("  ", Config.DefaultForeColor, Color.DarkRed);
             var cursorCom = gameObject.AddComponent<Cursor>();
-            Instanse = cursorCom;
+            Instance = cursorCom;
             return cursorCom;
         }
 

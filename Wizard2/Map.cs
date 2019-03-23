@@ -37,7 +37,7 @@ namespace Wizard2
             mesh.Init(list);
             var renderer =  gameObject.AddComponent<Renderer>();
 
-            RenderPoint rp = new RenderPoint("■", Colour.White, Config.DefaultBackColor, (int)Layer.Environment);
+            RenderPoint rp = new RenderPoint("■", Color.White, Config.DefaultBackColor, (int)Layer.Environment);
             renderer.Rendering(rp);
 
             gameObject.AddComponent<Collider>();
