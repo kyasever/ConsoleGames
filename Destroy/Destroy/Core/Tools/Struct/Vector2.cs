@@ -3,47 +3,30 @@
     using System;
 
     /// <summary>
-    /// 二维向量
-    /// 原Vector2->Vector2Float
+    /// 整数型二维向量
+    /// 原Vector2Int更改为Vector2为了简化
     /// </summary>
-    public struct Vector2Float
+    public struct Vector2 : IComparable
     {
         /// <summary>
-        /// X值
+        /// 
         /// </summary>
-        public float X;
+        public int X;
 
         /// <summary>
-        /// Y值
+        /// 
         /// </summary>
-        public float Y;
+        public int Y;
 
         /// <summary>
-        /// 向量长度
+        /// 
         /// </summary>
-        public float Magnitude
-        {
-            get
-            {
-                float magSquare = X * X + Y * Y;
-                return (float)Math.Sqrt(magSquare);
-            }
-        }
+        public Vector2 Negative => this * -1;
 
         /// <summary>
-        /// 单位向量
+        /// 
         /// </summary>
-        public Vector2Float Normalized => this / Magnitude;
-
-        /// <summary>
-        /// 反向
-        /// </summary>
-        public Vector2Float Negative => this * -1f;
-
-        /// <summary>
-        /// 构造
-        /// </summary>
-        public Vector2Float(float x, float y)
+        public Vector2(int x, int y)
         {
             X = x;
             Y = y;
@@ -57,7 +40,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public override bool Equals(object obj) => this == (Vector2Float)obj;
+        public override bool Equals(object obj) => this == (Vector2)obj;
 
         /// <summary>
         /// 
@@ -65,53 +48,90 @@
         public override string ToString() => $"[X:{X},Y:{Y}]";
 
         /// <summary>
-        /// 
+        /// 当检测到输入失灵的时候返回的默认值,不返回0,0为了加以区分
         /// </summary>
-        public static Vector2Float Zero => new Vector2Float();
+        public static Vector2 DefaultInput => new Vector2(-8, -8);
 
         /// <summary>
-        /// 
+        /// 比较原则, 左上角的小于右下角的, 按照从上到下, 从左到右排序
         /// </summary>
-        public static Vector2Float Up => new Vector2Float(0, 1);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static Vector2Float Down => new Vector2Float(0, -1);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static Vector2Float Left => new Vector2Float(-1, 0);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static Vector2Float Right => new Vector2Float(1, 0);
-
-        /// <summary>
-        /// 向量之间的距离float
-        /// </summary>
-        public static float Distance(Vector2Float a, Vector2Float b)
+        public int CompareTo(object obj)
         {
-            Vector2Float vector = a - b;
-            return vector.Magnitude;
+            Vector2 right = (Vector2)obj;
+            if (Y < right.Y)
+            {
+                return 1;
+            }
+            else if (Y == right.Y)
+            {
+                if (X > right.X)
+                {
+                    return 1;
+                }
+                else if (X == right.X)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// 向量之间的距离
+        /// </summary>
+        public static int Distance(Vector2 a, Vector2 b)
+        {
+            int x = Math.Abs(a.X - b.X);
+            int y = Math.Abs(a.Y - b.Y);
+            return x + y;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static bool operator ==(Vector2Float left, Vector2Float right) => left.X == right.X && left.Y == right.Y;
+        public static Vector2 Zero => new Vector2();
 
         /// <summary>
         /// 
         /// </summary>
-        public static bool operator !=(Vector2Float left, Vector2Float right) => left.X != right.X || left.Y != right.Y;
+        public static Vector2 Up => new Vector2(0, 1);
 
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Float operator +(Vector2Float left, Vector2Float right)
+        public static Vector2 Down => new Vector2(0, -1);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static Vector2 Left => new Vector2(-1, 0);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static Vector2 Right => new Vector2(1, 0);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool operator ==(Vector2 left, Vector2 right) => left.X == right.X && left.Y == right.Y;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool operator !=(Vector2 left, Vector2 right) => left.X != right.X || left.Y != right.Y;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static Vector2 operator +(Vector2 left, Vector2 right)
         {
             left.X += right.X;
             left.Y += right.Y;
@@ -121,7 +141,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Float operator -(Vector2Float left, Vector2Float right)
+        public static Vector2 operator -(Vector2 left, Vector2 right)
         {
             left.X -= right.X;
             left.Y -= right.Y;
@@ -131,7 +151,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Float operator *(Vector2Float left, float right)
+        public static Vector2 operator *(Vector2 left, int right)
         {
             left.X *= right;
             left.Y *= right;
@@ -141,7 +161,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public static Vector2Float operator /(Vector2Float left, float right)
+        public static Vector2 operator /(Vector2 left, int right)
         {
             if (right == 0)
                 throw new NaNException();
@@ -153,12 +173,20 @@
         /// <summary>
         /// 
         /// </summary>
-        public static explicit operator Vector2Float(Vector2 vector)
+        public static explicit operator Vector2(Vector2Float vector)
         {
-            Vector2Float vector2 = new Vector2Float();
-            vector2.X = vector.X;
-            vector2.Y = vector.Y;
-            return vector2;
+            Vector2 vector2Int = new Vector2();
+            vector2Int.X = (int)vector.X;
+            vector2Int.Y = (int)vector.Y;
+            return vector2Int;
+        }
+
+        /// <summary>
+        /// 给Vector2扩展一个Distanse方法,求两个点的距离
+        /// </summary>
+        public int Distanse(Vector2 otherV)
+        {
+            return Math.Abs(otherV.X - X) + Math.Abs(otherV.Y - Y);
         }
     }
 }

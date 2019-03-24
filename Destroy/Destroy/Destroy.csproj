@@ -61,7 +61,7 @@
     <Compile Include="Core\UI\SystemUI.cs" />
     <Compile Include="Core\Core\StandardIO.cs" />
     <Compile Include="Core\Core\Enums.cs" />
-    <Compile Include="Core\Tools\Windows.cs" />
+    <Compile Include="Windows\Windows.cs" />
     <Compile Include="Winform\EditorSystem.cs" />
     <Compile Include="Winform\ExtandVector2Int.cs" />
     <Compile Include="Winform\MainForm.cs">
@@ -101,13 +101,13 @@
     <Compile Include="Core\Core\Component.cs" />
     <Compile Include="Core\Core\GameObject.cs" />
     <Compile Include="Core\Components\Script.cs" />
-    <Compile Include="Core\Tools\Struct\Vector2.cs" />
+    <Compile Include="Core\Tools\Struct\Vector2Float.cs" />
     <Compile Include="Core\Tools\Utils\Mathematics.cs" />
     <Compile Include="Core\Components\Collider.cs" />
     <Compile Include="Core\Systems\PhysicsSystem.cs" />
     <Compile Include="Core\Tools\Debug.cs" />
     <Compile Include="Core\Tools\Input.cs" />
-    <Compile Include="Core\Tools\Struct\Vector2Int.cs" />
+    <Compile Include="Core\Tools\Struct\Vector2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\Tools\Utils\CharUtils.cs" />
   </ItemGroup>

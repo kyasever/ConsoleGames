@@ -156,6 +156,17 @@
         }
 
         /// <summary>
+        /// 3.20测试添加
+        /// 提供一种新的更便捷的创建物体的思路.直接返回具体脚本而不是游戏物体
+        /// </summary>
+        public static T CreateWith<T>(string name = "GameObject", string tag = "None", GameObject parent = null) where T : Component, new()
+        {
+            GameObject obj = new GameObject(name, tag, parent);
+            T com = obj.AddComponent<T>();
+            return com;
+        }
+
+        /// <summary>
         /// 设置自己所有组件的active以及所有子物体组件的active
         /// </summary>
         public void SetActive(bool value)

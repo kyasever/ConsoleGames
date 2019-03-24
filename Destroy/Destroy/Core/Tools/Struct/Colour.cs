@@ -1,47 +1,38 @@
 ﻿namespace Destroy
 {
     using System;
-    using System.Drawing;
 
     /// <summary>
     /// 颜色类,可以实现对ConsoleColor和Drawing.Color的兼容支持
     /// </summary>
     public struct Colour
     {
+        private uint r;
+        private uint g;
+        private uint b;
         /// <summary>
         /// red
         /// </summary>
-        public uint R { get; set; }
+        public uint R { get => r; set => r = value; }
         /// <summary>
         /// green
         /// </summary>
-        public uint G { get; set; }
+        public uint G { get => g; set => g = value; }
         /// <summary>
         /// blue
         /// </summary>
-        public uint B { get; set; }
+        public uint B { get => b; set => b = value; }
 
-        private ConsoleColor? consoleColor;
+        internal ConsoleColor? consoleColor;
 
         /// <summary>
         /// 使用RGB构造
         /// </summary>
         public Colour(uint r, uint g, uint b)
         {
-            R = r;
-            G = g;
-            B = b;
-            consoleColor = null;
-        }
-
-        /// <summary>
-        /// 使用Drawing.Color构造
-        /// </summary>
-        public Colour(Color color)
-        {
-            R = color.R;
-            G = color.G;
-            B = color.B;
+            this.r = r;
+            this.g = g;
+            this.b = b;
             consoleColor = null;
         }
 
@@ -51,14 +42,9 @@
         public Colour(ConsoleColor consoleColor)
         {
             this.consoleColor = consoleColor;
-
-            Color color = ConsoleColorToColor(consoleColor);
-
-            R = color.R;
-            G = color.G;
-            B = color.B;
+            ParseConsoleColor(consoleColor,out r,out g,out b);
         }
-
+        #region 静态颜色
         /// <summary>
         /// 
         /// </summary>
@@ -123,6 +109,7 @@
         /// 
         /// </summary>
         public static Colour DarkGray = new Colour(ConsoleColor.DarkGray);
+        #endregion
 
         /// <summary>
         /// 比较
@@ -150,84 +137,12 @@
         /// </summary>
         public override int GetHashCode() => base.GetHashCode();
 
-        /// <summary>
-        /// 转换为ConsoleColor供C#原生渲染器调用
-        /// </summary>
-        /// <return>返回值不会为空</return>
-        public ConsoleColor ToConsoleColor()
-        {
-            if (consoleColor == null)
-                return ColorToConsoleColor(Color.FromArgb((int)R, (int)G, (int)B));
-            return (ConsoleColor)consoleColor;
-        }
-
-        /// <summary>
-        /// 转化为System.Drawing.Color供其他渲染引擎使用
-        /// </summary>
-        public Color ToColor() => Color.FromArgb((int)R, (int)G, (int)B);
-
-        /// <summary>
-        /// 根据System.Drawing.Color的RGB值返回最接近的System.ConsoleColor
-        /// </summary>
-        public static ConsoleColor ColorToConsoleColor(Color color)
-        {
-            ConsoleColor closestConsoleColor = 0;
-            double delta = double.MaxValue;
-
-            foreach (ConsoleColor consoleColor in Enum.GetValues(typeof(ConsoleColor)))
-            {
-                string consoleColorName = Enum.GetName(typeof(ConsoleColor), consoleColor);
-                consoleColorName = string.Equals(consoleColorName, nameof(ConsoleColor.DarkYellow), StringComparison.Ordinal) ? nameof(Color.Orange) : consoleColorName;
-                Color rgbColor = Color.FromName(consoleColorName);
-                double sum = Math.Pow(rgbColor.R - color.R, 2.0) + Math.Pow(rgbColor.G - color.G, 2.0) + Math.Pow(rgbColor.B - color.B, 2.0);
-
-                double epsilon = 0.001;
-                if (sum < epsilon)
-                {
-                    return consoleColor;
-                }
-
-                if (sum < delta)
-                {
-                    delta = sum;
-                    closestConsoleColor = consoleColor;
-                }
-            }
-            return closestConsoleColor;
-        }
-
-        /// <summary>
-        /// 根据System.Drawing.Color的RGB值返回最接近的System.ConsoleColor
-        /// </summary>
-        public static ConsoleColor ColorToConsoleColor(byte r, byte g, byte b)
-        {
-            ConsoleColor result = 0;
-            double delta = double.MaxValue;
-
-            foreach (ConsoleColor each in Enum.GetValues(typeof(ConsoleColor)))
-            {
-                string name = Enum.GetName(typeof(ConsoleColor), each);
-
-                Color color = Color.FromName(name == "DarkYellow" ? "Orange" : name);
-                double t = Math.Pow(color.R - r, 2.0) + Math.Pow(color.G - g, 2.0) + Math.Pow(color.B - b, 2.0);
-                if (t == 0.0)
-                    return each;
-                if (t < delta)
-                {
-                    delta = t;
-                    result = each;
-                }
-            }
-            return result;
-        }
 
         /// <summary>
         /// System.ConsoleColor转换为System.Drawing.Color
         /// </summary>
-        public static Color ConsoleColorToColor(ConsoleColor consoleColor)
+        public static void ParseConsoleColor(ConsoleColor consoleColor,out uint r,out uint g,out uint b)
         {
-            int r, g, b;
-
             switch (consoleColor)
             {
                 case ConsoleColor.Black:
@@ -345,7 +260,43 @@
                 default:
                     throw new Exception("Error");
             }
-            return Color.FromArgb(r, g, b);
+        }
+
+        /// <summary>
+        /// 将colour解析为ConsoleColor
+        /// </summary>
+        /// <return>返回值不会为空</return>
+        public ConsoleColor ToConsoleColor()
+        {
+            if (consoleColor == null)
+                return ColorToConsoleColor((byte)R, (byte)G, (byte)B);
+            return (ConsoleColor)consoleColor;
+        }
+
+        /// <summary>
+        /// 根据System.Drawing.Color的RGB值返回最接近的System.ConsoleColor
+        /// </summary>
+        public static ConsoleColor ColorToConsoleColor(byte r, byte g, byte b)
+        {
+            ConsoleColor result = 0;
+            double delta = double.MaxValue;
+
+            foreach (ConsoleColor each in Enum.GetValues(typeof(ConsoleColor)))
+            {
+                string name = Enum.GetName(typeof(ConsoleColor), each);
+
+                uint R, G, B;
+                ParseConsoleColor(each,out R,out G,out B);
+                double t = Math.Pow(R - r, 2.0) + Math.Pow(G - g, 2.0) + Math.Pow(B - b, 2.0);
+                if (t == 0.0)
+                    return each;
+                if (t < delta)
+                {
+                    delta = t;
+                    result = each;
+                }
+            }
+            return result;
         }
     }
 }

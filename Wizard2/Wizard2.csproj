@@ -74,10 +74,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DestroyWinform\DestroyWinform.csproj">
-      <Project>{2c933b77-54c6-4e32-b50c-604185ab172a}</Project>
-      <Name>DestroyWinform</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Destroy\Destroy\Destroy.csproj">
       <Project>{29678c39-7511-4ce8-925f-08e663872cda}</Project>
       <Name>Destroy</Name>

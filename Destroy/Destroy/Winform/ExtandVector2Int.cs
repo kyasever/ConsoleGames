@@ -8,6 +8,16 @@ using System.Threading.Tasks;
 namespace Destroy.Winform
 { 
     /// <summary>
+    /// 
+    /// </summary>
+    public static class ExtandColor 
+    {
+
+
+
+
+    }
+    /// <summary>
     /// Vector2Int扩展,这个属于Destroy.Winform
     /// </summary>
     public static class ExtandVector2Int
@@ -40,11 +50,11 @@ namespace Destroy.Winform
         }
 
         /// <summary>
-        /// 给Vector2扩展一个Distanse方法,求两个点的距离
+        /// Colour转换为Drawing.Color
         /// </summary>
-        public static int Distanse(this Vector2 _Vector2Int, Vector2 otherV)
+        public static Color ToColor(this Colour colour)
         {
-            return Math.Abs(otherV.X - _Vector2Int.X) + Math.Abs(otherV.Y - _Vector2Int.Y);
+            return Color.FromArgb((int)colour.R, (int)colour.G, (int)colour.B);
         }
     }
 }
