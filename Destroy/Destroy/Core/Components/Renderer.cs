@@ -45,11 +45,11 @@
         /// <summary>
         /// 前景色
         /// </summary>
-        public Colour ForeColor = Config.DefaultForeColor;
+        public Color ForeColor = Config.DefaultForeColor;
         /// <summary>
         /// 背景色
         /// </summary>
-        public Colour BackColor = Config.DefaultBackColor;
+        public Color BackColor = Config.DefaultBackColor;
         private List<RenderPoint> result = new List<RenderPoint>();
 
         /// <summary>
@@ -62,7 +62,7 @@
         /// </summary>
         /// <param name="fore">初始的前景色</param>
         /// <param name="back">初始的背景色</param>
-        public ColorStringBiulder(Colour fore, Colour back)
+        public ColorStringBiulder(Color fore, Color back)
         {
             ForeColor = fore;
             BackColor = back;
@@ -167,7 +167,7 @@
         /// <param name="str">使用的字符串</param>
         /// <param name="foreColor">前景色</param>
         /// <param name="backColor">背景色</param>
-        public void Rendering(string str, Colour foreColor, Colour backColor)
+        public void Rendering(string str, Color foreColor, Color backColor)
         {
             List<RenderPoint> result = new List<RenderPoint>();
             //从贴图加载字符串信息,并切分成List String
@@ -253,7 +253,7 @@
         /// <summary>
         /// 更改背景色
         /// </summary>
-        public void SetBackColor(Colour backColor)
+        public void SetBackColor(Color backColor)
         {
             Dictionary<Vector2, RenderPoint> newdic = new Dictionary<Vector2, RenderPoint>();
             foreach (Vector2 point in RendererPoints.Keys)
@@ -268,7 +268,7 @@
         /// <summary>
         /// 更改前景色
         /// </summary>
-        public void SetForeColor(Colour foreColor)
+        public void SetForeColor(Color foreColor)
         {
             Dictionary<Vector2, RenderPoint> newdic = new Dictionary<Vector2, RenderPoint>();
             foreach (Vector2 point in RendererPoints.Keys)
@@ -349,12 +349,12 @@
         /// <summary>
         /// 前景色
         /// </summary>
-        public Colour ForeColor;
+        public Color ForeColor;
 
         /// <summary>
         /// 背景色
         /// </summary>
-        public Colour BackColor;
+        public Color BackColor;
 
         /// <summary>
         /// 渲染优先级(为0时脚本显示优先级最高(最后被渲染), 负数表示这个是UI(在游戏物体之前渲染))
@@ -467,7 +467,7 @@
         /// <summary>
         /// 使用前景颜色的字符串初始化
         /// </summary>
-        public RenderPoint(string str, Colour foreColor, int depth)
+        public RenderPoint(string str, Color foreColor, int depth)
         {
             Str = str;
             ForeColor = foreColor;
@@ -478,7 +478,7 @@
         /// <summary>
         /// 完整的初始化
         /// </summary>
-        public RenderPoint(string str, Colour foreColor, Colour backColor, int depth = int.MaxValue)
+        public RenderPoint(string str, Color foreColor, Color backColor, int depth = int.MaxValue)
         {
             Str = str;
             ForeColor = foreColor;

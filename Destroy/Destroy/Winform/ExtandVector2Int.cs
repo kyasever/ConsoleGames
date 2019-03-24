@@ -52,9 +52,9 @@ namespace Destroy.Winform
         /// <summary>
         /// Colour转换为Drawing.Color
         /// </summary>
-        public static Color ToColor(this Colour colour)
+        public static System.Drawing.Color ToColor(this Color color)
         {
-            return Color.FromArgb((int)colour.R, (int)colour.G, (int)colour.B);
+            return System.Drawing.Color.FromArgb((int)color.R, (int)color.G, (int)color.B);
         }
     }
 }

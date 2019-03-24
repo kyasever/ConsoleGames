@@ -80,7 +80,7 @@ namespace Wizard2
             gameObject.AddComponent<Mesh>();
             Renderer renderer = gameObject.AddComponent<Renderer>();
             renderer.Depth = (int)Layer.Agent;
-            renderer.Rendering("岩", new Colour(222, 178, 222), Config.DefaultBackColor);
+            renderer.Rendering("岩", new Destroy.Color(222, 178, 222), Config.DefaultBackColor);
 
             WizardAgent wizardAgent = gameObject.AddComponent<WizardAgent>();
             return wizardAgent;
@@ -107,7 +107,7 @@ namespace Wizard2
             List<Vector2> list = NavMesh.ExpandAera(center, expandWidth, NavMesh.CanMoveInPhysics);
             mesh.Init(list);
 
-            RenderPoint rp = new RenderPoint("  ", Colour.Blue, Colour.Blue, (int)Layer.MoveAera);
+            RenderPoint rp = new RenderPoint("  ", Destroy.Color.Blue, Destroy.Color.Blue, (int)Layer.MoveAera);
             renderer.Rendering(rp);
         }
 
@@ -142,7 +142,7 @@ namespace Wizard2
             List<Vector2> list = NavMesh.Search(beginPos, endPos).ResultList;
             mesh.Init(list);
 
-            RenderPoint rp = new RenderPoint("  ", Config.DefaultForeColor, Colour.Green, (int)Layer.MoveRoute);
+            RenderPoint rp = new RenderPoint("  ", Config.DefaultForeColor, Destroy.Color.Green, (int)Layer.MoveRoute);
             renderer.Rendering(rp);
         }
 

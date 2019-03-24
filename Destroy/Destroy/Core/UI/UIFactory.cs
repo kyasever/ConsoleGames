@@ -154,7 +154,7 @@
         /// <summary>
         /// 背景色
         /// </summary>
-        public Colour BackColor;
+        public Color BackColor;
         /// <summary>
         /// 序号
         /// </summary>
@@ -441,7 +441,7 @@
             renderer.Init(RendererMode.UI, -1);
             //添加一个Label组件
             ListBoxItem itemCom = label.AddComponent<ListBoxItem>();
-            itemCom.BackColor = Colour.Yellow;
+            itemCom.BackColor = Color.Yellow;
             itemCom.OnClick += OnClickAction;
 
             renderer.Rendering(text);

@@ -5,7 +5,7 @@
     /// <summary>
     /// 颜色类,可以实现对ConsoleColor和Drawing.Color的兼容支持
     /// </summary>
-    public struct Colour
+    public struct Color
     {
         private uint r;
         private uint g;
@@ -28,7 +28,7 @@
         /// <summary>
         /// 使用RGB构造
         /// </summary>
-        public Colour(uint r, uint g, uint b)
+        public Color(uint r, uint g, uint b)
         {
             this.r = r;
             this.g = g;
@@ -39,7 +39,7 @@
         /// <summary>
         /// 使用ConsoleColor构造
         /// </summary>
-        public Colour(ConsoleColor consoleColor)
+        public Color(ConsoleColor consoleColor)
         {
             this.consoleColor = consoleColor;
             ParseConsoleColor(consoleColor,out r,out g,out b);
@@ -48,73 +48,73 @@
         /// <summary>
         /// 
         /// </summary>
-        public static Colour Black = new Colour(ConsoleColor.Black);
+        public static Color Black = new Color(ConsoleColor.Black);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour Blue = new Colour(ConsoleColor.Blue);
+        public static Color Blue = new Color(ConsoleColor.Blue);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour Green = new Colour(ConsoleColor.Green);
+        public static Color Green = new Color(ConsoleColor.Green);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour Cyan = new Colour(ConsoleColor.Cyan);
+        public static Color Cyan = new Color(ConsoleColor.Cyan);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour Red = new Colour(ConsoleColor.Red);
+        public static Color Red = new Color(ConsoleColor.Red);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour Gray = new Colour(ConsoleColor.Gray);
+        public static Color Gray = new Color(ConsoleColor.Gray);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour Magenta = new Colour(ConsoleColor.Magenta);
+        public static Color Magenta = new Color(ConsoleColor.Magenta);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour Yellow = new Colour(ConsoleColor.Yellow);
+        public static Color Yellow = new Color(ConsoleColor.Yellow);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour White = new Colour(ConsoleColor.White);
+        public static Color White = new Color(ConsoleColor.White);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour DarkBlue = new Colour(ConsoleColor.DarkBlue);
+        public static Color DarkBlue = new Color(ConsoleColor.DarkBlue);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour DarkGreen = new Colour(ConsoleColor.DarkGreen);
+        public static Color DarkGreen = new Color(ConsoleColor.DarkGreen);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour DarkCyan = new Colour(ConsoleColor.DarkCyan);
+        public static Color DarkCyan = new Color(ConsoleColor.DarkCyan);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour DarkRed = new Colour(ConsoleColor.DarkRed);
+        public static Color DarkRed = new Color(ConsoleColor.DarkRed);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour DarkMagenta = new Colour(ConsoleColor.DarkMagenta);
+        public static Color DarkMagenta = new Color(ConsoleColor.DarkMagenta);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour DarkYellow = new Colour(ConsoleColor.DarkYellow);
+        public static Color DarkYellow = new Color(ConsoleColor.DarkYellow);
         /// <summary>
         /// 
         /// </summary>
-        public static Colour DarkGray = new Colour(ConsoleColor.DarkGray);
+        public static Color DarkGray = new Color(ConsoleColor.DarkGray);
         #endregion
 
         /// <summary>
         /// 比较
         /// </summary>
-        public static bool operator ==(Colour left, Colour right)
+        public static bool operator ==(Color left, Color right)
         {
             return left.R == right.R && left.G == right.G && left.B == right.B;
         }
@@ -122,7 +122,7 @@
         /// <summary>
         /// !=
         /// </summary>
-        public static bool operator !=(Colour left, Colour right)
+        public static bool operator !=(Color left, Color right)
         {
             return !(left == right);
         }
@@ -130,7 +130,7 @@
         /// <summary>
         /// ==
         /// </summary>
-        public override bool Equals(object obj) => this == (Colour)obj;
+        public override bool Equals(object obj) => this == (Color)obj;
 
         /// <summary>
         /// Hash

@@ -48,12 +48,12 @@
         /// <summary>
         /// 系统默认颜色
         /// </summary>
-        public static Colour DefaultForeColor = Colour.Gray;
+        public static Color DefaultForeColor = Color.Gray;
 
         /// <summary>
         /// 系统默认背景色
         /// </summary>
-        public static Colour DefaultBackColor = Colour.Black;
+        public static Color DefaultBackColor = Color.Black;
 
         /// <summary>
         /// 比如被初始化,表示一个RenderPoint在屏幕上占有的像素点

@@ -133,16 +133,16 @@
             switch (boxType)
             {
                 case BoxType.a:
-                    renderer.Rendering("甲乙丙丁", Colour.Blue, Colour.Red);
+                    renderer.Rendering("甲乙丙丁", Color.Blue, Color.Red);
                     break;
                 case BoxType.b:
-                    renderer.Rendering("一二三四", Colour.Gray, Colour.Green);
+                    renderer.Rendering("一二三四", Color.Gray, Color.Green);
                     break;
                 case BoxType.c:
-                    renderer.Rendering("子丑寅卯", Colour.Cyan, Colour.Red);
+                    renderer.Rendering("子丑寅卯", Color.Cyan, Color.Red);
                     break;
                 case BoxType.d:
-                    renderer.Rendering("-1-2-3-4", Colour.DarkGray, Colour.DarkBlue);
+                    renderer.Rendering("-1-2-3-4", Color.DarkGray, Color.DarkBlue);
                     break;
                 default:
                     break;
@@ -159,7 +159,7 @@
             string str = "欢迎使用DestroyEngine";
             int length = CharUtils.GetStringWidth(str);
             Renderer renderer = UIFactroy.CreateLabel(pos, length / 2 + 1);
-            renderer.Rendering(str, Colour.Cyan, Colour.Blue);
+            renderer.Rendering(str, Color.Cyan, Color.Blue);
             return renderer;
         }
 
@@ -171,7 +171,7 @@
             TextBox textBox = UIFactroy.CreateTextBox(pos, 5, 10);
             textBox.SetText("Destroy TextBox", 1);
             Renderer renderer = textBox.Labels[0].GetComponent<Renderer>();
-            renderer.SetForeColor(Colour.Green);
+            renderer.SetForeColor(Color.Green);
             textBox.SetText("1.这是一个文本框", 2);
             textBox.SetText("2.文本框没有碰撞", 3);
             textBox.SetText("3.不会随摄像机移动", 4);

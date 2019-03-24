@@ -177,11 +177,11 @@ namespace Destroy.Winform
             //不活跃的为灰色
             if (gameObject.Active)
             {
-                cNode.ForeColor = Color.Black;
+                cNode.ForeColor = System.Drawing.Color.Black;
             }
             else
             {
-                cNode.ForeColor = Color.Gray;
+                cNode.ForeColor = System.Drawing.Color.Gray;
             }
             tree_NodeDic.Add(cNode, gameObject);
 
@@ -216,8 +216,8 @@ namespace Destroy.Winform
                     RenderPoint rp = drawList[i];
                     //这个字体制表符是占两位的.....
                     //RenderPoint rp = new RenderPoint(Destroy.Template.BoxDrawingSupply.boxVerticalLeft.ToString(),-1);
-                    Color foreColor = rp.ForeColor.ToColor();
-                    Color backColor = rp.BackColor.ToColor();
+                    System.Drawing.Color foreColor = rp.ForeColor.ToColor();
+                    System.Drawing.Color backColor = rp.BackColor.ToColor();
 
                     SolidBrush solidBrushFore = new SolidBrush(foreColor);
                     SolidBrush solidBrushBack = new SolidBrush(backColor);
@@ -326,11 +326,11 @@ namespace Destroy.Winform
 
             if (!gameObject.Active)
             {
-                oNode.ForeColor = Color.Gray;
+                oNode.ForeColor = System.Drawing.Color.Gray;
             }
             else
             {
-                oNode.ForeColor = Color.Orange;
+                oNode.ForeColor = System.Drawing.Color.Orange;
             }
 
             TreeNode position = AddNode(oNode.Nodes, "Position", "Position:" + gameObject.Position.ToString());
@@ -354,11 +354,11 @@ namespace Destroy.Winform
 
             if (component.Enable)
             {
-                cNode.ForeColor = Color.Blue;
+                cNode.ForeColor = System.Drawing.Color.Blue;
             }
             else
             {
-                cNode.ForeColor = Color.Gray;
+                cNode.ForeColor = System.Drawing.Color.Gray;
             }
 
             Type componentType = component.GetType();

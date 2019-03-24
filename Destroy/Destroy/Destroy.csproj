@@ -86,7 +86,7 @@
     <Compile Include="Core\Tools\RefHelper.cs" />
     <Compile Include="Core\UI\Rectangle.cs" />
     <Compile Include="Core\Systems\InputSystem.cs" />
-    <Compile Include="Core\Tools\Struct\Colour.cs" />
+    <Compile Include="Core\Tools\Struct\Color.cs" />
     <Compile Include="Core\Core\Config.cs" />
     <Compile Include="ExampleScene\PushBox.cs" />
     <Compile Include="Core\UI\UIFactory.cs" />

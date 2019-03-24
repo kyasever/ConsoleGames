@@ -78,8 +78,8 @@
             RenderPoint GetARandomPoint()
             {
                 int r = random.Next(0, EsString.Length - 1);
-                Colour fc = new Colour((ConsoleColor)random.Next(0, 15));
-                Colour bc = new Colour((ConsoleColor)random.Next(0, 15));
+                Color fc = new Color((ConsoleColor)random.Next(0, 15));
+                Color bc = new Color((ConsoleColor)random.Next(0, 15));
                 return new RenderPoint(EsString[r].ToString(), fc, bc, -1);
             }
 
