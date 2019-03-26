@@ -67,6 +67,10 @@
         private Vector2Float lastInput = Vector2Float.Zero;
 
         /// <summary>
+        /// 
+        /// </summary>
+        public Vector2 Direction = Vector2.Zero;
+        /// <summary>
         /// 要控制的角色的速度
         /// </summary>
         public int Speed;

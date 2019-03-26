@@ -386,6 +386,8 @@
             //考虑了一些乱七八糟的问题,目前先都删了,只保留深度比较
             if (left.Depth < right.Depth)
             {
+                if (left.Depth < 0)
+                    return left;
                 RenderPoint rp = new RenderPoint();
                 if (left.BackColor == Config.DefaultBackColor)
                 {
@@ -396,7 +398,7 @@
                     rp.BackColor = left.BackColor;
                 }
 
-                if (left.ForeColor == Config.DefaultForeColor)
+                if (left.Str == "  ")
                 {
                     rp.ForeColor = right.ForeColor;
                     rp.Str = right.Str;
@@ -427,6 +429,8 @@
             }
             else
             {
+                if (right.Depth < 0)
+                    return right;
                 RenderPoint rp = new RenderPoint();
                 if (right.BackColor == Config.DefaultBackColor)
                 {
@@ -437,7 +441,7 @@
                     rp.BackColor = right.BackColor;
                 }
 
-                if (right.ForeColor == Config.DefaultForeColor)
+                if (right.Str == "  ")
                 {
                     rp.ForeColor = left.ForeColor;
                     rp.Str = left.Str;

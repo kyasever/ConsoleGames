@@ -6,14 +6,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Destroy;
 
-namespace Wizard2
+namespace Destroy.Standard
 {
-    public static class Map
+    /// <summary>
+    /// 地图加载,从文件中加载地图
+    /// </summary>
+    public static class MapLoader
     {
-        public static void LoadMap()
+        /// <summary>
+        /// 加载指定资源名字作为地图
+        /// </summary>
+        public static void LoadMap(string name)
         {
             List<Vector2> list = new List<Vector2>();
-            StreamReader sr = Resource.Load<StreamReader>("Scene1");
+            StreamReader sr = Resource.Load<StreamReader>(name);
             int y = 23;
             string str = "";
             while ((str = sr.ReadLine()) != null)
@@ -30,6 +36,9 @@ namespace Wizard2
             CreateWall(list);
         }
 
+        /// <summary>
+        /// 创建地图对象
+        /// </summary>
         public static GameObject CreateWall(List<Vector2> list)
         {
             GameObject gameObject = new GameObject("Wall", "Wall");

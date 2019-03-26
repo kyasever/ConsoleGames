@@ -21,6 +21,26 @@
         }
 
         /// <summary>
+        /// 系统监视器 默认位于屏幕右上角
+        /// </summary>
+        public static GameObject GetSystemInspector()
+        {
+            int x = Config.ScreenWidth - 12;
+            int y = Config.ScreenHeight - 17;
+            return GetSystemInspector(new Vector2(x, y));
+        }
+
+        /// <summary>
+        /// 系统监视器.包含常见的系统信息,范围17*12
+        /// </summary>
+        public static GameObject GetSystemInspector(Vector2 pos)
+        {
+            TextBox textBox = UIFactroy.CreateTextBox(pos, 15, 10);
+            SystemInspector script = textBox.AddComponent<SystemInspector>();
+            return textBox.GameObject;
+        }
+
+        /// <summary>
         /// 用于显示鼠标检测到的事件
         /// 范围5*10
         /// </summary>
@@ -37,10 +57,23 @@
         /// </summary>
         public static GameObject GetRendererTestAera(Vector2 pos)
         {
+            GameObject testGameObject = new GameObject("RendererTest", "UI");
+            testGameObject.Position = pos;
+            testGameObject.AddComponent<RendererTestScript>();
+            return testGameObject;
+        }
+    }
+
+    internal class RendererTestScript : Script
+    {
+        public GameObject R1, R2;
+        public bool flag = true;
+
+        public override void Awake()
+        {
             Random random = new Random();
             string EsString = "临兵斗者皆阵列在前";
 
-            GameObject testGameObject = new GameObject("RendererTest", "UI");
             List<Vector2> posList = new List<Vector2>();
             for (int i = 0; i < 400; i++)
             {
@@ -53,7 +86,7 @@
 
             for (int i = 0; i < 400; i++)
             {
-                if (random.Next(0,100) > 50)
+                if (random.Next(0, 100) > 50)
                 {
                     posListC1.Add(posList[i]);
                 }
@@ -70,10 +103,9 @@
                 rpListC2.Add(GetARandomPoint());
             }
 
-            RendererTestScript script = testGameObject.AddComponent<RendererTestScript>();
+            RendererTestScript script = AddComponent<RendererTestScript>();
             script.R1 = CreateChildR(posListC1, rpListC1);
             script.R2 = CreateChildR(posListC2, rpListC2);
-            return testGameObject;
 
             RenderPoint GetARandomPoint()
             {
@@ -90,16 +122,11 @@
                 Renderer renderer = childR.AddComponent<Renderer>();
                 renderer.Init(RendererMode.UI, -10);
                 renderer.Rendering(rendererList);
-                childR.Parent = testGameObject;
+                childR.Parent = GameObject;
                 return childR;
             }
         }
-    }
 
-    internal class RendererTestScript : Script
-    {
-        public GameObject R1, R2;
-        public bool flag = true;
         public override void Update()
         {
             if (flag)
@@ -161,6 +188,69 @@
                 i++;
                 GetComponent<TextBox>().SetText("当前帧率:" + Time.CurFrameRate.ToString(), i);
                 i++;
+            }
+        }
+    }
+
+    internal class SystemInspector : Script
+    {
+        public static SystemInspector Instance;
+        public SystemInspector()
+        {
+            Instance = this;
+        }
+        
+        
+
+        public int Interval = Config.TickPerSecond/10;
+
+        private int count = 0;
+
+        private TextBox textBox;
+        private List<string> items;
+
+        //将其他组件暂存的 需要显示的数据依次显示在底下
+        public List<Func<string>> outputFunc;
+
+
+
+        public override void Awake()
+        {
+            textBox = GetComponent<TextBox>();
+            if (textBox == null)
+            {
+                throw new Exception("这个脚本是基于textBox组件的.");
+            }
+        }
+
+        public override void Update()
+        {
+            count++;
+            if (count == Interval)
+            {
+                count = 0;
+
+                //每一行只能显示10宽度的字符
+                items = new List<string>();
+                items.Add("------帧率统计------");
+                items.Add("引擎用时 (ms):" + (Time.AllSystemsSpendTime * 1000).ToString("F4"));
+                //items.Add("理论最大帧率:" + Time.MaxFrameRate.ToString("F1"));
+                items.Add("当前帧率:" + Time.CurFrameRate.ToString("F1"));
+                items.Add("------鼠标指针------");
+                items.Add(Input.MousePosition.ToString());
+                items.Add(Input.MousePositionInPixel.ToString());
+
+                foreach(var v in outputFunc)
+                {
+                    items.Add(v.Invoke());
+                }
+
+                int i = 1;
+                foreach(var v in items)
+                {
+                    textBox.SetText(v, i);
+                    i++;
+                }
             }
         }
     }

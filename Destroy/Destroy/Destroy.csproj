@@ -57,10 +57,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Tools\Maze.cs" />
     <Compile Include="Core\UI\BoxDrawing.cs" />
     <Compile Include="Core\UI\SystemUI.cs" />
     <Compile Include="Core\Core\StandardIO.cs" />
     <Compile Include="Core\Core\Enums.cs" />
+    <Compile Include="Standard\Box-TPS\CameraController.cs" />
+    <Compile Include="Standard\Maze-SRPG\Cursor.cs" />
+    <Compile Include="Standard\Maze-SRPG\SRPGScene.cs" />
+    <Compile Include="Standard\Maze-SRPG\Layer.cs" />
+    <Compile Include="Standard\Maze-SRPG\Map.cs" />
+    <Compile Include="Standard\Maze-SRPG\WizardAgent.cs" />
     <Compile Include="Windows\Windows.cs" />
     <Compile Include="Winform\EditorSystem.cs" />
     <Compile Include="Winform\ExtandVector2Int.cs" />
@@ -70,7 +77,7 @@
     <Compile Include="Winform\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\Tools\NavMesh.cs" />
+    <Compile Include="Core\Tools\Navigation .cs" />
     <Compile Include="Core\Tools\Resource.cs" />
     <Compile Include="Winform\WinformEngine.cs" />
     <Compile Include="Core\Components\Camera.cs" />
@@ -88,7 +95,7 @@
     <Compile Include="Core\Systems\InputSystem.cs" />
     <Compile Include="Core\Tools\Struct\Color.cs" />
     <Compile Include="Core\Core\Config.cs" />
-    <Compile Include="ExampleScene\PushBox.cs" />
+    <Compile Include="Standard\Box-TPS\PushBox.cs" />
     <Compile Include="Core\UI\UIFactory.cs" />
     <Compile Include="Core\Tools\Utils\Matrix.cs" />
     <Compile Include="Core\Tools\ObjectPool.cs" />

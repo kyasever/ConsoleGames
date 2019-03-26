@@ -30,7 +30,7 @@ namespace Destroy
     /// 应该还会有一个NavMeshAgent,但不会有System. 这个静态类提供算法Agent负责调用
     /// 在战棋游戏里有战棋的Agent,原理差不多
     /// </summary>
-    public static class NavMesh
+    public static class Navigation
     {
         /// <summary>
         /// 默认搜索方法
@@ -237,6 +237,16 @@ namespace Destroy
             SearchResult result = new SearchResult();
             //保存路径信息
             RouteDic SearchDic = new RouteDic();
+
+            //首先校验一下终点是否可行
+            if (!canMoveFunc(stop))
+            {
+                result.Success = false;
+                result.ResultList = new List<Vector2>() { stop };
+                result.SearchAeraCount = SearchDic.Count;
+                return result;
+            }
+            
             //待检测点队列
             List<Vector2> queue = new List<Vector2>();
 
@@ -320,6 +330,7 @@ namespace Destroy
         /// <summary>
         /// 返回distanse范围内所有可以通过的点
         /// </summary>
+        /// <param name="startPos"></param>
         /// <param name="expandWidth">搜索范围</param>
         /// <param name="canMoveFunc">点是否是可以通过的</param>
         /// <returns>点列表</returns>

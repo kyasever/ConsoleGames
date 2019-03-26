@@ -1,6 +1,6 @@
 ﻿namespace Destroy
 {
-    using Destroy.Example;
+    using Destroy.Standard;
     using System.Collections.Generic;
     using System.Text;
 

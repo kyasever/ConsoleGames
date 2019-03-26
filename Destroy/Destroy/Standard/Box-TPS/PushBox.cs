@@ -1,4 +1,4 @@
-﻿namespace Destroy.Example
+﻿namespace Destroy.Standard
 {
     using System.Collections.Generic;
 
@@ -21,12 +21,15 @@
         public override void OnStart()
         {
             GameObject player = TestAssetsFactroy.CreateStandardPlayer("吊", new Vector2(5, 10));
+            CameraController.Instance.followTrans = player;
 
-            TestAssetsFactroy.CreateBox(TestAssetsFactroy.BoxType.a, new Vector2(10, 10));
-            TestAssetsFactroy.CreateBox(TestAssetsFactroy.BoxType.b, new Vector2(15, 10));
+
+
+            TestAssetsFactroy.CreateBox(new Vector2(10, 10));
+            TestAssetsFactroy.CreateBox(new Vector2(15, 10));
             //StandardAssets.CreateBox(StandardAssets.BoxType.b, new Vector2Int(10, 10));
-            TestAssetsFactroy.CreateBox(TestAssetsFactroy.BoxType.c, new Vector2(10, 15));
-            TestAssetsFactroy.CreateBox(TestAssetsFactroy.BoxType.d, new Vector2(15, 15));
+            TestAssetsFactroy.CreateBox(new Vector2(10, 15));
+            TestAssetsFactroy.CreateBox(new Vector2(15, 15));
 
             TestAssetsFactroy.CreateTestLable(new Vector2(11, 28));
 
@@ -34,9 +37,9 @@
             ListBox listTextBox = TestAssetsFactroy.CreateTestListBox(new Vector2(10, 21));
 
 
-            SystemUIFactroy.GetTimerUI(new Vector2(22, 12));
-
-            SystemUIFactroy.GetMouseEventUI(new Vector2(22, 6));
+            //SystemUIFactroy.GetTimerUI(new Vector2(22, 12));
+            //SystemUIFactroy.GetMouseEventUI(new Vector2(22, 6));
+            SystemUIFactroy.GetSystemInspector();
 
             //SystemUIFactroy.GetRendererTestAera(new Vector2Int(1, 1));
         }
@@ -66,62 +69,36 @@
             renderer.Depth = 5;
 
             CharacterController controller = player.AddComponent<CharacterController>();
-            controller.CanMoveInCollider = true;
+            controller.CanMoveInCollider = false;
             return player;
-        }
-
-        /// <summary>
-        /// 标准箱子的形状类型
-        /// </summary>
-        public enum BoxType
-        {
-            /// <summary>
-            /// 
-            /// </summary>
-            a,
-            /// <summary>
-            /// 
-            /// </summary>
-            b,
-            /// <summary>
-            /// 
-            /// </summary>
-            c,
-            /// <summary>
-            /// 
-            /// </summary>
-            d,
-            /// <summary>
-            /// 
-            /// </summary>
-            e
         }
 
         /// <summary>
         /// 创建一个基于物理系统的标准箱子
         /// </summary>
-        public static GameObject CreateBox(BoxType boxType, Vector2 pos)
+        public static GameObject CreateBox(Vector2 pos)
         {
-            GameObject box = new GameObject("箱子" + boxType.ToString())
+            int r = GameMode.Random.Next(0, 3);
+
+            GameObject box = new GameObject("箱子" + r.ToString())
             {
                 Position = pos
             };
 
             Mesh mesh = box.AddComponent<Mesh>();
 
-
-            switch (boxType)
+            switch (r)
             {
-                case BoxType.a:
+                case 0:
                     mesh.Init(new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0), new Vector2(0, -1) });
                     break;
-                case BoxType.b:
+                case 1:
                     mesh.Init(new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, -1) });
                     break;
-                case BoxType.c:
+                case 2:
                     mesh.Init(new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0), new Vector2(3, 0) });
                     break;
-                case BoxType.d:
+                case 3:
                     mesh.Init(new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 0), new Vector2(-1, 0), new Vector2(0, 1) });
                     break;
                 default:
@@ -130,18 +107,18 @@
             Collider mc = box.AddComponent<Collider>();
             Renderer renderer = box.AddComponent<Renderer>(); ;
             renderer.Init(RendererMode.GameObject, 10);
-            switch (boxType)
+            switch (r)
             {
-                case BoxType.a:
+                case 0:
                     renderer.Rendering("甲乙丙丁", Color.Blue, Color.Red);
                     break;
-                case BoxType.b:
+                case 1:
                     renderer.Rendering("一二三四", Color.Gray, Color.Green);
                     break;
-                case BoxType.c:
+                case 2:
                     renderer.Rendering("子丑寅卯", Color.Cyan, Color.Red);
                     break;
-                case BoxType.d:
+                case 3:
                     renderer.Rendering("-1-2-3-4", Color.DarkGray, Color.DarkBlue);
                     break;
                 default:

@@ -79,7 +79,6 @@
             return true;
         }
 
-
         private void Sort()
         {
             //使用HashSet去重复. 之后排序
