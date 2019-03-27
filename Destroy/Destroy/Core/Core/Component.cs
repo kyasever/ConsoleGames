@@ -64,20 +64,6 @@
         }
 
         #region 从GameObject处获得方法
-
-
-        /// <summary>
-        /// 获取组件个数
-        /// </summary>
-        [HideInInspector]
-        public int ComponentCount => GameObject.ComponentCount;
-
-        /// <summary>
-        /// 获取子物体个数
-        /// </summary>
-        [HideInInspector]    
-        public int ChildCount => GameObject.ChildCount;
-
         /// <summary>
         /// 添加指定组件
         /// </summary>

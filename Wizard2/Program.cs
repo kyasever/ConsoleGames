@@ -17,7 +17,7 @@ namespace Wizard2
         [STAThread]
         static void Main()
         {
-            Config.TickPerSecond = 100;
+            Config.TickPerSecond = 30;
             Config.ScreenWidth = 40;
             Config.ScreenHeight = 30;
             Config.RendererSize = new Vector2(16, 16);
@@ -31,7 +31,7 @@ namespace Wizard2
         private static void StartGame()
         {
             //SRPGScene scene = new SRPGScene("SRPGScene");
-            var scene = new ExampleScenePushBox();
+            var scene = new TPSScene();
 
             SceneManager.Load(scene, LoadSceneMode.Single);
 

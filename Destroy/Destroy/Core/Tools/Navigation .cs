@@ -267,7 +267,7 @@ namespace Destroy
                     {
                         flag = false;
                     }
-                    else if (np.Distanse(stop) <= v.Distanse(stop))
+                    else if (np.Distance(stop) <= v.Distance(stop))
                         queue.Insert(0, np);
                     else
                         queue.Add(np);

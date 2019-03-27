@@ -67,9 +67,9 @@
         private Vector2Float lastInput = Vector2Float.Zero;
 
         /// <summary>
-        /// 
+        /// 当前人物的朝向
         /// </summary>
-        public Vector2 Direction = Vector2.Zero;
+        public Vector2 Direction { get; set; } = Vector2.Zero;
         /// <summary>
         /// 要控制的角色的速度
         /// </summary>
@@ -127,6 +127,8 @@
             else
             {
                 FPosition += input.Normalized * Speed * Time.DeltaTime;
+                //如果为zero,则朝向依旧保持原本的朝向,如果输入了按键,那么改变朝向
+                Direction = (Vector2)input;
             }
 
             //浮点溢出之后进行移动 相当于原来的Rigid

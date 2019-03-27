@@ -40,7 +40,7 @@
     /// 使用这个工具类来生成一个组合颜色的字符串.
     /// 改变颜色 - 添加字符 - 改变颜色 - 添加字符 - 输出供Renderer使用
     /// </summary>
-    public class ColorStringBiulder
+    public class ColorStringBuilder
     {
         /// <summary>
         /// 前景色
@@ -55,14 +55,14 @@
         /// <summary>
         /// 使用这个工具类来生成一个组合颜色的字符串
         /// </summary>
-        public ColorStringBiulder() { }
+        public ColorStringBuilder() { }
 
         /// <summary>
         /// 使用这个工具类来生成一个组合颜色的字符串
         /// </summary>
         /// <param name="fore">初始的前景色</param>
         /// <param name="back">初始的背景色</param>
-        public ColorStringBiulder(Color fore, Color back)
+        public ColorStringBuilder(Color fore, Color back)
         {
             ForeColor = fore;
             BackColor = back;
@@ -416,6 +416,10 @@
             {
                 if (right.Str.Length == 2)
                 {
+                    if(left.Str.Length == 1)
+                    {
+                        return right;
+                    }
                     //两位字符
                     StringBuilder sb = new StringBuilder();
                     for (int i = 0; i < right.Str.Length; i++)

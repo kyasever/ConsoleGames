@@ -63,6 +63,7 @@
     <Compile Include="Core\Core\StandardIO.cs" />
     <Compile Include="Core\Core\Enums.cs" />
     <Compile Include="Standard\Box-TPS\CameraController.cs" />
+    <Compile Include="Standard\Box-TPS\Shooter.cs" />
     <Compile Include="Standard\Maze-SRPG\Cursor.cs" />
     <Compile Include="Standard\Maze-SRPG\SRPGScene.cs" />
     <Compile Include="Standard\Maze-SRPG\Layer.cs" />

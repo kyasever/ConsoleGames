@@ -170,21 +170,23 @@
             return left;
         }
 
+
+
         /// <summary>
         /// 
         /// </summary>
-        public static explicit operator Vector2(Vector2Float vector)
+        public static explicit operator Vector2Float(Vector2 vector)
         {
-            Vector2 vector2Int = new Vector2();
-            vector2Int.X = (int)vector.X;
-            vector2Int.Y = (int)vector.Y;
-            return vector2Int;
+            Vector2Float vector2 = new Vector2Float();
+            vector2.X = vector.X;
+            vector2.Y = vector.Y;
+            return vector2;
         }
 
         /// <summary>
         /// 给Vector2扩展一个Distanse方法,求两个点的距离
         /// </summary>
-        public int Distanse(Vector2 otherV)
+        public int Distance(Vector2 otherV)
         {
             return Math.Abs(otherV.X - X) + Math.Abs(otherV.Y - Y);
         }

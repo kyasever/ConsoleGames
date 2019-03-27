@@ -153,12 +153,12 @@
         /// <summary>
         /// 
         /// </summary>
-        public static explicit operator Vector2Float(Vector2 vector)
+        public static explicit operator Vector2(Vector2Float vector)
         {
-            Vector2Float vector2 = new Vector2Float();
-            vector2.X = vector.X;
-            vector2.Y = vector.Y;
-            return vector2;
+            Vector2 vector2Int = new Vector2();
+            vector2Int.X = (int)vector.X;
+            vector2Int.Y = (int)vector.Y;
+            return vector2Int;
         }
     }
 }

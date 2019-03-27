@@ -110,7 +110,6 @@
 
     }
 
-
     /// <summary>
     /// 文本框组件
     /// </summary>
@@ -154,29 +153,50 @@
         /// <summary>
         /// 背景色
         /// </summary>
-        public Color BackColor;
+        public Color BackColor { get; set; }
         /// <summary>
         /// 序号
         /// </summary>
-        public int Index;
-        /// <summary>
-        /// 被点击时产生的事件
-        /// </summary>
-        public Action<int> OnClick;
+        public int Index { get; set; }
 
+        /// <summary>
+        /// 表明这个子物体是否已经被选择
+        /// </summary>
+        public bool IsSelected { get; set; } = false;
 
         private Renderer renderer;
         private RayCastTarget rtarget;
+        private ListBox listBoxCom;
+
+
         internal override void Initialize()
         {
-            renderer = GetComponent<Renderer>();
-            rtarget = GetComponent<RayCastTarget>();
-            if (rtarget == null)
-                rtarget = AddComponent<RayCastTarget>();
-            rtarget.OnClickEvent += () =>
+            listBoxCom = GameObject.Parent.GetComponent<ListBox>();
+
+            //添加一个宽度等同于width的Mesh
+            Mesh mesh = AddComponent<Mesh>();
+            List<Vector2> meshList = new List<Vector2>();
+            for (int i = 0; i < listBoxCom.Width; i++)
             {
-                OnClick(Index);
-            };
+                meshList.Add(new Vector2(i, 0));
+            }
+            mesh.Init(meshList);
+            //添加一个Renderer组件
+            renderer = AddComponent<Renderer>();
+            renderer.Init(RendererMode.UI, -1);
+            //添加一个Label组件
+            BackColor = Color.Yellow;
+
+            rtarget = AddComponent<RayCastTarget>();
+            rtarget.OnClickEvent += () => { listBoxCom.OnClickAction(Index); };
+        }
+
+        /// <summary>
+        /// 设置文字
+        /// </summary>
+        public void Rendering(string text)
+        {
+            renderer.Rendering(text);
         }
 
         /// <summary>
@@ -186,10 +206,12 @@
         {
             if (selected)
             {
+                IsSelected = true;
                 renderer.SetBackColor(BackColor);
             }
             else
             {
+                IsSelected = false;
                 renderer.SetBackColor(Config.DefaultBackColor);
             }
         }
@@ -399,6 +421,17 @@
         }
 
         /// <summary>
+        /// 当前选择的标签对象
+        /// </summary>
+        public ListBoxItem CurrentItem
+        {
+            get
+            {
+                return Items[selectedIndex];
+            }
+        }
+
+        /// <summary>
         /// 当前视图最上面的Item的序号
         /// </summary>
         [ShowInInspector]
@@ -420,34 +453,14 @@
         }
 
         /// <summary>
-        /// 使用这个方法来新建一个ListItem
+        /// 创建一个新的列表对象.然后再进行进一步的处理
         /// </summary>
         public ListBoxItem CreateLabelItem(string text)
         {
-            GameObject label = new GameObject("Label" + Items.Count.ToString(), "UI");
-            //初始化位置
-            label.Parent = GameObject;
-
-            //添加一个宽度等同于width的Mesh
-            Mesh mesh = label.AddComponent<Mesh>();
-            List<Vector2> meshList = new List<Vector2>();
-            for (int i = 0; i < Width; i++)
-            {
-                meshList.Add(new Vector2(i, 0));
-            }
-            mesh.Init(meshList);
-            //添加一个Renderer组件
-            Renderer renderer = label.AddComponent<Renderer>();
-            renderer.Init(RendererMode.UI, -1);
-            //添加一个Label组件
-            ListBoxItem itemCom = label.AddComponent<ListBoxItem>();
-            itemCom.BackColor = Color.Yellow;
-            itemCom.OnClick += OnClickAction;
-
-            renderer.Rendering(text);
-
-            //不进行初始化,手动进行添加
-            return itemCom;
+            ListBoxItem item = GameObject.CreateWith<ListBoxItem>("Item"+text,GameObject.Tag,GameObject);
+            item.Rendering(text);
+            Items.Add(item);
+            return item;
         }
 
         /// <summary>
@@ -553,4 +566,5 @@
             }
         }
     }
+
 }

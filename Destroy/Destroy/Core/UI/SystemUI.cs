@@ -210,7 +210,7 @@
         private List<string> items;
 
         //将其他组件暂存的 需要显示的数据依次显示在底下
-        public List<Func<string>> outputFunc;
+        public List<Func<string>> outputFunc = new List<Func<string>>();
 
 
 
@@ -239,6 +239,7 @@
                 items.Add("------鼠标指针------");
                 items.Add(Input.MousePosition.ToString());
                 items.Add(Input.MousePositionInPixel.ToString());
+                items.Add("摄像机:"+Camera.Main.Position.ToString());
 
                 foreach(var v in outputFunc)
                 {
