@@ -10,6 +10,25 @@
     public static class UIFactroy
     {
         /// <summary>
+        /// 创建一个制表符画出来的长方形
+        /// </summary>
+        public static GameObject CreateBoxDrawingRect(Vector2 pos,int height,int width)
+        {
+            //边框
+            Rectangle rectangle = new Rectangle(width + 2, height + 2);
+            GameObject drawLine = new GameObject("BoxDrawing", "UI")
+            {
+                LocalPosition = pos
+            };
+            Mesh mesh = drawLine.AddComponent<Mesh>();
+            mesh.Init(rectangle.PosList);
+            Renderer renderer = drawLine.AddComponent<Renderer>();
+            renderer.Init(RendererMode.UI, -1);
+            renderer.Rendering(rectangle.Str, Config.DefaultForeColor, Config.DefaultBackColor);
+            return drawLine;
+        }
+
+        /// <summary>
         /// 文本框UI组件
         /// </summary>
         /// <param name="pos">文本框的起点位置</param>
@@ -18,8 +37,10 @@
         /// <returns></returns>
         public static TextBox CreateTextBox(Vector2 pos, int height, int width)
         {
-            GameObject gameObject = new GameObject("TextBox", "UI");
-            gameObject.Position = pos;
+            GameObject gameObject = new GameObject("TextBox", "UI")
+            {
+                Position = pos
+            };
 
             //添加一个TextBox控件,用于寻找对应的Lable
             TextBox textBox = gameObject.AddComponent<TextBox>();
@@ -32,16 +53,9 @@
                 textBox.Labels.Add(label);
             }
 
-            //边框
-            Rectangle rectangle = new Rectangle(width + 2, height + 2);
-            GameObject drawLine = new GameObject("BoxDrawing", "UI");
+            GameObject drawLine = CreateBoxDrawingRect(Vector2.Zero, height, width);
             drawLine.Parent = gameObject;
-            drawLine.LocalPosition = new Vector2(0, 0);
-            Mesh mesh = drawLine.AddComponent<Mesh>();
-            mesh.Init(rectangle.PosList);
-            Renderer renderer = drawLine.AddComponent<Renderer>();
-            renderer.Init(RendererMode.UI, -1);
-            renderer.Rendering(rectangle.Str, Config.DefaultForeColor, Config.DefaultBackColor);
+            drawLine.LocalPosition = Vector2.Zero;
             textBox.boxDrawing = drawLine;
 
             return textBox;
@@ -52,23 +66,19 @@
         /// </summary>
         public static ListBox CreateListBox(Vector2 pos, int height, int width)
         {
-            GameObject gameObject = new GameObject("ListBox", "UI");
-            gameObject.Position = pos;
+            GameObject gameObject = new GameObject("ListBox", "UI")
+            {
+                Position = pos
+            };
 
             //添加一个TextBox控件,用于寻找对应的Lable
             ListBox textBox = gameObject.AddComponent<ListBox>();
             textBox.Init(height, width);
-            //边框
-            Rectangle rectangle = new Rectangle(width + 2, height + 2);
-            GameObject drawLine = new GameObject("BoxDrawing", "UI");
-            drawLine.Parent = gameObject;
-            drawLine.LocalPosition = new Vector2(0, 0);
-            Mesh mesh = drawLine.AddComponent<Mesh>();
-            mesh.Init(rectangle.PosList);
-            Renderer renderer = drawLine.AddComponent<Renderer>();
-            renderer.Init(RendererMode.UI, -1);
-            renderer.Rendering(rectangle.Str, Config.DefaultForeColor, Config.DefaultBackColor);
 
+            GameObject drawLine = CreateBoxDrawingRect(Vector2.Zero, height, width);
+            drawLine.Parent = gameObject;
+            drawLine.LocalPosition = Vector2.Zero;
+            textBox.boxDrawing = drawLine;
             //进度条
 
             return textBox;
@@ -77,15 +87,23 @@
         /// <summary>
         /// 创建一个Lable组件,不带有默认文字
         /// </summary>
-        public static Renderer CreateLabel(Vector2 pos, int width)
+        public static Renderer CreateLabel(Vector2 pos, string text = "", int width = -1)
         {
-            GameObject lable = new GameObject("Label", "UI");
-            //初始化位置
-            lable.Position = pos;
+            GameObject lable = new GameObject("Label", "UI")
+            {
+                //初始化位置
+                Position = pos
+            };
 
             //添加一个宽度等同于width的Mesh
             Mesh mesh = lable.AddComponent<Mesh>();
             List<Vector2> meshList = new List<Vector2>();
+            if(width == -1)
+            {
+                width = CharUtils.GetStringWidth(text)/2 + 1;
+                if (width < 1)
+                    width = 1;
+            }
             for (int i = 0; i < width; i++)
             {
                 meshList.Add(new Vector2(i, 0));
@@ -94,18 +112,63 @@
             //添加一个Renderer组件
             Renderer renderer = lable.AddComponent<Renderer>();
             renderer.Init(RendererMode.UI, -1);
+            renderer.Rendering(text);
             //不进行初始化,手动进行添加
             return renderer;
         }
 
         /// <summary>
-        /// 创建一个Lable
+        /// 创建一个按钮组件
         /// </summary>
-        public static Renderer CreateLabel(Vector2 pos, string text, int width)
+        public static Button CreateButton(Vector2 pos,string text,Action onClick = null,int width = -1)
         {
-            Renderer renderer = CreateLabel(pos, width);
-            renderer.Rendering(text);
-            return renderer;
+            var l = CreateLabel(pos, text, width);
+            var btnCom =  l.AddComponent<Button>();
+            if(onClick != null)
+                btnCom.OnClick += onClick;
+            return btnCom;
+        }
+    }
+
+    /// <summary>
+    /// 按钮组件 感觉这个组件好没有必要啊.... 回头删了吧 
+    /// </summary>
+    public class Button : Component
+    {
+        private Renderer renderer;
+        private RayCastTarget rTarget;
+        /// <summary>
+        /// 点击回调
+        /// </summary>
+        public Action OnClick;
+        /// <summary>
+        /// 设置文字
+        /// </summary>
+        public string Text { get => renderer.GetString(); set => renderer.SetString(value); }
+
+        internal override void Initialize()
+        {
+            renderer = GetComponent<Renderer>();
+            rTarget = AddComponent<RayCastTarget>();
+            rTarget.OnMoveInEvent += MoveIn;
+            rTarget.OnMoveOutEvent += MoveOut;
+            rTarget.OnClickEvent += Click;
+        }
+
+        private void MoveIn()
+        {
+            renderer.SetBackColor(Color.Yellow);
+        }
+        private void MoveOut()
+        {
+            renderer.SetBackColor(Config.DefaultBackColor);
+        }
+        private void Click()
+        {
+            if (OnClick != null)
+            {
+                OnClick.Invoke();
+            }
         }
 
     }
@@ -253,9 +316,13 @@
                 get
                 {
                     if (mList.Count > 0)
+                    {
                         return mList[mList.Count - 1];
+                    }
                     else
+                    {
                         return null;
+                    }
                 }
             }
 
@@ -281,10 +348,13 @@
             public void Add(ListBoxItem item)
             {
                 if (LastListBoxItem != null)
+                {
                     item.LocalPosition = LastListBoxItem.GameObject.LocalPosition + new Vector2(0, -1);
+                }
                 else
+                {
                     item.LocalPosition = firstPos;
-                ((IList<ListBoxItem>)mList).Add(item);
+                } ((IList<ListBoxItem>)mList).Add(item);
                 item.Index = Count - 1;
             }
 
@@ -423,13 +493,7 @@
         /// <summary>
         /// 当前选择的标签对象
         /// </summary>
-        public ListBoxItem CurrentItem
-        {
-            get
-            {
-                return Items[selectedIndex];
-            }
-        }
+        public ListBoxItem CurrentItem => Items[selectedIndex];
 
         /// <summary>
         /// 当前视图最上面的Item的序号
@@ -457,7 +521,7 @@
         /// </summary>
         public ListBoxItem CreateLabelItem(string text)
         {
-            ListBoxItem item = GameObject.CreateWith<ListBoxItem>("Item"+text,GameObject.Tag,GameObject);
+            ListBoxItem item = GameObject.CreateWith<ListBoxItem>("Item" + text, GameObject.Tag, GameObject);
             item.Rendering(text);
             Items.Add(item);
             return item;
@@ -541,7 +605,9 @@
                 {
                     SelectedIndex--;
                     if (SelectedIndex < TopIndex)
+                    {
                         RollUp();
+                    }
                 }
             }
             else if (Input.GetKeyDown(ConsoleKey.E))
@@ -550,7 +616,9 @@
                 {
                     SelectedIndex++;
                     if (SelectedIndex > EndIndex)
+                    {
                         RollDown();
+                    }
                 }
             }
 

@@ -342,9 +342,16 @@
         /// </summary>
         public static void DontDestroyOnLoad(GameObject gameObject)
         {
-            if (SceneManager.DontDestroyOnLoad.GameObjects.Contains(gameObject))
-                return;
-            gameObject.AddToScene(SceneManager.DontDestroyOnLoad);
+            if (!SceneManager.DontDestroyOnLoad.GameObjects.Contains(gameObject))
+                gameObject.AddToScene(SceneManager.DontDestroyOnLoad);
+
+            if (gameObject.ChildCount != 0)
+            {
+                foreach (var go in gameObject.Childs)
+                {
+                    DontDestroyOnLoad(go);
+                }
+            }
         }
 
         /// <summary>

@@ -15,8 +15,7 @@ namespace Destroy.Standard
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        public SRPGScene(string name):base(name)
+        public SRPGScene():base("SRPGScene")
         {
 
         }
@@ -34,6 +33,8 @@ namespace Destroy.Standard
         /// </summary>
         public override void OnStart()
         {
+            Camera.Main.Position = Vector2.Zero;
+
             //检查资源文件数量
             Resource.Init();
             Debug.Log("查找目录Resouce,资源数量:" + Resource.Name_Path.Keys.Count);

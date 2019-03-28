@@ -159,7 +159,7 @@
         /// <summary>
         /// 加载场景
         /// </summary>
-        public static void Load(Scene newScene, LoadSceneMode loadSceneMode)
+        public static void Load(Scene newScene, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             if (newScene == null)
             {

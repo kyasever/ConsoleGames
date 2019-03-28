@@ -31,7 +31,8 @@ namespace Wizard2
         private static void StartGame()
         {
             //SRPGScene scene = new SRPGScene("SRPGScene");
-            var scene = new TPSScene();
+            //var scene = new TPSScene();
+            var scene = new StartScene();
 
             SceneManager.Load(scene, LoadSceneMode.Single);
 

@@ -11,22 +11,6 @@ namespace Destroy.Standard
     /// </summary>
     public class CameraController : Script
     {
-        private static CameraController instance;
-        /// <summary>
-        /// 单例
-        /// </summary>
-        public static CameraController Instance
-        {
-            get
-            {
-                if(instance == null)
-                {
-                    instance = GameObject.CreateWith<CameraController>("CameraFollow", "CameraController");
-                }
-                return instance;
-            }
-        }
-
         /// <summary>
         /// 跟随的目标
         /// </summary>

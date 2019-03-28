@@ -64,11 +64,13 @@
     <Compile Include="Core\Core\Enums.cs" />
     <Compile Include="Standard\Box-TPS\CameraController.cs" />
     <Compile Include="Standard\Box-TPS\Shooter.cs" />
+    <Compile Include="Standard\Box-TPS\TPSScene.cs" />
     <Compile Include="Standard\Maze-SRPG\Cursor.cs" />
     <Compile Include="Standard\Maze-SRPG\SRPGScene.cs" />
     <Compile Include="Standard\Maze-SRPG\Layer.cs" />
     <Compile Include="Standard\Maze-SRPG\Map.cs" />
     <Compile Include="Standard\Maze-SRPG\WizardAgent.cs" />
+    <Compile Include="Standard\Start\StartScene.cs" />
     <Compile Include="Windows\Windows.cs" />
     <Compile Include="Winform\EditorSystem.cs" />
     <Compile Include="Winform\ExtandVector2Int.cs" />
@@ -96,7 +98,6 @@
     <Compile Include="Core\Systems\InputSystem.cs" />
     <Compile Include="Core\Tools\Struct\Color.cs" />
     <Compile Include="Core\Core\Config.cs" />
-    <Compile Include="Standard\Box-TPS\PushBox.cs" />
     <Compile Include="Core\UI\UIFactory.cs" />
     <Compile Include="Core\Tools\Utils\Matrix.cs" />
     <Compile Include="Core\Tools\ObjectPool.cs" />

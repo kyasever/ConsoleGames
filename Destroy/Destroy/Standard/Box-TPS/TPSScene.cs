@@ -23,7 +23,7 @@
         {
             //主角位于原点
             GameObject player = TPSFactroy.CreateStandardPlayer("吊", new Vector2(0, 0));
-            CameraController.Instance.followTrans = player;
+            GameObject.CreateWith<CameraController>().followTrans = player;
             player.AddComponent<Shooter>();
 
             //创建迷宫地图 位于第三象限
@@ -259,7 +259,7 @@
         {
             string str = "欢迎使用DestroyEngine";
             int length = CharUtils.GetStringWidth(str);
-            Renderer renderer = UIFactroy.CreateLabel(pos, length / 2 + 1);
+            Renderer renderer = UIFactroy.CreateLabel(pos, "",length / 2 + 1);
             renderer.Rendering(str, Color.Cyan, Color.Blue);
             return renderer;
         }
