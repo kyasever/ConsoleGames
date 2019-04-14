@@ -12,7 +12,7 @@
         /// <summary>
         /// 创建一个制表符画出来的长方形
         /// </summary>
-        public static GameObject CreateBoxDrawingRect(Vector2 pos,int height,int width)
+        public static GameObject CreateBoxDrawingRect(Vector2 pos, int height, int width)
         {
             //边框
             Rectangle rectangle = new Rectangle(width + 2, height + 2);
@@ -98,9 +98,9 @@
             //添加一个宽度等同于width的Mesh
             Mesh mesh = lable.AddComponent<Mesh>();
             List<Vector2> meshList = new List<Vector2>();
-            if(width == -1)
+            if (width == -1)
             {
-                width = CharUtils.GetStringWidth(text)/2 + 1;
+                width = CharUtils.GetStringWidth(text) / 2 + 1;
                 if (width < 1)
                     width = 1;
             }
@@ -120,11 +120,11 @@
         /// <summary>
         /// 创建一个按钮组件
         /// </summary>
-        public static Button CreateButton(Vector2 pos,string text,Action onClick = null,int width = -1)
+        public static Button CreateButton(Vector2 pos, string text, Action onClick = null, int width = -1)
         {
             var l = CreateLabel(pos, text, width);
-            var btnCom =  l.AddComponent<Button>();
-            if(onClick != null)
+            var btnCom = l.AddComponent<Button>();
+            if (onClick != null)
                 btnCom.OnClick += onClick;
             return btnCom;
         }
@@ -227,39 +227,40 @@
         /// </summary>
         public bool IsSelected { get; set; } = false;
 
-        private Renderer renderer;
-        private RayCastTarget rtarget;
-        private ListBox listBoxCom;
-
-
-        internal override void Initialize()
+        /// <summary>
+        /// 使用脚本内部的静态Create方法来创建一个挂载这个脚本的典型游戏物体
+        /// </summary>
+        /// <param name="text">显示的文本</param>
+        /// <param name="parentListBox">来自于哪个ListBox的创建</param>
+        /// <returns></returns>
+        public static ListBoxItem Create(string text, ListBox parentListBox)
         {
-            listBoxCom = GameObject.Parent.GetComponent<ListBox>();
+            //创建对象
+            GameObject obj = new GameObject("Item" + text, parentListBox.GameObject.Tag, parentListBox.GameObject);
+            //这个对象的父物体是创建它的ListBox
+            obj.Parent = parentListBox.GameObject;
+            //给这个对象加一个Item组件
+            ListBoxItem item = obj.AddComponent<ListBoxItem>();
+            //初始化这个Item
+            item.BackColor = Color.Yellow;
 
-            //添加一个宽度等同于width的Mesh
-            Mesh mesh = AddComponent<Mesh>();
+            //添加一个宽度等同于父框体width的Mesh
+            Mesh mesh = obj.AddComponent<Mesh>();
             List<Vector2> meshList = new List<Vector2>();
-            for (int i = 0; i < listBoxCom.Width; i++)
+            for (int i = 0; i < parentListBox.Width; i++)
             {
                 meshList.Add(new Vector2(i, 0));
             }
             mesh.Init(meshList);
             //添加一个Renderer组件
-            renderer = AddComponent<Renderer>();
+            var renderer = obj.AddComponent<Renderer>();
             renderer.Init(RendererMode.UI, -1);
-            //添加一个Label组件
-            BackColor = Color.Yellow;
-
-            rtarget = AddComponent<RayCastTarget>();
-            rtarget.OnClickEvent += () => { listBoxCom.OnClickAction(Index); };
-        }
-
-        /// <summary>
-        /// 设置文字
-        /// </summary>
-        public void Rendering(string text)
-        {
             renderer.Rendering(text);
+            //添加一个Label组件
+            var rtarget = obj.AddComponent<RayCastTarget>();
+            rtarget.OnClickEvent += () => { parentListBox.OnClickAction(item.Index); };
+
+            return item;
         }
 
         /// <summary>
@@ -270,12 +271,12 @@
             if (selected)
             {
                 IsSelected = true;
-                renderer.SetBackColor(BackColor);
+                GetComponent<Renderer>().SetBackColor(BackColor);
             }
             else
             {
                 IsSelected = false;
-                renderer.SetBackColor(Config.DefaultBackColor);
+                GetComponent<Renderer>().SetBackColor(Config.DefaultBackColor);
             }
         }
     }
@@ -517,12 +518,12 @@
         }
 
         /// <summary>
-        /// 创建一个新的列表对象.然后再进行进一步的处理
+        /// 添加一个新的ITem
         /// </summary>
+        /// <param name="text">item显示的文本</param>
         public ListBoxItem CreateLabelItem(string text)
         {
-            ListBoxItem item = GameObject.CreateWith<ListBoxItem>("Item" + text, GameObject.Tag, GameObject);
-            item.Rendering(text);
+            var item = ListBoxItem.Create(text, this);
             Items.Add(item);
             return item;
         }

@@ -13,6 +13,32 @@
         /// </summary>
         public Dictionary<Vector2, List<RayCastTarget>> UITargets { get; private set; } = new Dictionary<Vector2, List<RayCastTarget>>();
 
+        private static GameObject testObj;
+        /// <summary>
+        /// 创建一个测试实例,用于标示该系统的运作状态
+        /// </summary>
+        public static GameObject CreateTest()
+        { 
+            if(testObj != null)
+            {
+                GameObject.Destroy(testObj);
+            }
+            GameObject gameObject = new GameObject("EventText", "System");
+            var mesh =  gameObject.AddComponent<Mesh>();
+            List<Vector2> list = new List<Vector2>();
+            foreach(var v in RuntimeEngine.GetSystem<EventHandlerSystem>().UITargets.Keys)
+            {
+                list.Add(v);
+            }
+            mesh.Init(list);
+            var renderer = gameObject.AddComponent<Renderer>();
+            renderer.Init(RendererMode.UI, -1);
+            renderer.Rendering(new RenderPoint("  ", Config.DefaultForeColor, Color.Yellow, -1));
+            testObj = gameObject;
+            return gameObject;
+        }
+
+
         private bool KeyDown = false;
         private Vector2 mousePos = new Vector2(-100, -100);
 

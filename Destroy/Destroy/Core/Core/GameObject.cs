@@ -62,7 +62,7 @@
         /// 当发生坐标改变时产生的回调事件,将自己的Position告诉组件,组件自行管理
         /// 参数一 发生改变之前所处的位置 参数二 发生改变之后所处的位置
         /// </summary>
-        public event Func<Vector2, Vector2, bool> ChangePositionEvnet;
+        public event Action<Vector2, Vector2> ChangePositionEvnet;
 
         /// <summary>
         /// 碰撞回调事件.
@@ -90,13 +90,32 @@
         /// </summary>
         public Vector2 LocalPosition
         {
-            get => localPosition; set
+            get => localPosition;
+            set
             {
-                if (ChangePositionEvnet != null && localPosition != value)
+                if (localPosition != value)
                 {
-                    ChangePositionEvnet.Invoke(Position, GetWorldPosition(this, value));
+                    InvokeChild(this, value);
+                    //ChangePositionEvnet.Invoke(Position, GetWorldPosition(this, value));
                 }
                 localPosition = value;
+            }
+        }
+
+        private void InvokeChild(GameObject go,Vector2 to)
+        {
+            if(ChangePositionEvnet != null)
+                ChangePositionEvnet.Invoke(go.Position, GetWorldPosition(go, to));
+            if (ChildCount == 0)
+            {
+                return;
+            }
+            else
+            {
+                foreach(var childObj in Childs)
+                { 
+                    childObj.InvokeChild(childObj , GetWorldPosition(childObj, to+childObj.localPosition));
+                }
             }
         }
 

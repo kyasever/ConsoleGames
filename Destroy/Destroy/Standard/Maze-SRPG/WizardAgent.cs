@@ -62,6 +62,11 @@ namespace Destroy.Standard
                 return routeIndicator;
             }
         }
+
+        /// <summary>
+        /// 当前人物动作选择对话框
+        /// </summary>
+        public static StateNoticeBox curStateDlg;
     }
 
     /// <summary>
@@ -106,6 +111,10 @@ namespace Destroy.Standard
             /// 搜索
             /// </summary>
             Search,
+            /// <summary>
+            /// 准备
+            /// </summary>
+            Ready,
         }
         /// <summary>
         /// 角色状态
@@ -155,7 +164,10 @@ namespace Destroy.Standard
                             Position = cursorPos;
                             routeAera.SetActive(false);
                             moveAera.SetActive(false);
-                            state = State.None;
+                            state = State.Ready;
+                            
+                            GameMode.curStateDlg.GameObject.SetActive(true);
+                            GameMode.curStateDlg.GameObject.Position = Position - Camera.Main.Position;
                         }
                     }
                     else
@@ -185,8 +197,30 @@ namespace Destroy.Standard
                     }
                     lastPos = cursorPos;
                     break;
+                case State.Ready:
+                    //ListBox msgBox = UIFactroy.CreateListBox(new Vector2(0, 0), 5, 10);
+                    break;
             }
 
+        }
+
+    }
+
+    /// <summary>
+    /// 对话框组件
+    /// </summary>
+    public class StateNoticeBox : Script
+    {
+        //private ListBox listBoxCom;
+        public static StateNoticeBox Create()
+        {
+            ListBox msgBox = UIFactroy.CreateListBox(new Vector2(0, 0), 5, 5);
+            var btn1 = msgBox.CreateLabelItem("攻击");
+            btn1.GetComponent<RayCastTarget>().OnClickEvent += ()=> { Debug.Log("Clicked"); };
+            msgBox.CreateLabelItem("物品");
+            msgBox.CreateLabelItem("休息");
+            msgBox.GameObject.SetActive(false);
+            return msgBox.AddComponent<StateNoticeBox>();
         }
 
     }

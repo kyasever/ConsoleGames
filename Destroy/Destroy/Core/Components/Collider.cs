@@ -24,10 +24,9 @@
             GameObject.ChangePositionEvnet += OnMove;
         }
 
-        private bool OnMove(Vector2 from, Vector2 to)
+        private void OnMove(Vector2 from, Vector2 to)
         {
             RuntimeEngine.GetSystem<CollisionSystem>().MoveInSystem(this, from, to);
-            return true;
         }
 
         internal override void OnRemove()

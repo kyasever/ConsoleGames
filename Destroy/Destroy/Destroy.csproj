@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Core\Actor.cs" />
     <Compile Include="Core\Tools\Maze.cs" />
     <Compile Include="Core\UI\BoxDrawing.cs" />
     <Compile Include="Core\UI\SystemUI.cs" />
