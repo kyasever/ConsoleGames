@@ -19,237 +19,154 @@
      * 增加了一种直接从白模初始化的方式,
      * 将四种构造函数合并成一种,现在一共有三种初始化方式,使用字符串和颜色初始化-使用材质和贴图初始化-使用白模和材质初始化
      * 白模表示一个字典,初始化的时候由手动获取指定,标准情况下Key和元素数量和Mesh是一样的,Value是这个点上的字符元素
+     * 
+     * 4/24 准备重写Renderer和RSystem
+     * renderer的渲染结果是一系列的 Vector2-RP
+     * RS里保存的结构类型为Dic Vector To RP结果
+     * RS交给渲染器的东西不包括空白点
     */
-
-    /// <summary>
-    /// 渲染模式
-    /// </summary>
-    public enum RendererMode
-    {
-        /// <summary>
-        /// 原点:屏幕左下角世界坐标(0,0)的坐标,不随摄像机运动
-        /// </summary>
-        UI,
-        /// <summary>
-        /// 原点:屏幕左下角世界坐标(0,0)的坐标,随摄像机运动
-        /// </summary>
-        GameObject,
-    }
-
-    /// <summary>
-    /// 使用这个工具类来生成一个组合颜色的字符串.
-    /// 改变颜色 - 添加字符 - 改变颜色 - 添加字符 - 输出供Renderer使用
-    /// </summary>
-    public class ColorStringBuilder
-    {
-        /// <summary>
-        /// 前景色
-        /// </summary>
-        public Color ForeColor = Config.DefaultForeColor;
-        /// <summary>
-        /// 背景色
-        /// </summary>
-        public Color BackColor = Config.DefaultBackColor;
-        private List<RenderPoint> result = new List<RenderPoint>();
-
-        /// <summary>
-        /// 使用这个工具类来生成一个组合颜色的字符串
-        /// </summary>
-        public ColorStringBuilder() { }
-
-        /// <summary>
-        /// 使用这个工具类来生成一个组合颜色的字符串
-        /// </summary>
-        /// <param name="fore">初始的前景色</param>
-        /// <param name="back">初始的背景色</param>
-        public ColorStringBuilder(Color fore, Color back)
-        {
-            ForeColor = fore;
-            BackColor = back;
-        }
-
-        /// <summary>
-        /// 添加一个char
-        /// </summary>
-        public void AppendChar(char c)
-        {
-            result.Add(new RenderPoint(c.ToString(), ForeColor, BackColor));
-        }
-
-        /// <summary>
-        /// 添加一个字符串
-        /// </summary>
-        public void AppendString(string str)
-        {
-            //从贴图加载字符串信息,并切分成List String
-            List<string> grids = CharUtils.DivideString(str);
-            foreach (string s in grids)
-            {
-                result.Add(new RenderPoint(s, ForeColor, BackColor));
-            }
-        }
-
-        /// <summary>
-        /// 输出为List,供Renderer使用
-        /// </summary>
-        public List<RenderPoint> ToRenderer()
-        {
-            return result;
-        }
-    }
 
     /// <summary>
     /// 渲染组件,最基础的渲染组件只负责维护这点东西,理论上这个也是能用的.甚至不依赖Mesh组件,直接编辑渲染结果就好了
     /// </summary>
-    public class Renderer : Component
+    public class Renderer
     {
         /// <summary>
-        /// 渲染模式
+        /// 务必初始化. 通常情况下在创建GO的同时就生成好准确的Depth
         /// </summary>
-        public virtual RendererMode Mode { get; set; }
-
+        public int Depth = int.MaxValue;
 
         /// <summary>
-        /// 渲染结果,允许直接操作它来进行渲染.没毛病
+        /// 渲染结果,允许直接操作它来进行渲染.
+        /// 没毛病 本质上所有对Renderer的操作都是为了给这个字典添加值
         /// </summary>
         [HideInInspector]
-        public virtual Dictionary<Vector2, RenderPoint> RendererPoints { get; set; }
+        public virtual Dictionary<Vector2, RenderPoint> RendererPoints { get; set; } = new Dictionary<Vector2, RenderPoint>();
 
         /// <summary>
-        /// 渲染深度 越低的渲染优先级越高
+        /// 核心DrawString方法.从左至右的给对象增加一个字符串的渲染
         /// </summary>
-        public int Depth
+        /// <param name="str">要渲染的字符串内容</param>
+        /// <param name="foreColor">字符串前景色</param>
+        /// <param name="backColor">字符串背景色</param>
+        /// <param name="StartPosition">字符串渲染的起始点(相对中心点的偏移量)</param>
+        /// <param name="MaxWidth">字符串最大渲染宽度</param>
+        /// <param name="MinWidth">字符串最小渲染宽度</param>
+        public void DrawString(string str, Color foreColor, Color backColor, Vector2 StartPosition, int MaxWidth = int.MaxValue, int MinWidth = int.MaxValue)
         {
-            get => depth;
-            set
-            {
-                depth = value;
-                SetDepth(value);
-                if (Mode == RendererMode.GameObject && value <= 0)
-                {
-                    Debug.Warning(GameObject.Name + "不建议渲染模式为GameObject的对象渲染深度为负数");
-                }
-                else if (Mode == RendererMode.UI && value >= 0)
-                {
-                    Debug.Warning(GameObject.Name + "不建议渲染模式为UI的对象渲染深度为正数");
-                }
-            }
-        }
-        private int depth;
-
-        private Mesh meshCom { get; set; }
-
-        /// <summary>
-        /// 修改这个API,变为使用这个点填充所有Mesh
-        /// </summary>
-        /// <param name="renderPoint">使用的RenderPoint参数</param>
-        public void Rendering(RenderPoint renderPoint)
-        {
-            RendererPoints = new Dictionary<Vector2, RenderPoint>();
-            foreach (var v in GetComponent<Mesh>().PosList)
-            {
-                RendererPoints.Add(v, renderPoint);
-            }
-        }
-
-        /// <summary>
-        /// 基于默认颜色和默认Mesh进行渲染
-        /// </summary>
-        /// <param name="str">使用的字符串</param>
-        public void Rendering(string str)
-        {
-            Rendering(str, Config.DefaultForeColor, Config.DefaultBackColor);
-        }
-
-        /// <summary>
-        /// 基于Mesh和默认Depth
-        /// </summary>
-        /// <param name="str">使用的字符串</param>
-        /// <param name="foreColor">前景色</param>
-        /// <param name="backColor">背景色</param>
-        public void Rendering(string str, Color foreColor, Color backColor)
-        {
-            List<RenderPoint> result = new List<RenderPoint>();
-            //从贴图加载字符串信息,并切分成List String
             List<string> grids = CharUtils.DivideString(str);
+            int index = 0;
             foreach (string s in grids)
             {
-                result.Add(new RenderPoint(s, foreColor, backColor));
+                Vector2 key = StartPosition + new Vector2(index, 0);
+                RenderPoint value = new RenderPoint(s, foreColor, backColor, Depth);
+                SafeAdd(key, value);
+                index++;
+                if (index == MaxWidth - 1)
+                    break;
             }
-            Rendering(result);
-        }
-
-        /// <summary>
-        /// 基于Mesh
-        /// 通过RenderPointList进行渲染,可以通过ColorStringBiulder提供参数.
-        /// </summary>
-        public void Rendering(List<RenderPoint> list)
-        {
-            RendererPoints = new Dictionary<Vector2, RenderPoint>();
-            int length = meshCom.PosList.Count;
-            for (int i = 0; i < length; i++)
+            if (grids.Count < MinWidth)
             {
-                if (i < list.Count)
+                for (int i = grids.Count; i < MinWidth; i++)
                 {
-                    RenderPoint rp = list[i];
-                    rp.Depth = depth;
-                    RendererPoints.Add(meshCom.PosList[i], rp);
-                }
-                else
-                {
-                    RendererPoints.Add(meshCom.PosList[i], RenderPoint.UIBlock);
+                    Vector2 key = StartPosition + new Vector2(i, 0);
+                    RenderPoint value = new RenderPoint("  ", foreColor, backColor, Depth);
+                    SafeAdd(key, value);
                 }
             }
         }
 
-        /// <summary>
-        /// 简单粗暴,自己来把.直接指定结果
-        /// </summary>
-        public void Rendering(Dictionary<Vector2, RenderPoint> dic)
+        private bool SafeAdd(Vector2 point, RenderPoint renderPoint)
         {
-            RendererPoints = dic;
-        }
-       
-
-        /// <summary>
-        /// 初始化的时候指定mode和深度.
-        /// </summary>
-        public void Init(RendererMode mode = RendererMode.GameObject, int depth = int.MaxValue)
-        {
-            Mode = mode;
-            this.depth = depth;
-        }
-
-        internal override void Initialize()
-        {
-            Mode = RendererMode.GameObject;
-            depth = int.MaxValue;
-
-            meshCom = GetComponent<Mesh>();
-            if (meshCom == null)
-                meshCom = AddComponent<Mesh>();
-            RendererPoints = new Dictionary<Vector2, RenderPoint>();
-            foreach (Vector2 pos in meshCom.PosList)
+            if (RendererPoints.ContainsKey(point))
             {
-                RendererPoints.Add(pos, RenderPoint.Block);
+                RendererPoints[point] = RendererPoints[point] + renderPoint;
+                return true;
+            }
+            else
+            {
+                RendererPoints[point] = renderPoint;
+                return false;
             }
         }
 
         /// <summary>
-        /// 获取渲染的字符串信息
+        /// 第一个参数 从Vector2/Line/Rectangle 中选取一个,代表要渲染的形状
+        /// 第二个参数 从Void(没有参数)/RenderPoint/Color 中选取一个,代表使用制表符/指定的渲染点/背景色中选取一个,代表渲染的填充物
         /// </summary>
-        public string GetString()
+        public void Draw(params object[] args)
         {
-            StringBuilder stringBuilder = new StringBuilder();
-            foreach (Vector2 pos in meshCom.PosList)
+            //第一个参数是Vector2 代表要渲染一个点
+            if (args[0].GetType() == typeof(Vector2))
             {
-                if (RendererPoints.ContainsKey(pos) && !RendererPoints[pos].Equals(RenderPoint.Block))
-                    stringBuilder.Append(RendererPoints[pos]);
+                Vector2 point = (Vector2)args[0];
+                if (args.Length == 1)
+                {
+                    string doubleHori = BoxDrawingCharacter.BoxHorizontal.ToString() + BoxDrawingCharacter.BoxHorizontal.ToString();
+                    SafeAdd(point, new RenderPoint(doubleHori, Depth));
+                }
+                else if (args[1].GetType() == typeof(RenderPoint))
+                {
+                    SafeAdd(point, (RenderPoint)args[1]);
+                }
+                else if (args[1].GetType() == typeof(Color))
+                {
+                    SafeAdd(point, new RenderPoint("  ", Config.DefaultForeColor, (Color)args[1], Depth));
+                }
             }
-            return stringBuilder.ToString();
+            else if (args[0].GetType() == typeof(Line))
+            {
+                Line line = (Line)args[0];
+                RenderPoint renderPoint = RenderPoint.Block;
+                if (args.Length == 1)
+                {
+                    renderPoint = new RenderPoint(line.GetStr(), Depth);
+                }
+                else if (args[1].GetType() == typeof(RenderPoint))
+                {
+                    renderPoint = (RenderPoint)args[1];
+
+                }
+                else if (args[1].GetType() == typeof(Color))
+                {
+                    renderPoint = new RenderPoint("  ", Config.DefaultForeColor, (Color)args[1], Depth);
+                }
+                foreach (var v in line.PosList)
+                {
+                    SafeAdd(v, renderPoint);
+                }
+            }
+            else if (args[0].GetType() == typeof(Rectangle))
+            {
+                Rectangle rect = (Rectangle)args[0];
+
+                if (args.Length == 1)
+                {
+                    var list = CharUtils.DivideString(rect.GetStr());
+                    for (int i = 0; i < rect.PosList.Count; i++)
+                    {
+                        SafeAdd(rect.PosList[i], new RenderPoint(list[i], Depth));
+                    }
+                }
+                else if (args[1].GetType() == typeof(RenderPoint))
+                {
+                    foreach(var v in rect.PosList)
+                    {
+                        SafeAdd(v, (RenderPoint)args[1]);
+                    }
+                }
+                else if (args[1].GetType() == typeof(Color))
+                {
+                    var renderPoint = new RenderPoint("  ", Config.DefaultForeColor, (Color)args[1], Depth);
+                    foreach (var v in rect.PosList)
+                    {
+                        SafeAdd(v, (RenderPoint)args[1]);
+                    }
+                }
+            }
         }
 
-        #region 设置四项基础属性,通常用于快捷更改,避免用这些来进行初始化
+        #region 设置基础属性,通常用于快捷更改,避免用这些来进行初始化
         /// <summary>
         /// 更改背景色
         /// </summary>
@@ -294,35 +211,7 @@
             }
             RendererPoints = newdic;
         }
-
-        /// <summary>
-        /// 更改渲染的字符
-        /// </summary>
-        public void SetString(string str)
-        {
-            List<string> list = CharUtils.DivideString(str);
-            int i = 0;
-            foreach (Vector2 point in RendererPoints.Keys)
-            {
-                RenderPoint rp = RendererPoints[point];
-                rp.Str = list[i];
-                RendererPoints[point] = rp;
-                i++;
-                if (i == list.Count)
-                    break;
-            }
-        }
         #endregion
-
-        internal override void OnAdd()
-        {
-            RuntimeEngine.GetSystem<RendererSystem>().RendererCollection.Add(this);
-        }
-
-        internal override void OnRemove()
-        {
-            RuntimeEngine.GetSystem<RendererSystem>().RendererCollection.Remove(this);
-        }
     }
 
     /// <summary>
@@ -416,7 +305,7 @@
             {
                 if (right.Str.Length == 2)
                 {
-                    if(left.Str.Length == 1)
+                    if (left.Str.Length == 1)
                     {
                         return right;
                     }

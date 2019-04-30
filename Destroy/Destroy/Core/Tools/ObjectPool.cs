@@ -2,6 +2,11 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    
+    /// <summary>
+    /// 使用该方法创建一个游戏物体
+    /// </summary>
+    public delegate GameObject Instantiate();
 
     /// <summary>
     /// 对象池

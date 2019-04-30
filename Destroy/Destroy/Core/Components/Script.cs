@@ -50,41 +50,22 @@
         }
 
         //在这里执行Awake
-        internal override void Initialize()
+        public override void Initialize()
         {
             Awake();
         }
 
-        internal override void OnAdd()
+        public override void OnAdd()
         {
-            GameObject.OnCollisionEvent += OnCollisionReceive;
             RuntimeEngine.GetSystem<StartSystem>().StartScriptCollection.Add(this);
         }
 
-        internal override void OnRemove()
+        public override void OnRemove()
         {
-            GameObject.OnCollisionEvent -= OnCollisionReceive;
+
             bool suc = RuntimeEngine.GetSystem<UpdateSystem>().UpdateScriptCollection.Remove(this);
             if (!suc)
                 RuntimeEngine.GetSystem<StartSystem>().StartScriptCollection.Remove(this);
         }
-
-        //用这个来判断是否活跃,不活跃就不接收碰撞回调了
-        private void OnCollisionReceive(Collision collision)
-        {
-            if(Enable)
-            {
-                OnCollision(collision);
-            }
-        }
-
-        /// <summary>
-        /// 重载来接收碰撞回调消息
-        /// </summary>
-        public virtual void OnCollision(Collision collision)
-        {
-
-        }
-
     }
 }

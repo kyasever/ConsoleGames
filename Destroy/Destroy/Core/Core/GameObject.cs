@@ -4,16 +4,101 @@
     using System.Collections;
     using System.Collections.Generic;
 
-    /// <summary>
-    /// 使用该方法创建一个游戏物体
-    /// </summary>
-    public delegate GameObject Instantiate();
+    public enum ObjectType
+    {
+        Actor,UI
+    }
 
     /// <summary>
-    /// 场景中所有实体的类型
+    /// Destroy更新后的设计哲学
+    /// 大幅度减少暴露的接口. 只允许开发者操作Script一个类
+    /// </summary>
+    public class Actor : GameObject
+    {
+        public Actor(string name = "GameObject", string tag = "None", GameObject parent = null) : base(name, tag, parent)
+        {
+            Collider.ColliderList = new List<Vector2>() { new Vector2(0, 0) };
+            ObjectType = ObjectType.Actor;
+        }
+
+        public override void OnStart()
+        {
+            //将collider加入物理系统
+            Collider = new Collider();
+            RuntimeEngine.GetSystem<CollisionSystem>().ColliderCollection.Add(Collider);
+
+            //将Renderer加入渲染系统,其他单独处理
+            Renderer = new Renderer();
+            Renderer.Depth = int.MaxValue;
+            RuntimeEngine.GetSystem<RendererSystem>().ActorRendererCollection.Add(Renderer);
+        }
+
+        public override void OnDestroy()
+        {
+            RuntimeEngine.GetSystem<CollisionSystem>().ColliderCollection.Remove(Collider);
+            RuntimeEngine.GetSystem<RendererSystem>().ActorRendererCollection.Remove(Renderer);
+        }
+
+    }
+
+    /// <summary>
+    /// UIObject 不需要把Collider挂到collisionSystem中,但是需要保留有Collider
+    /// 如果脚本继承了IClickEvent 那么其就会被挂到点击回调系统中
+    /// </summary>
+    public class UIObject : GameObject
+    {
+        public UIObject(string name = "GameObject",int depth = -1,string tag = "None", GameObject parent = null) : base(name, tag, parent)
+        {
+            Collider.ColliderList = new List<Vector2>() { new Vector2(0, 0) };
+            Renderer.Depth = depth;
+            ObjectType = ObjectType.UI;
+        }
+
+        public override void OnStart()
+        {
+            //将collider加入物理系统
+            Collider = new Collider();
+            RuntimeEngine.GetSystem<CollisionSystem>().ColliderCollection.Add(Collider);
+
+            //将Renderer加入渲染系统,其他单独处理
+            Renderer = new Renderer();
+            Renderer.Depth = -1;
+            RuntimeEngine.GetSystem<RendererSystem>().UIRendererCollection.Add(Renderer);
+        }
+
+        public override void OnDestroy()
+        {
+            RuntimeEngine.GetSystem<CollisionSystem>().ColliderCollection.Remove(Collider);
+            RuntimeEngine.GetSystem<RendererSystem>().UIRendererCollection.Remove(Renderer);
+        }
+
+    }
+
+    /// <summary>
+    /// 对啊 Component.Position 实际上是获取了GameObject.Transform.Position.
+    /// new GameObject的时候直接挂好了所有的组件,组件默认
     /// </summary>
     public class GameObject
     {
+        //默认包含的三个组件
+        public Transform Transform;
+        public Collider Collider;
+        public Renderer Renderer;
+        public ObjectType ObjectType;
+
+        /// <summary>
+        /// 父物体
+        /// </summary>
+        [HideInInspector]
+        public GameObject Parent
+        {
+            get
+            {
+                return Transform.Parent?.GameObject;
+            } 
+            set => Transform.Parent = value.Transform;
+        }
+
         /// <summary>
         /// 名字
         /// </summary>
@@ -24,100 +109,6 @@
         /// </summary>
         public string Tag { get; private set; }
 
-        /// <summary>
-        /// 是否激活
-        /// </summary>
-        public bool Active { get; private set; }
-
-        /// <summary>
-        /// 父物体
-        /// </summary>
-        public GameObject Parent
-        {
-            get => parent;
-            set
-            {
-                if (value == null)
-                    return;
-
-                //修改本地坐标
-                LocalPosition = Position - value.Position;
-
-                //先把自己从之前的父物体的子对象集合中移除
-                if (parent != null)
-                    parent.Childs.Remove(this);
-
-                //再加到新的父物体集合里面
-                parent = value;
-                parent.Childs.Add(this);
-            }
-        }
-
-        /// <summary>
-        /// 该游戏物体的子物体集合
-        /// </summary>
-        public List<GameObject> Childs { get; private set; }
-
-        /// <summary>
-        /// 当发生坐标改变时产生的回调事件,将自己的Position告诉组件,组件自行管理
-        /// 参数一 发生改变之前所处的位置 参数二 发生改变之后所处的位置
-        /// </summary>
-        public event Action<Vector2, Vector2> ChangePositionEvnet;
-
-        /// <summary>
-        /// 碰撞回调事件.
-        /// </summary>
-        public Action<Collision> OnCollisionEvent;
-
-        /// <summary>
-        /// 世界坐标
-        /// </summary>
-        public Vector2 Position
-        {
-            get => GetWorldPosition(this);
-            set
-            {
-                if (parent == null)
-                    LocalPosition = value;
-                else
-                    LocalPosition = value - parent.Position;
-            }
-        }
-
-        private Vector2 localPosition;
-        /// <summary>
-        /// 本地坐标
-        /// </summary>
-        public Vector2 LocalPosition
-        {
-            get => localPosition;
-            set
-            {
-                if (localPosition != value)
-                {
-                    InvokeChild(this, value);
-                    //ChangePositionEvnet.Invoke(Position, GetWorldPosition(this, value));
-                }
-                localPosition = value;
-            }
-        }
-
-        private void InvokeChild(GameObject go,Vector2 to)
-        {
-            if(ChangePositionEvnet != null)
-                ChangePositionEvnet.Invoke(go.Position, GetWorldPosition(go, to));
-            if (ChildCount == 0)
-            {
-                return;
-            }
-            else
-            {
-                foreach(var childObj in Childs)
-                { 
-                    childObj.InvokeChild(childObj , GetWorldPosition(childObj, to+childObj.localPosition));
-                }
-            }
-        }
 
         /// <summary>
         /// 这个游戏物体属于哪个scene
@@ -125,53 +116,94 @@
         public Scene Scene { get; private set; }
 
         /// <summary>
-        /// 获取组件个数
+        /// 创建时调用,进行默认组件添加和初始化操作
         /// </summary>
-        public int ComponentCount => Components.Count;
+        public virtual void OnStart()
+        {
 
+        }
+
+        /// <summary>
+        /// 被销毁时调用,进行组件解绑操作
+        /// </summary>
+        public virtual void OnDestroy()
+        {
+
+        }
+
+        #region 激活状态 Active
         /// <summary>
         /// 获取子物体个数
         /// </summary>
-        public int ChildCount => Childs.Count;
+        public int ChildCount => Transform.Childs.Count;
 
+        private bool active = true;
         /// <summary>
-        /// 存成列表形式的组件
+        /// 是否激活
         /// </summary>
-        internal List<Component> Components { get; set; }
-
+        public bool Active
+        {
+            get { return active; }
+            set
+            {
+                active = value;
+                SetActive(value);
+            }
+        }
         /// <summary>
-        /// 存成字典形式的组件
+        /// 设置自己所有组件的active以及所有子物体组件的active
         /// </summary>
-        internal Dictionary<Type, Component> ComponentDict { get; set; }
+        public void SetActive(bool value)
+        {
+            if (Active != value)
+            {
+                if (Transform.Childs.Count != 0)
+                {
+                    foreach (Transform child in Transform.Childs)
+                    {
+                        child.GameObject.SetActive(value);
+                    }
+                }
+                foreach (Component component in ComponentDict.Values)
+                {
+                    component.Enable = value;
+                }
+            }
+        }
+        #endregion
 
-        private GameObject parent;
+        #region 初始化
 
         /// <summary>
         /// 创建一个游戏物体 (相当于在当前场景中实例化)
         /// </summary>
         public GameObject(string name = "GameObject", string tag = "None", GameObject parent = null)
         {
+            //关于游戏物体本身的特性
             Name = name;
             Tag = tag;
             Active = true;
 
-            this.parent = null;
-            this.localPosition = Vector2.Zero;
+            //游戏物体在场景中
+            if (SceneManager.ActiveScene == null)
+            {
+                Debug.Error("未初始化场景");
+            }
+            AddToScene(SceneManager.ActiveScene);
+
+            //包含的组件
+            ComponentDict = new Dictionary<Type, Component>();
+
+            //直接添加Transform
+            Transform = new Transform(this);
+
+            OnStart();
+
             if (parent != null)
             {
                 this.Parent = parent;
-                this.LocalPosition = Vector2.Zero;
+                Transform.LocalPosition = Vector2.Zero;
             }
-
-            Childs = new List<GameObject>();
-
-            if (SceneManager.ActiveScene == null)
-                throw new Exception($"未初始化场景!");
-
-            AddToScene(SceneManager.ActiveScene);
-
-            Components = new List<Component>();
-            ComponentDict = new Dictionary<Type, Component>();
         }
 
         /// <summary>
@@ -185,56 +217,25 @@
             return com;
         }
 
+        #endregion
+
+        #region 组件化
         /// <summary>
-        /// 设置自己所有组件的active以及所有子物体组件的active
+        /// 获取组件个数
         /// </summary>
-        public void SetActive(bool value)
-        {
-            if (Active != value)
-            {
-                Active = value;
-
-                if (Childs.Count != 0)
-                {
-                    foreach (GameObject child in Childs)
-                    {
-                        child.SetActive(value);
-                    }
-                }
-
-                foreach (Component component in Components)
-                {
-                    component.Enable = value;
-                }
-            }
-        }
+        public int ComponentCount => ComponentDict.Values.Count;
 
         /// <summary>
-        /// 在当前场景中根据名字寻找游戏物体, 若有多个同名物体也只返回一个。
+        /// 存成字典形式的组件
         /// </summary>
-        public GameObject Find(string name)
-        {
-            GameObject result = null;
-            Scene.GameObjects.ForEach(gameObject => { if (gameObject.Name == name) result = gameObject; });
-            return result;
-        }
-
-        /// <summary>
-        /// 在当前场景中根据标签寻找游戏物体, 若有多个则返回多个。
-        /// </summary>
-        public List<GameObject> FindWithTag(string tag)
-        {
-            List<GameObject> gameObjects = null;
-            if (Scene.GameObjectsWithTag.ContainsKey(tag))
-                gameObjects = Scene.GameObjectsWithTag[tag];
-            return gameObjects;
-        }
+        internal Dictionary<Type, Component> ComponentDict { get; set; }
 
         /// <summary>
         /// 添加指定组件
         /// </summary>
-        public T AddComponent<T>() where T : Component, new()
+        public virtual T AddComponent<T>() where T : Component, new()
         {
+
             Type root = TypeRootConverter.GetComponentRoot(typeof(T));
             if (root == null)
                 throw new Exception("未知错误");
@@ -247,9 +248,10 @@
             }
 
             T instance = new T();
+
             instance.GameObject = this;
+
             //执行方法, 向系统注册
-            Components.Add(instance);
             ComponentDict.Add(root, instance);
 
             //初始化组件
@@ -278,100 +280,9 @@
                 return null;
             }
         }
+        #endregion
 
-        /// <summary>
-        /// 获取指定的类型及其子类的集合
-        /// </summary>
-        public List<T> GetComponents<T>() where T : Component
-        {
-            Type type = typeof(T);
-            List<T> list = new List<T>();
 
-            foreach (Component each in Components)
-            {
-                Type t = each.GetType();
-                if (type == t || t.IsSubclassOf(type))
-                {
-                    list.Add(each as T);
-                }
-            }
-            return list;
-        }
-
-        /// <summary>
-        /// 在指定场景中根据名字寻找游戏物体, 若有多个同名物体也只返回一个。
-        /// </summary>
-        public static GameObject Find(string sceneName, string name)
-        {
-            Scene scene = null;
-
-            if (SceneManager.Scenes.ContainsKey(sceneName))
-                scene = SceneManager.Scenes[sceneName];
-
-            if (scene == null)
-                return null;
-
-            GameObject result = null;
-            scene.GameObjects.ForEach(gameObject => { if (gameObject.Name == name) result = gameObject; });
-            return result;
-        }
-
-        /// <summary>
-        /// 在指定场景中根据标签寻找游戏物体, 若有多个则返回多个。
-        /// </summary>
-        public static List<GameObject> FindWithTag(string sceneName, string tag)
-        {
-            Scene scene = null;
-
-            if (SceneManager.Scenes.ContainsKey(sceneName))
-                scene = SceneManager.Scenes[sceneName];
-            if (scene == null)
-                return null;
-
-            List<GameObject> gameObjects = null;
-
-            if (scene.GameObjectsWithTag.ContainsKey(tag))
-                gameObjects = scene.GameObjectsWithTag[tag];
-
-            return gameObjects;
-        }
-
-        /// <summary>
-        /// 销毁一个游戏物体
-        /// </summary>
-        public static void Destroy(GameObject gameObject)
-        {
-            //进行这个设置的时候,就已经关掉了所有组件了.对于系统来说相当于已经被移除
-            gameObject.SetActive(false);
-            //在最后移除它
-            RuntimeEngine.GetSystem<DeleteSystem>().GameObjectsToDelete.Add(gameObject);
-        }
-
-        /// <summary>
-        /// 延迟销毁一个游戏物体
-        /// </summary>
-        public static void Destroy(GameObject gameObject, float delayTime)
-        {
-            RuntimeEngine.GetSystem<InvokeSystem>().AddDelayAction(
-                () => Destroy(gameObject), delayTime);
-        }
-
-        /// <summary>
-        /// 将一个游戏物体的引用加入DontDestroyOnLoad
-        /// </summary>
-        public static void DontDestroyOnLoad(GameObject gameObject)
-        {
-            if (!SceneManager.DontDestroyOnLoad.GameObjects.Contains(gameObject))
-                gameObject.AddToScene(SceneManager.DontDestroyOnLoad);
-
-            if (gameObject.ChildCount != 0)
-            {
-                foreach (var go in gameObject.Childs)
-                {
-                    DontDestroyOnLoad(go);
-                }
-            }
-        }
 
         /// <summary>
         /// ?检测是否为空
@@ -398,30 +309,6 @@
                 scene.GameObjectsWithTag[Tag].Add(this);
             else
                 scene.GameObjectsWithTag.Add(Tag, new List<GameObject>() { this });
-        }
-
-        /// <summary>
-        /// 通过递归查找物体的最终节点并相加,获得世界坐标
-        /// </summary>
-        private Vector2 GetWorldPosition(GameObject gameObject)
-        {
-            if (gameObject.parent != null)
-            {
-                return gameObject.LocalPosition + GetWorldPosition(gameObject.parent);
-            }
-            else
-                return gameObject.LocalPosition;
-        }
-
-        //用于临时检测可能的位置,加入这个物体LocalPosition到了这个位置,那么它的WorldPos
-        private Vector2 GetWorldPosition(GameObject gameObject, Vector2 lPos)
-        {
-            if (gameObject.parent != null)
-            {
-                return lPos + GetWorldPosition(gameObject.parent);
-            }
-            else
-                return lPos;
         }
     }
 }

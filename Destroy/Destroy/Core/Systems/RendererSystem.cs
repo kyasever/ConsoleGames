@@ -50,7 +50,11 @@
     /// </summary>
     public class RendererSystem : DestroySystem
     {
-        internal List<Renderer> RendererCollection { get; set; } = new List<Renderer>();
+        internal List<Renderer> ActorRendererCollection { get; set; } = new List<Renderer>();
+
+        internal List<Renderer> UIRendererCollection { get; set; } = new List<Renderer>();
+        // 之后要改成这个样子
+        //        public Dictionary<Vector2,RenderPoint> Renderers { get; private set; }
 
         private RenderPoint[,] renderers;
 
@@ -103,23 +107,38 @@
                 return;
 
             //处理 将Renderer信息画到画布上
-            foreach (Renderer renderer in RendererCollection)
+            foreach (Renderer renderer in ActorRendererCollection)
             {
                 if (!renderer.Enable)
                     continue;
                 foreach (KeyValuePair<Vector2, RenderPoint> rendererPoint in renderer.RendererPoints)
                 {
                     Vector2 pos = new Vector2();
-                    if (renderer.Mode == RendererMode.GameObject)
+                    //相对于摄像机的位置
+                    pos = renderer.Position + rendererPoint.Key - Camera.Main.Position;
+
+                    //防止数组越界
+                    if (pos.X >= 0 && pos.X < Config.ScreenWidth && pos.Y >= 0 && pos.Y < Config.ScreenHeight)
                     {
-                        //相对于摄像机的位置
-                        pos = renderer.Position + rendererPoint.Key - Camera.Main.Position;
+                        //世界坐标:[右X, 上Y] -> 屏幕坐标:[右X, 下Y]
+                        int x = pos.X;
+                        int y = Config.ScreenHeight - 1 - pos.Y;
+                        //这步操作非常重要. 内部进行了很多运算处理,并不是覆盖或者别的.
+                        renderers[x, y] += rendererPoint.Value;
                     }
-                    else if (renderer.Mode == RendererMode.UI)
-                    {
-                        //相对于原点的位置
-                        pos = renderer.Position + rendererPoint.Key;
-                    }
+                }
+            }
+
+            //处理 将Renderer信息画到画布上
+            foreach (Renderer renderer in UIRendererCollection)
+            {
+                if (!renderer.Enable)
+                    continue;
+                foreach (KeyValuePair<Vector2, RenderPoint> rendererPoint in renderer.RendererPoints)
+                {
+                    Vector2 pos = new Vector2();
+                    //相对于原点的位置
+                    pos = renderer.Position + rendererPoint.Key;
                     //防止数组越界
                     if (pos.X >= 0 && pos.X < Config.ScreenWidth && pos.Y >= 0 && pos.Y < Config.ScreenHeight)
                     {

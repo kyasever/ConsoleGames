@@ -5,6 +5,8 @@
  * 优化了多点碰撞和循环碰撞问题. 
  * 更新了一套超吊的质量运算系统.
  * 通过递归检测,现在可以随便推了,怎么推都行
+ * 4/23
+ * 经过了不知道多少个版本之后,现在碰撞系统被换成了最简洁的样子
  */
 namespace Destroy
 {
@@ -19,35 +21,17 @@ namespace Destroy
         /// <summary>
         /// 发生碰撞的点的坐标
         /// </summary>
-        public Vector2 HitPos { get; set; }
-        /// <summary>
-        /// 发生碰撞的碰撞体的数量
-        /// </summary>
-        public int CollisionCount => ColliderList.Count;
+        public Vector2 HitPos => ColliderList[0].Key;
         /// <summary>
         /// 获取第一个产生碰撞的物体
         /// </summary>
-        public Collider OtherCollier => ColliderList[0];
+        public Collider OtherCollier => ColliderList[0].Value;
+
+        public int CollisionCount => ColliderList.Count;
         /// <summary>
-        /// 获取完整的产生碰撞的碰撞体列表
+        /// 发生碰撞的地点和碰到的碰撞体
         /// </summary>
-        public List<Collider> ColliderList { get; private set; }
-        /// <summary>
-        /// 使用一个碰撞体初始化
-        /// </summary>
-        public Collision(Collider other,Vector2 hitpos)
-        {
-            HitPos = hitpos;
-            ColliderList = new List<Collider>() { other };
-        }
-        /// <summary>
-        /// 使用很多个碰撞体初始化
-        /// </summary>
-        public Collision(List<Collider> list,Vector2 hitpos)
-        {
-            HitPos = hitpos;
-            ColliderList = list;
-        }
+        public List<KeyValuePair<Vector2,Collider>> ColliderList = new List<KeyValuePair<Vector2, Collider>>();
     }
 
     /// <summary>
@@ -69,146 +53,56 @@ namespace Destroy
     /// </summary>
     public class CollisionSystem : DestroySystem
     {
+        public List<Collider> ColliderCollection = new List<Collider>();
+
         /// <summary>
         /// 每一个点都可以放很多碰撞体组件
         /// </summary>
-        public Dictionary<Vector2, List<Collider>> Colliders { get; private set; }
+        public Dictionary<Vector2, List<Collider>> Colliders { get; private set; } = new Dictionary<Vector2, List<Collider>>();
 
         /// <summary>
-        /// 
+        /// 将所有Collider都加入图中. 然后遍历
         /// </summary>
-        public CollisionSystem()
+        public override void Update()
         {
-            needUpdate = false;
+            //每一个碰撞体将要接收到的碰撞结果
+            Dictionary<Collider, Collision> result = new Dictionary<Collider, Collision>();
+            //所有地点的集合
             Colliders = new Dictionary<Vector2, List<Collider>>();
-        }
-
-        /// <summary>
-        /// 将一个碰撞体加入系统
-        /// </summary>
-        public void AddToSystem(Collider collider)
-        {
-            AddToSystem(collider, collider.Position);
-        }
-
-        /// <summary>
-        /// 将一个碰撞体加入系统,手动制定加入的位置
-        /// </summary>
-        public void AddToSystem(Collider collider,Vector2 position)
-        {
-            //一个碰撞体在一次加入中只会与另一个碰撞体碰撞一次 不能与自己碰撞
-            Dictionary<Collider, Vector2> chash = new Dictionary<Collider, Vector2>();
-            chash.Add(collider, position);
-
-            //两个大碰撞体多点接触不会触发多次,可能发生多次位置不同的接触产生多次回调
-            foreach (Vector2 dis in collider.ColliderList)
+            //将所有碰撞体都加入储存列表中 并产生碰撞信息
+            foreach (Collider collider in ColliderCollection)
             {
-                Vector2 pos = position + dis;
-                if (Colliders.ContainsKey(pos))
+                if (!collider.Enable)
+                    continue;
+                foreach (Vector2 dis in collider.ColliderList)
                 {
-                    List<Collider> onCollisionList = new List<Collider>();
-                    foreach (Collider c in Colliders[pos])
+                    Vector2 pos = collider.Position + dis;
+                    if (Colliders.ContainsKey(pos))
                     {
-                        if (!chash.ContainsKey(c))
+                        foreach(Collider otherCollider in Colliders[pos])
                         {
-                            //不会和它第二次碰撞
-                            chash.Add(c,pos);
-                            onCollisionList.Add(c);
+                            SafeAddResult(collider, otherCollider, pos);
+                            SafeAddResult(otherCollider, collider, pos);
                         }
+                        Colliders[pos].Add(collider);
                     }
-                    //说明发生了新的碰撞
-                    if (onCollisionList.Count > 0)
+                    else
                     {
-                        //执行回调方法
-                        collider.GameObject.OnCollisionEvent?.Invoke(new Collision(onCollisionList,chash[onCollisionList[0]]));
+                        Colliders.Add(pos, new List<Collider>() { collider });
                     }
-                    //将这个顺利加入系统
-                    Colliders[pos].Add(collider);
-                }
-                else
-                {
-                    //这个点是空的,直接加入系统
-                    Colliders.Add(pos, new List<Collider>() { collider });
                 }
             }
-        }
-
-        /// <summary>
-        /// 将一个碰撞体移除系统
-        /// </summary>
-        public void RemoveFromSystem(Collider collider)
-        {
-            RemoveFromSystem(collider, collider.Position);
-        }
-
-        /// <summary>
-        /// 将一个碰撞体移除系统,手动制定位置
-        /// </summary>
-        public void RemoveFromSystem(Collider collider,Vector2 position)
-        {
-            foreach (Vector2 dis in collider.ColliderList)
+            void SafeAddResult(Collider thisCollider,Collider otherCollider,Vector2 pos)
             {
-                Vector2 pos = position + dis;
-                if (Colliders.ContainsKey(pos))
-                {
-                    Colliders[pos].Remove(collider);
-                    if (Colliders[pos].Count == 0)
-                    {
-                        Colliders.Remove(pos);
-                    }
-                }
+                if(!result.ContainsKey(thisCollider))
+                    result.Add(thisCollider, new Collision());
+                result[thisCollider].ColliderList.Add(new KeyValuePair<Vector2, Collider>(pos, otherCollider));
             }
-        }
-
-        /// <summary>
-        /// 判断一个碰撞体是否可以在系统中移动,判断的时候会产生碰撞回调但是不会移动
-        /// </summary>
-        public bool CanMoveInPos(Collider collider, Vector2 from,Vector2 to)
-        {
-            //一个碰撞体在一次加入中只会与另一个碰撞体碰撞一次 不能与自己碰撞
-            Dictionary<Collider, Vector2> chash = new Dictionary<Collider, Vector2>();
-            chash.Add(collider, from);
-
-            bool canMoveFlag = true;
-
-            //两个大碰撞体多点接触不会触发多次,可能发生多次位置不同的接触产生多次回调
-            foreach (Vector2 colliderDis in collider.ColliderList)
+            //通知所有产生碰撞的物体
+            foreach(var pair in result)
             {
-                Vector2 pos = to + colliderDis;
-                if (Colliders.ContainsKey(pos))
-                {
-                    List<Collider> onCollisionList = new List<Collider>();
-                    foreach (Collider c in Colliders[pos])
-                    {
-                        if (!chash.ContainsKey(c))
-                        {
-                            //不会和它第二次碰撞
-                            chash.Add(c,pos);
-                            onCollisionList.Add(c);
-                        }
-                    }
-                    //说明发生了新的碰撞
-                    if (onCollisionList.Count > 0)
-                    {
-                        //执行回调方法
-                        collider.GameObject.OnCollisionEvent?.Invoke(new Collision(onCollisionList, chash[onCollisionList[0]]));
-                    }
-                    //这里仅做碰撞检测,在移动的尝试中如果发生了碰撞,那么会进行碰撞回调,但是可能不会进行实际的移动
-                    canMoveFlag = false;
-                }
+                pair.Key.OnCollisionEvent?.Invoke(pair.Value);
             }
-            return canMoveFlag;
         }
-
-        /// <summary>
-        /// 让一个碰撞体在系统中移动
-        /// </summary>
-        public void MoveInSystem(Collider collider, Vector2 from,Vector2 to)
-        {
-            RemoveFromSystem(collider,from);
-            AddToSystem(collider, to);
-        }
-
     }
-
 }

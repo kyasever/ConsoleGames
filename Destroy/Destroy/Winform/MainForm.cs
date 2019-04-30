@@ -187,9 +187,9 @@ namespace Destroy.Winform
 
             if (gameObject.ChildCount > 0)
             {
-                foreach (GameObject v in gameObject.Childs)
+                foreach (Transform v in gameObject.Transform.Childs)
                 {
-                    AddGameObject(cNode, v);
+                    AddGameObject(cNode, v.GameObject);
                 }
             }
         }
@@ -292,6 +292,10 @@ namespace Destroy.Winform
         /// </summary>
         private TreeNode AddNode(TreeNodeCollection rootNode, object obj, string name)
         {
+            if(obj == null)
+            {
+                return AddNode(rootNode, name, name + " : null");
+            }
             Type type = obj.GetType();
 
             string info, value;

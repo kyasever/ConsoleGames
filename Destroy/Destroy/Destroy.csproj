@@ -58,21 +58,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Core\NewCore\Actor.cs" />
-    <Compile Include="Core\Tools\Maze.cs" />
     <Compile Include="Core\UI\BoxDrawing.cs" />
+    <Compile Include="Core\Components\Transform.cs" />
+    <Compile Include="Core\UI\Button.cs" />
+    <Compile Include="Core\UI\Geometry.cs" />
+    <Compile Include="Core\UI\Label.cs" />
     <Compile Include="Core\UI\SystemUI.cs" />
+    <Compile Include="Core\Tools\Maze.cs" />
     <Compile Include="Core\Core\StandardIO.cs" />
     <Compile Include="Core\Core\Enums.cs" />
-    <Compile Include="Standard\Box-TPS\CameraController.cs" />
-    <Compile Include="Standard\Box-TPS\Shooter.cs" />
-    <Compile Include="Standard\Box-TPS\TPSScene.cs" />
-    <Compile Include="Standard\Maze-SRPG\Cursor.cs" />
-    <Compile Include="Standard\Maze-SRPG\SRPGScene.cs" />
-    <Compile Include="Standard\Maze-SRPG\Layer.cs" />
-    <Compile Include="Standard\Maze-SRPG\Map.cs" />
-    <Compile Include="Standard\Maze-SRPG\WizardAgent.cs" />
-    <Compile Include="Standard\Start\StartScene.cs" />
+    <Compile Include="Core\UI\TextBox.cs" />
+    <Compile Include="Core\UI\UIFactory.cs" />
     <Compile Include="Windows\Windows.cs" />
     <Compile Include="Winform\EditorSystem.cs" />
     <Compile Include="Winform\ExtandVector2Int.cs" />
@@ -87,8 +83,6 @@
     <Compile Include="Winform\WinformEngine.cs" />
     <Compile Include="Core\Components\Camera.cs" />
     <Compile Include="Core\Components\CharacterController.cs" />
-    <Compile Include="Core\Components\Mesh.cs" />
-    <Compile Include="Core\Components\RayCastTarget.cs" />
     <Compile Include="Core\Core\DestroySystem.cs" />
     <Compile Include="Core\Core\TypeRootConverter.cs" />
     <Compile Include="Core\Systems\CallScriptSystem.cs" />
@@ -96,11 +90,9 @@
     <Compile Include="Core\Core\SceneManager.cs" />
     <Compile Include="Winform\ComAttribute.cs" />
     <Compile Include="Core\Tools\RefHelper.cs" />
-    <Compile Include="Core\UI\Rectangle.cs" />
     <Compile Include="Core\Systems\InputSystem.cs" />
     <Compile Include="Core\Tools\Struct\Color.cs" />
     <Compile Include="Core\Core\Config.cs" />
-    <Compile Include="Core\UI\UIFactory.cs" />
     <Compile Include="Core\Tools\Utils\Matrix.cs" />
     <Compile Include="Core\Tools\ObjectPool.cs" />
     <Compile Include="Core\Tools\Utils\Singleton.cs" />

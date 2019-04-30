@@ -12,7 +12,7 @@
         /// <summary>
         /// 创建一个制表符画出来的长方形
         /// </summary>
-        public static GameObject CreateBoxDrawingRect(Vector2 pos, int height, int width)
+        public static GameObject CreateBoxDrawingRect(Vector2 pos,int height,int width)
         {
             //边框
             Rectangle rectangle = new Rectangle(width + 2, height + 2);
@@ -83,128 +83,6 @@
 
             return textBox;
         }
-
-        /// <summary>
-        /// 创建一个Lable组件,不带有默认文字
-        /// </summary>
-        public static Renderer CreateLabel(Vector2 pos, string text = "", int width = -1)
-        {
-            GameObject lable = new GameObject("Label", "UI")
-            {
-                //初始化位置
-                Position = pos
-            };
-
-            //添加一个宽度等同于width的Mesh
-            Mesh mesh = lable.AddComponent<Mesh>();
-            List<Vector2> meshList = new List<Vector2>();
-            if (width == -1)
-            {
-                width = CharUtils.GetStringWidth(text) / 2 + 1;
-                if (width < 1)
-                    width = 1;
-            }
-            for (int i = 0; i < width; i++)
-            {
-                meshList.Add(new Vector2(i, 0));
-            }
-            mesh.Init(meshList);
-            //添加一个Renderer组件
-            Renderer renderer = lable.AddComponent<Renderer>();
-            renderer.Init(RendererMode.UI, -1);
-            renderer.Rendering(text);
-            //不进行初始化,手动进行添加
-            return renderer;
-        }
-
-        /// <summary>
-        /// 创建一个按钮组件
-        /// </summary>
-        public static Button CreateButton(Vector2 pos, string text, Action onClick = null, int width = -1)
-        {
-            var l = CreateLabel(pos, text, width);
-            var btnCom = l.AddComponent<Button>();
-            if (onClick != null)
-                btnCom.OnClick += onClick;
-            return btnCom;
-        }
-    }
-
-    /// <summary>
-    /// 按钮组件 感觉这个组件好没有必要啊.... 回头删了吧 
-    /// </summary>
-    public class Button : Component
-    {
-        private Renderer renderer;
-        private RayCastTarget rTarget;
-        /// <summary>
-        /// 点击回调
-        /// </summary>
-        public Action OnClick;
-        /// <summary>
-        /// 设置文字
-        /// </summary>
-        public string Text { get => renderer.GetString(); set => renderer.SetString(value); }
-
-        internal override void Initialize()
-        {
-            renderer = GetComponent<Renderer>();
-            rTarget = AddComponent<RayCastTarget>();
-            rTarget.OnMoveInEvent += MoveIn;
-            rTarget.OnMoveOutEvent += MoveOut;
-            rTarget.OnClickEvent += Click;
-        }
-
-        private void MoveIn()
-        {
-            renderer.SetBackColor(Color.Yellow);
-        }
-        private void MoveOut()
-        {
-            renderer.SetBackColor(Config.DefaultBackColor);
-        }
-        private void Click()
-        {
-            if (OnClick != null)
-            {
-                OnClick.Invoke();
-            }
-        }
-
-    }
-
-    /// <summary>
-    /// 文本框组件
-    /// </summary>
-    public class TextBox : Component
-    {
-        /// <summary>
-        /// 最后返回的应该是TextBox组件,可以通过label更改每一条的信息,
-        /// </summary>
-        public List<Renderer> Labels = new List<Renderer>();
-        /// <summary>
-        /// 边框的对象
-        /// </summary>
-        public GameObject boxDrawing;
-        /// <summary>
-        /// 更改对应行上面的字符,也可以通过获取Labels自己找对应的Label组件
-        /// </summary>
-        public bool SetText(string str, int line)
-        {
-            if (line > Labels.Count)
-            {
-                return false;
-            }
-            else if (line <= 0)
-            {
-                return false;
-            }
-            else
-            {
-                Labels[line - 1].Rendering(str);
-                return true;
-            }
-        }
     }
 
     /// <summary>
@@ -227,40 +105,39 @@
         /// </summary>
         public bool IsSelected { get; set; } = false;
 
-        /// <summary>
-        /// 使用脚本内部的静态Create方法来创建一个挂载这个脚本的典型游戏物体
-        /// </summary>
-        /// <param name="text">显示的文本</param>
-        /// <param name="parentListBox">来自于哪个ListBox的创建</param>
-        /// <returns></returns>
-        public static ListBoxItem Create(string text, ListBox parentListBox)
-        {
-            //创建对象
-            GameObject obj = new GameObject("Item" + text, parentListBox.GameObject.Tag, parentListBox.GameObject);
-            //这个对象的父物体是创建它的ListBox
-            obj.Parent = parentListBox.GameObject;
-            //给这个对象加一个Item组件
-            ListBoxItem item = obj.AddComponent<ListBoxItem>();
-            //初始化这个Item
-            item.BackColor = Color.Yellow;
+        private Renderer renderer;
+        private RayCastTarget rtarget;
+        private ListBox listBoxCom;
 
-            //添加一个宽度等同于父框体width的Mesh
-            Mesh mesh = obj.AddComponent<Mesh>();
+
+        internal override void Initialize()
+        {
+            listBoxCom = GameObject.Parent.GetComponent<ListBox>();
+
+            //添加一个宽度等同于width的Mesh
+            Mesh mesh = AddComponent<Mesh>();
             List<Vector2> meshList = new List<Vector2>();
-            for (int i = 0; i < parentListBox.Width; i++)
+            for (int i = 0; i < listBoxCom.Width; i++)
             {
                 meshList.Add(new Vector2(i, 0));
             }
             mesh.Init(meshList);
             //添加一个Renderer组件
-            var renderer = obj.AddComponent<Renderer>();
+            renderer = AddComponent<Renderer>();
             renderer.Init(RendererMode.UI, -1);
-            renderer.Rendering(text);
             //添加一个Label组件
-            var rtarget = obj.AddComponent<RayCastTarget>();
-            rtarget.OnClickEvent += () => { parentListBox.OnClickAction(item.Index); };
+            BackColor = Color.Yellow;
 
-            return item;
+            rtarget = AddComponent<RayCastTarget>();
+            rtarget.OnClickEvent += () => { listBoxCom.OnClickAction(Index); };
+        }
+
+        /// <summary>
+        /// 设置文字
+        /// </summary>
+        public void Rendering(string text)
+        {
+            renderer.Rendering(text);
         }
 
         /// <summary>
@@ -271,12 +148,12 @@
             if (selected)
             {
                 IsSelected = true;
-                GetComponent<Renderer>().SetBackColor(BackColor);
+                renderer.SetBackColor(BackColor);
             }
             else
             {
                 IsSelected = false;
-                GetComponent<Renderer>().SetBackColor(Config.DefaultBackColor);
+                renderer.SetBackColor(Config.DefaultBackColor);
             }
         }
     }
@@ -518,12 +395,12 @@
         }
 
         /// <summary>
-        /// 添加一个新的ITem
+        /// 创建一个新的列表对象.然后再进行进一步的处理
         /// </summary>
-        /// <param name="text">item显示的文本</param>
         public ListBoxItem CreateLabelItem(string text)
         {
-            var item = ListBoxItem.Create(text, this);
+            ListBoxItem item = GameObject.CreateWith<ListBoxItem>("Item" + text, GameObject.Tag, GameObject);
+            item.Rendering(text);
             Items.Add(item);
             return item;
         }

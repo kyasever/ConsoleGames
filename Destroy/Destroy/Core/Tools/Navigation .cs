@@ -252,10 +252,8 @@ namespace Destroy
 
             SearchDic[start] = 0;
             queue.Add(start);
-
-            Vector2 v = start;
             bool flag = true;
-
+            Vector2 v;
             //添加点进队列
             bool AddNextRoute(Vector2 ov)
             {
@@ -302,8 +300,10 @@ namespace Destroy
                 }
             }
             //结果路径
-            List<Vector2> path = new List<Vector2>();
-            path.Add(stop);
+            List<Vector2> path = new List<Vector2>
+            {
+                stop
+            };
             while (true)
             {
                 v = path.First();
@@ -313,11 +313,13 @@ namespace Destroy
                     break;
                 }
                 //将周围最小的一个点加入下一步
-                List<RouteData> minSet = new List<RouteData>();
-                minSet.Add(new RouteData(v + Vector2.Left, SearchDic));
-                minSet.Add(new RouteData(v + Vector2.Right, SearchDic));
-                minSet.Add(new RouteData(v + Vector2.Up, SearchDic));
-                minSet.Add(new RouteData(v + Vector2.Down, SearchDic));
+                List<RouteData> minSet = new List<RouteData>
+                {
+                    new RouteData(v + Vector2.Left, SearchDic),
+                    new RouteData(v + Vector2.Right, SearchDic),
+                    new RouteData(v + Vector2.Up, SearchDic),
+                    new RouteData(v + Vector2.Down, SearchDic)
+                };
                 minSet.Sort();
                 path.Insert(0, minSet[0].vector);
             }
@@ -345,10 +347,8 @@ namespace Destroy
 
             SearchDic[start] = 0;
             queue.Add(start);
-
-            Vector2 p = start;
             bool flag = true;
-
+            Vector2 p;
             bool AddNextRoute(Vector2 ov)
             {
                 if (canMoveFunc(p + ov) && !SearchDic.ContainsKey(p + ov))

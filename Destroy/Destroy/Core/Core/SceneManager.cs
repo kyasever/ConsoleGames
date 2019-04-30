@@ -6,7 +6,7 @@
     /// <summary>
     /// 场景基类, 用于保存游戏物体的引用
     /// </summary>
-    public abstract class Scene
+    public class Scene
     {
         /// <summary>
         /// 场景的名字
@@ -51,20 +51,6 @@
         /// 在销毁这个Scene时调用
         /// </summary>
         public virtual void OnDestroy() { }
-    }
-
-    /// <summary>
-    /// 这个属于默认场景,这个场景复制一份调用方法的对象,在转场的时候把自己保存的引用加入到新场景里
-    /// </summary>
-    internal class DontDestroyOnLoad : Scene
-    {
-        public override void OnStart()
-        {
-        }
-
-        public override void OnDestroy()
-        {
-        }
     }
 
     /// <summary>
@@ -120,7 +106,7 @@
         /// </summary>
         internal static Dictionary<string, Scene> Scenes { get; set; }
 
-        internal static DontDestroyOnLoad DontDestroyOnLoad { get; set; }
+        private static Scene dontDestroyOnLoadScene { get; set; }
 
         internal static DefaultScene DefaultScene { get; set; }
 
@@ -131,10 +117,10 @@
         public static void Init()
         {
             Scenes = new Dictionary<string, Scene>();
-            DontDestroyOnLoad = new DontDestroyOnLoad();
+            dontDestroyOnLoadScene = new Scene();
             DefaultScene = new DefaultScene();
             Load(DefaultScene, LoadSceneMode.Additive);
-            Scenes.Add(DontDestroyOnLoad.Name, DontDestroyOnLoad);
+            Scenes.Add(dontDestroyOnLoadScene.Name, dontDestroyOnLoadScene);
             ActiveScene = DefaultScene;
         }
 
@@ -173,8 +159,8 @@
                     //销毁所有之前场景的游戏物体, 如果dontdestroy保存着它的对象,则不销毁
                     foreach (GameObject gameObject in ActiveScene.GameObjects)
                     {
-                        if (!DontDestroyOnLoad.GameObjects.Contains(gameObject))
-                            GameObject.Destroy(gameObject);
+                        if (!dontDestroyOnLoadScene.GameObjects.Contains(gameObject))
+                            DestroyObject(gameObject);
                     }
                     //移除之前场景的引用
                     Scenes.Remove(ActiveScene.Name);
@@ -184,7 +170,7 @@
                 //设置新场景为激活场景
                 ActiveScene = newScene;
                 //将DontDestroyOnLoad中保存的对象加入新的激活场景
-                foreach (GameObject gameObject in DontDestroyOnLoad.GameObjects)
+                foreach (GameObject gameObject in dontDestroyOnLoadScene.GameObjects)
                 {
                     gameObject.AddToScene(ActiveScene);
                 }
@@ -204,5 +190,94 @@
             //将这个Scene加入dict
             Scenes.Add(newScene.Name, newScene);
         }
+
+        /// <summary>
+        /// 在当前场景中根据名字寻找游戏物体, 若有多个同名物体也只返回一个。
+        /// </summary>
+        public static GameObject Find(string name)
+        {
+            GameObject result = null;
+            ActiveScene.GameObjects.ForEach(gameObject => { if (gameObject.Name == name) result = gameObject; });
+            return result;
+        }
+
+        /// <summary>
+        /// 在当前场景中根据标签寻找游戏物体, 若有多个则返回多个。
+        /// </summary>
+        public static List<GameObject> FindWithTag(string tag)
+        {
+            List<GameObject> gameObjects = null;
+            if (ActiveScene.GameObjectsWithTag.ContainsKey(tag))
+                gameObjects = ActiveScene.GameObjectsWithTag[tag];
+            return gameObjects;
+        }
+
+        /// <summary>
+        /// 在指定场景中根据名字寻找游戏物体, 若有多个同名物体也只返回一个。
+        /// </summary>
+        public static GameObject Find(string sceneName, string name)
+        {
+            Scene scene = null;
+
+            if (SceneManager.Scenes.ContainsKey(sceneName))
+                scene = SceneManager.Scenes[sceneName];
+
+            if (scene == null)
+                return null;
+
+            GameObject result = null;
+            scene.GameObjects.ForEach(gameObject => { if (gameObject.Name == name) result = gameObject; });
+            return result;
+        }
+
+        /// <summary>
+        /// 在指定场景中根据标签寻找游戏物体, 若有多个则返回多个。
+        /// </summary>
+        public static List<GameObject> FindWithTag(string sceneName, string tag)
+        {
+            Scene scene = null;
+
+            if (SceneManager.Scenes.ContainsKey(sceneName))
+                scene = SceneManager.Scenes[sceneName];
+            if (scene == null)
+                return null;
+
+            List<GameObject> gameObjects = null;
+
+            if (scene.GameObjectsWithTag.ContainsKey(tag))
+                gameObjects = scene.GameObjectsWithTag[tag];
+
+            return gameObjects;
+        }
+
+        /// <summary>
+        /// 销毁一个游戏物体
+        /// </summary>
+        public static void DestroyObject(GameObject gameObject)
+        {
+            //进行这个设置的时候,就已经关掉了所有组件了.对于系统来说相当于已经被移除
+            gameObject.SetActive(false);
+            //在最后移除它
+            RuntimeEngine.GetSystem<DeleteSystem>().GameObjectsToDelete.Add(gameObject);
+        }
+
+
+        /// <summary>
+        /// 将一个游戏物体的引用加入DontDestroyOnLoad
+        /// </summary>
+        public static void DontDestroyOnLoad(GameObject gameObject)
+        {
+            if (!dontDestroyOnLoadScene.GameObjects.Contains(gameObject))
+                gameObject.AddToScene(dontDestroyOnLoadScene);
+
+            if (gameObject.ChildCount != 0)
+            {
+                foreach (var go in gameObject.Transform.Childs)
+                {
+                    DontDestroyOnLoad(go.GameObject);
+                }
+            }
+        }
+
     }
 }

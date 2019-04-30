@@ -30,10 +30,10 @@ namespace Wizard2
 
         private static void StartGame()
         {
-            SRPGScene scene = new SRPGScene();
+            //SRPGScene scene = new SRPGScene();
             //var scene = new TPSScene();
             
-            //var scene = new StartScene();
+            var scene = new newTestScene();
 
             SceneManager.Load(scene, LoadSceneMode.Single);
 
@@ -45,6 +45,16 @@ namespace Wizard2
         private static bool Func(Vector2 v)
         {
             return true;
+        }
+    }
+
+    public class newTestScene : Scene
+    {
+        public override void OnStart()
+        {
+            Actor actor = new Actor("Player", "testTag");
+            actor.Position = new Vector2(15, 15);
+            actor.Renderer.DrawString("asdfasdfasd",Color.Blue,Color.Green,Vector2.Zero);
         }
     }
 }

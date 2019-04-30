@@ -95,16 +95,6 @@
         }
 
         /// <summary>
-        /// 碰撞检测 测试用
-        /// </summary>
-        /// <param name="collision"></param>
-        public override void OnCollision(Collision collision)
-        {
-            //可以像这样来检测碰撞
-            Debug.Log(collision.HitPos.ToString());
-        }
-
-        /// <summary>
         /// Update
         /// </summary>
         public override void Update()
@@ -162,15 +152,15 @@
                 if (!CanMoveInCollider)
                 {
                     //先去物理系统检测是否可以移动,检测的过程中不会移动物体,但是会产生碰撞回调
-                    if (!RuntimeEngine.GetSystem<CollisionSystem>().CanMoveInPos(GetComponent<Collider>(), Position, Position + tomove))
-                    {
-                        FPosition = Vector2Float.Zero;
-                    }
-                    //接下来进行移动
-                    else
-                    {
-                        Position += tomove;
-                    }
+                    //if (!RuntimeEngine.GetSystem<CollisionSystem>().CanMoveInPos(GetComponent<Collider>(), Position, Position + tomove))
+                    //{
+                    //    FPosition = Vector2Float.Zero;
+                    //}
+                    ////接下来进行移动
+                    //else
+                    //{
+                    //    Position += tomove;
+                    //}
                 }
                 else
                 {

@@ -1,7 +1,67 @@
 ﻿namespace Destroy
 {
+    using System;
     using System.Collections.Generic;
     using System.Text;
+
+    /// <summary>
+    /// 直线类,用于表达一条直线的形状,目前来说Line仅支持横线和竖线,不支持射线
+    /// </summary>
+    public class Line
+    {
+        public Vector2 StartPos;
+        public Vector2 EndPos;
+        public List<Vector2> PosList;
+
+        private bool isHorizontal = false;
+
+        public Line(Vector2 startPos,Vector2 endPos)
+        {
+            StartPos = startPos;
+            EndPos = endPos;
+            PosList = new List<Vector2>();
+            if(StartPos.X == EndPos.X)
+            {
+                isHorizontal = true;
+                int x = StartPos.X;
+                int ymin = Math.Min(StartPos.Y, EndPos.Y);
+                int ymax = Math.Max(StartPos.Y, EndPos.Y);
+                for (int i = ymin;i<= ymax; i++)
+                {
+                    PosList.Add(new Vector2(x, i));
+                }
+            }
+            else if (StartPos.Y == EndPos.Y)
+            {
+                int y = StartPos.Y;
+                int xmin = Math.Min(StartPos.X, EndPos.X);
+                int xmax = Math.Max(StartPos.X, EndPos.X);
+                for (int i = xmin; i <= xmax; i++)
+                {
+                    PosList.Add(new Vector2(i, y));
+                }
+            }
+            else
+            {
+                Debug.Error("不支持非水平或垂直的直线");
+            }
+        }
+
+        public string GetStr()
+        {
+            string rawStr;
+            if(isHorizontal)
+            {
+                rawStr = BoxDrawingCharacter.BoxHorizontal.ToString() + BoxDrawingCharacter.BoxHorizontal.ToString();
+            }
+            else
+            {
+                rawStr = BoxDrawingCharacter.BoxVertical.ToString();
+            }
+            return rawStr;
+        }
+
+    }
 
     /// <summary>
     /// 矩形类,用于返回标准矩形的点集.
@@ -9,6 +69,11 @@
     /// </summary>
     public class Rectangle
     {
+        /// <summary>
+        /// 起始点
+        /// </summary>
+        public Vector2 StartPos;
+
         /// <summary>
         /// 宽度高度
         /// </summary>
@@ -20,11 +85,6 @@
         public List<Vector2> PosList;
 
         /// <summary>
-        /// 字符
-        /// </summary>
-        public string Str;
-
-        /// <summary>
         /// 初始化,给定起始坐标,长,宽. 进行点集的初始化操作
         /// </summary>
         public Rectangle(int width, int height)
@@ -33,7 +93,6 @@
             this.Height = height;
             PosList = new List<Vector2>();
             AddMesh();
-            AddTexture();
         }
 
         /// <summary>
@@ -59,7 +118,7 @@
         /// <summary>
         /// 添加贴图
         /// </summary>
-        private void AddTexture()
+        public string GetStr()
         {
             //添加边框的贴图
             StringBuilder sb = new StringBuilder();
@@ -72,7 +131,7 @@
                 sb.Append(' ');
             }
             sb.Append(BoxDrawingSupply.GetLastLine(Width));
-            Str = sb.ToString();
+            return sb.ToString();
         }
 
         /// <summary>

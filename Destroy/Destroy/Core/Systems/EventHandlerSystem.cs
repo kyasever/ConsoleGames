@@ -3,41 +3,22 @@
     using System;
     using System.Collections.Generic;
 
+    /*
+     * 只有这个问题很大 还是应该整合进phy
+     * 特殊处理吧. UI的特点就是不基于摄像机 别的也没了
+     * 
+     */
     /// <summary>
     /// 处理鼠标事件 通常只有UI和这个有关 游戏物体请用物理系统检测
     /// </summary>
     public class EventHandlerSystem : DestroySystem
     {
+        public List<Collider> UICollection = new List<Collider>();
+
         /// <summary>
         /// UI射线检测组件
         /// </summary>
-        public Dictionary<Vector2, List<RayCastTarget>> UITargets { get; private set; } = new Dictionary<Vector2, List<RayCastTarget>>();
-
-        private static GameObject testObj;
-        /// <summary>
-        /// 创建一个测试实例,用于标示该系统的运作状态
-        /// </summary>
-        public static GameObject CreateTest()
-        { 
-            if(testObj != null)
-            {
-                GameObject.Destroy(testObj);
-            }
-            GameObject gameObject = new GameObject("EventText", "System");
-            var mesh =  gameObject.AddComponent<Mesh>();
-            List<Vector2> list = new List<Vector2>();
-            foreach(var v in RuntimeEngine.GetSystem<EventHandlerSystem>().UITargets.Keys)
-            {
-                list.Add(v);
-            }
-            mesh.Init(list);
-            var renderer = gameObject.AddComponent<Renderer>();
-            renderer.Init(RendererMode.UI, -1);
-            renderer.Rendering(new RenderPoint("  ", Config.DefaultForeColor, Color.Yellow, -1));
-            testObj = gameObject;
-            return gameObject;
-        }
-
+        public Dictionary<Vector2, List<Collider>> UITargets { get; private set; } = new Dictionary<Vector2, List<Collider>>();
 
         private bool KeyDown = false;
         private Vector2 mousePos = new Vector2(-100, -100);
@@ -47,6 +28,25 @@
         /// </summary>
         public override void Update()
         {
+            UITargets = new Dictionary<Vector2, List<Collider>>();
+            foreach (var collider in UICollection)
+            {
+                if (!collider.Enable)
+                    continue;
+                foreach (var dis in collider.ColliderList)
+                {
+                    Vector2 pos = collider.Position + dis;
+                    if (UITargets.ContainsKey(pos))
+                    {
+                        UITargets[pos].Add(collider);
+                    }
+                    else
+                    {
+                        UITargets.Add(pos, new List<Collider>() { collider });
+                    }
+                }
+            }
+
             bool k = Input.GetMouseButton(MouseButton.Left);
             Vector2 newPos = Input.MousePosition - Camera.Main.Position;
 
@@ -57,19 +57,16 @@
                 {
                     foreach (var target in UITargets[newPos])
                     {
-                        if (target.Enable)
-                        {
-                            //不加event就可以这么写,加了就不能. 有点奇怪
-                            target.OnClickEvent?.Invoke();
-                        }
+                        //不加event就可以这么写,加了就不能. 有点奇怪
+                        target.OnClickEvent?.Invoke();
                     }
                 }
             }
             //当产生位置移动的时候,产生移动进入离开事件回调.
             if (newPos != mousePos)
             {
-                List<RayCastTarget> needToOutList = new List<RayCastTarget>();
-                List<RayCastTarget> needToInList = new List<RayCastTarget>();
+                List<Collider> needToOutList = new List<Collider>();
+                List<Collider> needToInList = new List<Collider>();
 
                 if (UITargets.ContainsKey(mousePos))
                 {
@@ -114,44 +111,6 @@
 
             KeyDown = k;
             mousePos = newPos;
-        }
-
-        /// <summary>
-        /// 加入系统
-        /// </summary>
-        public void AddToSystem(RayCastTarget UITarget, Vector2 position)
-        {
-            foreach (Vector2 dis in UITarget.colliderList)
-            {
-                Vector2 pos = position + dis;
-                if (UITargets.ContainsKey(pos))
-                {
-                    UITargets[pos].Add(UITarget);
-                }
-                else
-                {
-                    UITargets.Add(pos, new List<RayCastTarget>() { UITarget });
-                }
-            }
-        }
-
-        /// <summary>
-        /// 移除系统
-        /// </summary>
-        public void RemoveFromSystem(RayCastTarget UITarget, Vector2 position)
-        {
-            foreach (Vector2 dis in UITarget.colliderList)
-            {
-                Vector2 pos = position + dis;
-                if (UITargets.ContainsKey(pos))
-                {
-                    UITargets[pos].Remove(UITarget);
-                    if (UITargets[pos].Count == 0)
-                    {
-                        UITargets.Remove(pos);
-                    }
-                }
-            }
         }
     }
 }

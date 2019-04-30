@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Destroy
 {
-
+    /*
     /// <summary>
     /// 迷宫生成
     /// </summary>
@@ -150,4 +150,5 @@ namespace Destroy
             }
         }
     }
+    */
 }

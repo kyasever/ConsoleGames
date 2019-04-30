@@ -9,45 +9,33 @@
     */
 
     /// <summary>
-    /// 碰撞体组件,一般来说默认按着Mesh来
+    /// 碰撞体组件
     /// </summary>
-    public class Collider : Component
+    public class Collider
     {
+        /// <summary>
+        /// 碰撞回调事件.
+        /// </summary>
+        public Action<Collision> OnCollisionEvent { get; set; }
+
         /// <summary>
         /// 碰撞体包含的点的列表,通常情况下来说保持和Mesh的数据相同
         /// </summary>
-        public List<Vector2> ColliderList { get; private set; }
+        public List<Vector2> ColliderList { get; set; }
 
-        internal override void OnAdd()
-        {
-                RuntimeEngine.GetSystem<CollisionSystem>().AddToSystem(this);
-            GameObject.ChangePositionEvnet += OnMove;
-        }
+        /// <summary>
+        /// 当进入组件时产生的事件
+        /// </summary>
+        public Action OnMoveInEvent { get; set; }
 
-        private void OnMove(Vector2 from, Vector2 to)
-        {
-            RuntimeEngine.GetSystem<CollisionSystem>().MoveInSystem(this, from, to);
-        }
+        /// <summary>
+        /// 当离开组件时产生的事件
+        /// </summary>
+        public Action OnMoveOutEvent { get; set; }
 
-        internal override void OnRemove()
-        {
-                RuntimeEngine.GetSystem<CollisionSystem>().RemoveFromSystem(this);
-
-
-            GameObject.ChangePositionEvnet -= OnMove;
-        }
-
-        internal override void Initialize()
-        {
-            Mesh mesh = GetComponent<Mesh>();
-            if (mesh == null)
-            {
-                mesh = AddComponent<Mesh>();
-                Debug.Warning("没有Mesh组件,自动生成一个Mesh");
-            }
-            //将对象复制到此组件内. 更改Mesh中的list同样会更改这个
-            ColliderList = mesh.PosList;
-            return;
-        }
+        /// <summary>
+        /// 当点击组件时产生的事件
+        /// </summary>
+        public Action OnClickEvent { get; set; }
     }
 }
