@@ -80,3 +80,5 @@ ModelManifest.xml
 v15/
 # .gitignore
 .DS_Store
+.vs/WizardAdvanture/v16/Server/sqlite3/storage.ide-shm
+.vs/WizardAdvanture/v16/Server/sqlite3/storage.ide-wal
