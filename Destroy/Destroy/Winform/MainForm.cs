@@ -337,8 +337,8 @@ namespace Destroy.Winform
                 oNode.ForeColor = System.Drawing.Color.Orange;
             }
 
-            TreeNode position = AddNode(oNode.Nodes, "Position", "Position:" + gameObject.Position.ToString());
-            TreeNode localPosition = AddNode(oNode.Nodes, "Local", "LocalPos:" + gameObject.LocalPosition.ToString());
+            TreeNode position = AddNode(oNode.Nodes, "Position", "Position:" + gameObject.Transform.Position.ToString());
+            TreeNode localPosition = AddNode(oNode.Nodes, "Local", "LocalPos:" + gameObject.Transform.LocalPosition.ToString());
             TreeNode count = AddNode(oNode.Nodes, "CC", "ComponentsCount:" + gameObject.ComponentCount.ToString());
             if (gameObject.ChildCount > 0)
             {

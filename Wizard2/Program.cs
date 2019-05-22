@@ -47,13 +47,13 @@ namespace Wizard2
             return true;
         }
     }
-
+    //没有createwith new 就可以直接创建对应的物体.
     public class newTestScene : Scene
     {
         public override void OnStart()
         {
             Actor actor = new Actor("Player", "testTag");
-            actor.Position = new Vector2(15, 15);
+            actor.Transform.Position = new Vector2(15, 15);
             actor.Renderer.DrawString("asdfasdfasd",Color.Blue,Color.Green,Vector2.Zero);
         }
     }

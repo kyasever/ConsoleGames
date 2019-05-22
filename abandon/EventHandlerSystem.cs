@@ -35,7 +35,7 @@
                     continue;
                 foreach (var dis in collider.ColliderList)
                 {
-                    Vector2 pos = collider.GameObject.Transform.Position + dis;
+                    Vector2 pos = collider.Position + dis;
                     if (UITargets.ContainsKey(pos))
                     {
                         UITargets[pos].Add(collider);

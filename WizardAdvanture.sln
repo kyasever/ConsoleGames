@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2042
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WizardAdvanture", "WizardAdvanture\WizardAdvanture.csproj", "{4F7E8733-53B8-4D43-BEFB-AE5EA4B91EE0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wizard2", "Wizard2\Wizard2.csproj", "{99FAFFDB-A1E5-474C-968B-931F14FE3BFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Destroy", "Destroy\Destroy\Destroy.csproj", "{29678C39-7511-4CE8-925F-08E663872CDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "abandon", "abandon\abandon.csproj", "{7BADEEBD-29FD-4CDC-9880-09B6A9BA979B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,18 @@ Global
 		{29678C39-7511-4CE8-925F-08E663872CDA}.Release|x64.Build.0 = Release|Any CPU
 		{29678C39-7511-4CE8-925F-08E663872CDA}.Release|x86.ActiveCfg = Release|Any CPU
 		{29678C39-7511-4CE8-925F-08E663872CDA}.Release|x86.Build.0 = Release|Any CPU
+		{7BADEEBD-29FD-4CDC-9880-09B6A9BA979B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BADEEBD-29FD-4CDC-9880-09B6A9BA979B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BADEEBD-29FD-4CDC-9880-09B6A9BA979B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7BADEEBD-29FD-4CDC-9880-09B6A9BA979B}.Debug|x64.Build.0 = Debug|Any CPU
+		{7BADEEBD-29FD-4CDC-9880-09B6A9BA979B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7BADEEBD-29FD-4CDC-9880-09B6A9BA979B}.Debug|x86.Build.0 = Debug|Any CPU
+		{7BADEEBD-29FD-4CDC-9880-09B6A9BA979B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BADEEBD-29FD-4CDC-9880-09B6A9BA979B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BADEEBD-29FD-4CDC-9880-09B6A9BA979B}.Release|x64.ActiveCfg = Release|Any CPU
+		{7BADEEBD-29FD-4CDC-9880-09B6A9BA979B}.Release|x64.Build.0 = Release|Any CPU
+		{7BADEEBD-29FD-4CDC-9880-09B6A9BA979B}.Release|x86.ActiveCfg = Release|Any CPU
+		{7BADEEBD-29FD-4CDC-9880-09B6A9BA979B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

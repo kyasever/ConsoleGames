@@ -29,7 +29,7 @@
     /// <summary>
     /// 渲染组件,最基础的渲染组件只负责维护这点东西,理论上这个也是能用的.甚至不依赖Mesh组件,直接编辑渲染结果就好了
     /// </summary>
-    public class Renderer
+    public class Renderer : RawComponent
     {
         /// <summary>
         /// 务必初始化. 通常情况下在创建GO的同时就生成好准确的Depth
@@ -52,7 +52,7 @@
         /// <param name="StartPosition">字符串渲染的起始点(相对中心点的偏移量)</param>
         /// <param name="MaxWidth">字符串最大渲染宽度</param>
         /// <param name="MinWidth">字符串最小渲染宽度</param>
-        public void DrawString(string str, Color foreColor, Color backColor, Vector2 StartPosition, int MaxWidth = int.MaxValue, int MinWidth = int.MaxValue)
+        public void DrawString(string str, Color foreColor, Color backColor, Vector2 StartPosition, int MaxWidth = int.MaxValue, int MinWidth = 0)
         {
             List<string> grids = CharUtils.DivideString(str);
             int index = 0;

@@ -14,22 +14,59 @@
     Actor包含默认组件的引用,充当组件的中介者.默认集成Transform Collider Renderer 不集成其他组件
     */
 
-    /// <summary>
-    /// 具体的接口,已经获得了各项引用 本身只实现自身的功能,但是可以通过Actor转接调用别的组件直接实现方法
-    /// </summary>
-    public class Component
+    public interface IComponent
     {
-        private GameObject gameObject = null;
+        GameObject GameObject { get; set; }
+        bool Enable { get; set; }
+    }
+
+    public class RawComponent : IComponent
+    {
+
+        #region ICom接口
+        protected GameObject gameObject;
         public GameObject GameObject { get => gameObject; set => gameObject = value; }
-        public ObjectType ObjectType { get => gameObject.ObjectType; }
+        protected bool enable = true;
+        public bool Enable { get => enable; set => enable = value; }
+        #endregion
 
         protected Transform Transform => GameObject.Transform;
         protected Collider Collider => GameObject.Collider;
         protected Renderer Renderer => GameObject.Renderer;
 
-        private bool enable = true;
-        public bool Enable { get => enable; set => enable = value; }
+        #region From Transfrom
+        [HideInInspector]
+        public virtual Vector2 Position { get => Transform.Position; set => Transform.Position = value; }
 
+        /// <summary>
+        /// 获取本地坐标
+        /// </summary>
+        [HideInInspector]
+        public virtual Vector2 LocalPosition
+        {
+            get => Transform.LocalPosition;
+            set => Transform.LocalPosition = value;
+        }
+
+        [HideInInspector]
+        public GameObject Parent
+        {
+            get
+            {
+                return Transform.Parent?.GameObject;
+            }
+            set => Transform.Parent = value.Transform;
+        }
+        #endregion
+
+    }
+
+    /// <summary>
+    /// 具体的接口,已经获得了各项引用 本身只实现自身的功能,但是可以通过Actor转接调用别的组件直接实现方法
+    /// </summary>
+    public class Component : RawComponent
+    {
+        public ObjectType ObjectType { get => gameObject.ObjectType; }
 
         public virtual void Initialize() { }
 
@@ -59,30 +96,6 @@
             return GameObject.GetComponent<T>();
         }
 
-        #region From Transfrom
-        [HideInInspector]
-        public virtual Vector2 Position { get => Transform.Position; set => Transform.Position = value; }
-
-        /// <summary>
-        /// 获取本地坐标
-        /// </summary>
-        [HideInInspector]
-        public virtual Vector2 LocalPosition
-        {
-            get => Transform.LocalPosition;
-            set => Transform.LocalPosition = value;
-        }
-
-        [HideInInspector]
-        public GameObject Parent
-        {
-            get
-            {
-                return Transform.Parent?.GameObject;
-            }
-            set => Transform.Parent = value.Transform;
-        }
-        #endregion
 
         #region From Collider
         /// <summary>

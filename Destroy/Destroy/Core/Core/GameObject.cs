@@ -25,10 +25,12 @@
         {
             //将collider加入物理系统
             Collider = new Collider();
+            Collider.GameObject = this;
             RuntimeEngine.GetSystem<CollisionSystem>().ColliderCollection.Add(Collider);
 
             //将Renderer加入渲染系统,其他单独处理
             Renderer = new Renderer();
+            Renderer.GameObject = this;
             Renderer.Depth = int.MaxValue;
             RuntimeEngine.GetSystem<RendererSystem>().ActorRendererCollection.Add(Renderer);
         }
@@ -58,10 +60,12 @@
         {
             //将collider加入物理系统
             Collider = new Collider();
+            Collider.GameObject = this;
             RuntimeEngine.GetSystem<CollisionSystem>().ColliderCollection.Add(Collider);
 
             //将Renderer加入渲染系统,其他单独处理
             Renderer = new Renderer();
+            Renderer.GameObject = this;
             Renderer.Depth = -1;
             RuntimeEngine.GetSystem<RendererSystem>().UIRendererCollection.Add(Renderer);
         }
@@ -195,7 +199,8 @@
             ComponentDict = new Dictionary<Type, Component>();
 
             //直接添加Transform
-            Transform = new Transform(this);
+            Transform = new Transform();
+            Transform.GameObject = this;
 
             OnStart();
 
@@ -205,18 +210,6 @@
                 Transform.LocalPosition = Vector2.Zero;
             }
         }
-
-        /// <summary>
-        /// 3.20测试添加
-        /// 提供一种新的更便捷的创建物体的思路.直接返回具体脚本而不是游戏物体
-        /// </summary>
-        public static T CreateWith<T>(string name = "GameObject", string tag = "None", GameObject parent = null) where T : Component, new()
-        {
-            GameObject obj = new GameObject(name, tag, parent);
-            T com = obj.AddComponent<T>();
-            return com;
-        }
-
         #endregion
 
         #region 组件化
