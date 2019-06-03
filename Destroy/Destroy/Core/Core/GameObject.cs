@@ -12,6 +12,7 @@
     /// <summary>
     /// Destroy更新后的设计哲学
     /// 大幅度减少暴露的接口. 只允许开发者操作Script一个类
+    /// Actor应该是一个组件而不是游戏物体本身. 但是又是可new组件.
     /// </summary>
     public class Actor : GameObject
     {
@@ -19,6 +20,13 @@
         {
             Collider.ColliderList = new List<Vector2>() { new Vector2(0, 0) };
             ObjectType = ObjectType.Actor;
+        }
+
+        public static T CreateWith<T>(string name = "GameObject", string tag = "None", GameObject parent = null) where T : Component, new()
+        {
+            Actor obj = new Actor(name, tag, parent);
+            T com = obj.AddComponent<T>();
+            return com;
         }
 
         public override void OnStart()
@@ -40,7 +48,6 @@
             RuntimeEngine.GetSystem<CollisionSystem>().ColliderCollection.Remove(Collider);
             RuntimeEngine.GetSystem<RendererSystem>().ActorRendererCollection.Remove(Renderer);
         }
-
     }
 
     /// <summary>
@@ -161,6 +168,8 @@
         {
             if (Active != value)
             {
+                Active = value;
+
                 if (Transform.Childs.Count != 0)
                 {
                     foreach (Transform child in Transform.Childs)
@@ -171,6 +180,9 @@
                 foreach (Component component in ComponentDict.Values)
                 {
                     component.Enable = value;
+                    Renderer.Enable = value;
+                    Collider.Enable = value;
+                    Transform.Enable = value;
                 }
             }
         }

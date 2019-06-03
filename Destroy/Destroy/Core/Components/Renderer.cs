@@ -44,6 +44,13 @@
         public virtual Dictionary<Vector2, RenderPoint> RendererPoints { get; set; } = new Dictionary<Vector2, RenderPoint>();
 
         /// <summary>
+        /// 刷新重绘
+        /// </summary>
+        public void Refresh()
+        {
+            RendererPoints = new Dictionary<Vector2, RenderPoint>();
+        }
+        /// <summary>
         /// 核心DrawString方法.从左至右的给对象增加一个字符串的渲染
         /// </summary>
         /// <param name="str">要渲染的字符串内容</param>
@@ -91,7 +98,7 @@
         }
 
         /// <summary>
-        /// 第一个参数 从Vector2/Line/Rectangle 中选取一个,代表要渲染的形状
+        /// 第一个参数 从Vector2/Line/Rectangle/List<Vector2> 中选取一个,代表要渲染的形状
         /// 第二个参数 从Void(没有参数)/RenderPoint/Color 中选取一个,代表使用制表符/指定的渲染点/背景色中选取一个,代表渲染的填充物
         /// </summary>
         public void Draw(params object[] args)
@@ -161,6 +168,34 @@
                     foreach (var v in rect.PosList)
                     {
                         SafeAdd(v, (RenderPoint)args[1]);
+                    }
+                }
+            }
+            else if (args[0].GetType() == typeof(List<Vector2>))
+            {
+                List<Vector2> list = (List<Vector2>)args[0];
+                //制表符的话 用默认反转色填充
+                if (args.Length == 1)
+                {
+                    var renderPoint = new RenderPoint("  ", Config.DefaultBackColor, Config.DefaultForeColor, Depth);
+                    foreach (var v in list)
+                    {
+                        SafeAdd(v, (RenderPoint)args[1]);
+                    }
+                }
+                else if (args[1].GetType() == typeof(RenderPoint))
+                {
+                    foreach (var v in list)
+                    {
+                        SafeAdd(v, (RenderPoint)args[1]);
+                    }
+                }
+                else if (args[1].GetType() == typeof(Color))
+                {
+                    var renderPoint = new RenderPoint("  ", Config.DefaultForeColor, (Color)args[1], Depth);
+                    foreach (var v in list)
+                    {
+                        SafeAdd(v, renderPoint);
                     }
                 }
             }

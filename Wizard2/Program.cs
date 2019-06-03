@@ -41,20 +41,41 @@ namespace Wizard2
 
             Debug.Log("Hello Destroy");
         }
-
-        private static bool Func(Vector2 v)
-        {
-            return true;
-        }
     }
     //没有createwith new 就可以直接创建对应的物体.
     public class newTestScene : Scene
     {
         public override void OnStart()
         {
-            Actor actor = new Actor("Player", "testTag");
-            actor.Transform.Position = new Vector2(15, 15);
-            actor.Renderer.DrawString("asdfasdfasd",Color.Blue,Color.Green,Vector2.Zero);
+            MyScript mainObj = Actor.CreateWith<MyScript>("Player", "testTag");
         }
     }
+
+    public class MyScript : Script
+    {
+        public override void Awake()
+        {
+            Position = new Vector2(15, 15);
+
+            DrawString("asdfasdfasd", Color.Blue, Color.Green, Vector2.Zero);
+
+
+            Destroy.Standard.Cursor.Instance.Position = new Vector2(10, 10);
+
+            MoveIndicator moveIndicator = Actor.CreateWith<MoveIndicator>("MoveIndicator", "Indicator");
+            RouteIndicator routeIndicator = Actor.CreateWith<RouteIndicator>("RouteIndicator", "Indicator");
+
+            SRPGAgent sRPGAgent = Actor.CreateWith<SRPGAgent>("Player", "PP");
+            sRPGAgent.Position = new Vector2(10, 10);
+            sRPGAgent.moveAera = moveIndicator;
+            sRPGAgent.routeAera = routeIndicator;
+
+        }
+
+        public override void Update()
+        {
+        }
+
+    }
+
 }

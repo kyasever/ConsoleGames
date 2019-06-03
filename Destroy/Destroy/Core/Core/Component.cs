@@ -153,22 +153,30 @@
         #endregion
 
         #region From Renderer
-        public void DrawString(string str, int MaxWidth = int.MaxValue, int MinWidth = int.MaxValue)
+
+        public Dictionary<Vector2, RenderPoint> RendererPoints => Renderer.RendererPoints;
+
+        public void Refresh()
+        {
+            Renderer.Refresh();
+        }
+
+        public void DrawString(string str, int MaxWidth = int.MaxValue, int MinWidth = 0)
         {
             Renderer.DrawString(str, Config.DefaultForeColor, Config.DefaultBackColor, Vector2.Zero, MaxWidth, MinWidth);
         }
 
-        public void DrawString(string str, Color foreColor, Color backColor, int MaxWidth = int.MaxValue, int MinWidth = int.MaxValue)
+        public void DrawString(string str, Color foreColor, Color backColor, int MaxWidth = int.MaxValue, int MinWidth = 0)
         {
             Renderer.DrawString(str, foreColor, backColor, Vector2.Zero, MaxWidth, MinWidth);
         }
 
-        public void DrawString(string str, Vector2 StartPosition, int MaxWidth = int.MaxValue, int MinWidth = int.MaxValue)
+        public void DrawString(string str, Vector2 StartPosition, int MaxWidth = int.MaxValue, int MinWidth = 0)
         {
             Renderer.DrawString(str, Config.DefaultForeColor, Config.DefaultBackColor, StartPosition, MaxWidth, MinWidth);
         }
 
-        public void DrawString(string str, Color foreColor, Color backColor, Vector2 StartPosition ,int MaxWidth = int.MaxValue, int MinWidth = int.MaxValue)
+        public void DrawString(string str, Color foreColor, Color backColor, Vector2 StartPosition ,int MaxWidth = int.MaxValue, int MinWidth = 0)
         {
             Renderer.DrawString(str, foreColor, backColor, StartPosition, MaxWidth, MinWidth);
         }

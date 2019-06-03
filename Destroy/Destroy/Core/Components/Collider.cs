@@ -3,12 +3,6 @@
     using System;
     using System.Collections.Generic;
 
-    /*
-     * 1/21 kyaseer
-     * 现在MoveMent和Collider组合作为一个组件,废弃原来的Rigid系统,扔进legacy 只用这一种物理
-    */
-
-
     /// <summary>
     /// 碰撞体组件
     /// </summary>
