@@ -78,7 +78,7 @@
             // panelGame
             // 
             this.panelGame.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panelGame.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.panelGame.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.panelGame.Location = new System.Drawing.Point(150, 0);
             this.panelGame.Margin = new System.Windows.Forms.Padding(0);
             this.panelGame.Name = "panelGame";

@@ -150,13 +150,29 @@
                 Collider.OnClickEvent = value;
             }
         }
+
+        /// <summary>
+        /// 使碰撞体数据和渲染数据保持同步
+        /// </summary>
+        public void RefreshCollider()
+        {
+            ColliderList = new List<Vector2>();
+            foreach(var v in RendererPoints)
+            {
+                ColliderList.Add(v.Key);
+            }
+        }
+
         #endregion
 
         #region From Renderer
 
         public Dictionary<Vector2, RenderPoint> RendererPoints => Renderer.RendererPoints;
 
-        public void Refresh()
+        /// <summary>
+        /// 清空渲染数据
+        /// </summary>
+        public void ClearRenderer()
         {
             Renderer.Refresh();
         }

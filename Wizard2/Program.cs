@@ -70,12 +70,43 @@ namespace Wizard2
             sRPGAgent.moveAera = moveIndicator;
             sRPGAgent.routeAera = routeIndicator;
 
+
+            MainUI mainUI;
+
+            //当然也可以使用一个便捷的API直接创造一个挂载这个脚本的游戏物体.
+            mainUI = UIObject.CreateWith<MainUI>("UI", "UI");
         }
 
-        public override void Update()
+        public override void Start()
         {
+            //改变自身的碰撞体积
+            ColliderList = new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 1) };
+            //给自身增加碰撞回调
+            OnCollisionEvent += (Collision c) => { Debug.Log(c.HitPos); };
+            //给自身增加一个字符串显示
+            DrawString("哇hahahaha");
+            //改变自身的位置
+            Position = new Vector2(10, 10);
         }
 
+    }
+
+    public class Player : Script
+    {
+
+    }
+
+    public class MainUI : Script
+    {
+        public override void Awake()
+        {
+            OnMoveInEvent += () => { Debug.Log("Move in"); };
+            OnClickEvent += () => { Debug.Log("Clicked"); };
+
+            Position = new Vector2(20, 20);
+            Draw(new Rectangle(10, 10));
+            RefreshCollider();
+        }
     }
 
 }

@@ -167,7 +167,7 @@
                     var renderPoint = new RenderPoint("  ", Config.DefaultForeColor, (Color)args[1], Depth);
                     foreach (var v in rect.PosList)
                     {
-                        SafeAdd(v, (RenderPoint)args[1]);
+                        SafeAdd(v, renderPoint);
                     }
                 }
             }

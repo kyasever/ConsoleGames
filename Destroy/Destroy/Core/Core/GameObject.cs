@@ -6,7 +6,7 @@
 
     public enum ObjectType
     {
-        Actor,UI
+        Actor, UI
     }
 
     /// <summary>
@@ -56,11 +56,18 @@
     /// </summary>
     public class UIObject : GameObject
     {
-        public UIObject(string name = "GameObject",int depth = -1,string tag = "None", GameObject parent = null) : base(name, tag, parent)
+        public UIObject(string name = "GameObject", string tag = "None", GameObject parent = null, int depth = -1) : base(name, tag, parent)
         {
             Collider.ColliderList = new List<Vector2>() { new Vector2(0, 0) };
             Renderer.Depth = depth;
             ObjectType = ObjectType.UI;
+        }
+
+        public static T CreateWith<T>(string name = "GameObject", string tag = "None", GameObject parent = null) where T : Component, new()
+        {
+            UIObject obj = new UIObject(name, tag, parent);
+            T com = obj.AddComponent<T>();
+            return com;
         }
 
         public override void OnStart()
@@ -68,7 +75,7 @@
             //将collider加入物理系统
             Collider = new Collider();
             Collider.GameObject = this;
-            RuntimeEngine.GetSystem<CollisionSystem>().ColliderCollection.Add(Collider);
+            RuntimeEngine.GetSystem<EventHandlerSystem>().UICollection.Add(Collider);
 
             //将Renderer加入渲染系统,其他单独处理
             Renderer = new Renderer();
@@ -79,7 +86,7 @@
 
         public override void OnDestroy()
         {
-            RuntimeEngine.GetSystem<CollisionSystem>().ColliderCollection.Remove(Collider);
+            RuntimeEngine.GetSystem<EventHandlerSystem>().UICollection.Remove(Collider);
             RuntimeEngine.GetSystem<RendererSystem>().UIRendererCollection.Remove(Renderer);
         }
 
@@ -106,7 +113,7 @@
             get
             {
                 return Transform.Parent?.GameObject;
-            } 
+            }
             set => Transform.Parent = value.Transform;
         }
 

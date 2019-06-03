@@ -57,7 +57,7 @@ namespace Destroy.Standard
         {
             //获取该展开的范围
             List<Vector2> list = Navigation.ExpandAera(center, expandWidth, Navigation.CanMoveInPhysics);
-            Refresh();
+            ClearRenderer();
             //使用蓝色填充该范围
             Draw(list, Color.Blue);
         }
@@ -103,7 +103,7 @@ namespace Destroy.Standard
         public void SearchRoute(Vector2 beginPos, Vector2 endPos)
         {
             List<Vector2> list = Navigation.Search(beginPos, endPos).ResultList;
-            Refresh();
+            ClearRenderer();
             Draw(list, Color.Green);
         }
 
@@ -130,6 +130,9 @@ namespace Destroy.Standard
         public float MoveSpeed = 10;
         private float MoveInterval;
         private float MoveTime = 0f;
+
+        [ShowInInspector]
+        public bool AutoMove = false;
 
         private static Cursor instanse;
         /// <summary>
@@ -161,6 +164,10 @@ namespace Destroy.Standard
         public override void Update()
         {
             this.Position = Input.MousePosition;
+
+
+            if (!AutoMove)
+                return;
 
             //当光标位于屏幕边缘时,移动摄像机
             Vector2 moveDir = Vector2.Zero;
