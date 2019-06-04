@@ -87,6 +87,8 @@ namespace Wizard2
             DrawString("哇hahahaha");
             //改变自身的位置
             Position = new Vector2(10, 10);
+            //改变自身的父物体
+            Parent = Camera.Main.GameObject;
         }
 
     }

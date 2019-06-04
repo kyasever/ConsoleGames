@@ -157,7 +157,7 @@
         public void RefreshCollider()
         {
             ColliderList = new List<Vector2>();
-            foreach(var v in RendererPoints)
+            foreach (var v in RendererPoints)
             {
                 ColliderList.Add(v.Key);
             }
@@ -192,7 +192,7 @@
             Renderer.DrawString(str, Config.DefaultForeColor, Config.DefaultBackColor, StartPosition, MaxWidth, MinWidth);
         }
 
-        public void DrawString(string str, Color foreColor, Color backColor, Vector2 StartPosition ,int MaxWidth = int.MaxValue, int MinWidth = 0)
+        public void DrawString(string str, Color foreColor, Color backColor, Vector2 StartPosition, int MaxWidth = int.MaxValue, int MinWidth = 0)
         {
             Renderer.DrawString(str, foreColor, backColor, StartPosition, MaxWidth, MinWidth);
         }
