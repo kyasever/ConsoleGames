@@ -82,7 +82,7 @@ namespace Wizard2
             //改变自身的碰撞体积
             ColliderList = new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 1) };
             //给自身增加碰撞回调
-            OnCollisionEvent += (Collision c) => { Debug.Log(c.HitPos); };
+            OnCollisionEvent += (Collision c) => { };
             //给自身增加一个字符串显示
             DrawString("哇hahahaha");
             //改变自身的位置
