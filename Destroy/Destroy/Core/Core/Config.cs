@@ -13,7 +13,7 @@
         static Config()
         {
             //引擎
-            TickPerSecond = 60;
+            TickPerSecond = 30;
             ScreenWidth = 30;
             ScreenHeight = 30;
             CharWidth = CharWidthEnum.Double;
@@ -48,12 +48,12 @@
         /// <summary>
         /// 系统默认颜色
         /// </summary>
-        public static Color DefaultForeColor = Color.Gray;
+        public static Color DefaultForeColor = Color.Black;
 
         /// <summary>
         /// 系统默认背景色
         /// </summary>
-        public static Color DefaultBackColor = Color.Black;
+        public static Color DefaultBackColor = Color.White;
 
         /// <summary>
         /// 比如被初始化,表示一个RenderPoint在屏幕上占有的像素点

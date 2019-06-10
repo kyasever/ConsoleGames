@@ -77,7 +77,6 @@ namespace Destroy
         {
             foreach (GameObject gameObject in GameObjectsToDelete)
             {
-                gameObject.OnDestroy();
                 foreach (Component component in gameObject.ComponentDict.Values)
                 {
                     //把每个组件与系统解绑

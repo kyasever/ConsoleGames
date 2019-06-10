@@ -18,14 +18,7 @@ namespace Destroy.Winform
         /// 用于指示当前鼠标所处位置
         /// </summary>
         public static Vector2 MousePosition = new Vector2(-8, -8);
-
-        /// <summary>
-        /// 当前被选中的游戏物体
-        /// </summary>
-        public static GameObject CurrertGameObject;
-
-        private static FormEditor mainForm = WinformEngine.MainForm;
-
+        private static MainForm mainForm = MainForm.Instanse;
         private static Task updateTask, drawTask;
 
         /// <summary>
@@ -33,6 +26,13 @@ namespace Destroy.Winform
         /// </summary>
         public override void Start()
         {
+            mainForm = MainForm.Instanse;
+            //初始化Editor窗口
+            mainForm.Invoke(new Action(() =>
+            {
+                mainForm.InitSize();
+                mainForm.RefreshEditoerPosition();
+            }));
         }
 
         /// <summary>
@@ -44,7 +44,6 @@ namespace Destroy.Winform
             {
                 return;
             }
-
             updateTask = Task.Run(() =>
             {
                 mainForm.Invoke(new Action(() =>
@@ -69,7 +68,6 @@ namespace Destroy.Winform
             {
                 return;
             }
-
             drawTask = Task.Run(() =>
             {
                 mainForm.Invoke(new Action(() =>
@@ -95,5 +93,7 @@ namespace Destroy.Winform
                 mainForm.AddMessage(msg);
             }));
         }
+
+
     }
 }
