@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Destroy
+﻿namespace Destroy
 {
     /// <summary>
     /// 标签组件 基本处于没完成的状态
@@ -21,7 +15,7 @@ namespace Destroy
         private string text;
         public string Text
         {
-            get => text; 
+            get => text;
             set
             {
                 text = value;

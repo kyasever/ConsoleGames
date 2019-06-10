@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Destroy
+﻿namespace Destroy
 {
     using System.Collections.Generic;
 
@@ -77,6 +71,7 @@ namespace Destroy
         {
             foreach (GameObject gameObject in GameObjectsToDelete)
             {
+                gameObject.OnDestroy();
                 foreach (Component component in gameObject.ComponentDict.Values)
                 {
                     //把每个组件与系统解绑

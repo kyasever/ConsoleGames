@@ -47,7 +47,7 @@
         /// <summary>
         /// 
         /// </summary>
-        protected  bool GetMouseButtonDown(MouseButton mouseButton)
+        protected bool GetMouseButtonDown(MouseButton mouseButton)
         {
             if (Input.GetMouseButton(mouseButton))
             {
@@ -70,7 +70,7 @@
         /// <summary>
         /// 
         /// </summary>
-        protected  bool GetMouseButtonUp(MouseButton mouseButton)
+        protected bool GetMouseButtonUp(MouseButton mouseButton)
         {
             if (Input.GetMouseButton(mouseButton))
             {
@@ -97,7 +97,7 @@
         /// <summary>
         /// 
         /// </summary>
-        protected  bool GetKeyDown(ConsoleKey consoleKey)
+        protected bool GetKeyDown(ConsoleKey consoleKey)
         {
             if (Input.GetKey(consoleKey))
             {
@@ -120,7 +120,7 @@
         /// <summary>
         /// 
         /// </summary>
-        protected  bool GetKeyUp(ConsoleKey consoleKey)
+        protected bool GetKeyUp(ConsoleKey consoleKey)
         {
             if (Input.GetKey(consoleKey))
             {

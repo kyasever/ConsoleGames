@@ -1,7 +1,5 @@
 ﻿namespace Destroy
 {
-    using System;
-
     /// <summary>
     /// 引擎配置
     /// </summary>
@@ -13,7 +11,7 @@
         static Config()
         {
             //引擎
-            TickPerSecond = 30;
+            TickPerSecond = 60;
             ScreenWidth = 30;
             ScreenHeight = 30;
             CharWidth = CharWidthEnum.Double;
@@ -48,12 +46,12 @@
         /// <summary>
         /// 系统默认颜色
         /// </summary>
-        public static Color DefaultForeColor = Color.Black;
+        public static Color DefaultForeColor = Color.Gray;
 
         /// <summary>
         /// 系统默认背景色
         /// </summary>
-        public static Color DefaultBackColor = Color.White;
+        public static Color DefaultBackColor = Color.Black;
 
         /// <summary>
         /// 比如被初始化,表示一个RenderPoint在屏幕上占有的像素点
@@ -74,7 +72,7 @@
         /// <summary>
         /// //双宽字符(比如中文)
         /// </summary>
-        Double = 2, 
+        Double = 2,
     }
 
     /// <summary>
@@ -93,7 +91,7 @@
         /// <summary>
         /// //服务器同步频率
         /// </summary>
-        public int ServerSyncRate;        
+        public int ServerSyncRate;
 
         /// <summary>
         /// 

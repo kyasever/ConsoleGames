@@ -1,5 +1,4 @@
-﻿using Destroy.Winform;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -246,7 +245,7 @@ namespace Destroy
                 result.SearchAeraCount = SearchDic.Count;
                 return result;
             }
-            
+
             //待检测点队列
             List<Vector2> queue = new List<Vector2>();
 
@@ -341,7 +340,7 @@ namespace Destroy
             RouteDic SearchDic = new RouteDic();
             //索引队列
             List<Vector2> queue = new List<Vector2>();
-            List<Vector2> avaliablePos = new List<Vector2>(); 
+            List<Vector2> avaliablePos = new List<Vector2>();
 
             Vector2 start = startPos;
 

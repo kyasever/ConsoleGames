@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace WizardAdvanture
 {
@@ -142,7 +139,7 @@ namespace WizardAdvanture
                 while (true)
                 {
                     int effective = _ReceivePacket(socketClient, buffer);
-                   
+
                     //Console.WriteLine($"客户端 {socketClient.Handle.ToInt32()} 收包 {effective}字节");
                     byte[] message = new byte[effective];
                     Array.Copy(buffer, message, effective);

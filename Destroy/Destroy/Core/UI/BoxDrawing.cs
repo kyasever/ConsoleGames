@@ -1,6 +1,5 @@
 ﻿namespace Destroy
 {
-    using Destroy;
     using System.Text;
 
 

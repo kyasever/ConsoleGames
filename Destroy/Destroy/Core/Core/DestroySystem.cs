@@ -1,8 +1,5 @@
 ﻿namespace Destroy
 {
-    using System;
-    using System.Collections.Generic;
-
     /// <summary>
     /// 所有系统的基类，继承这个类就可以AddSystem到RuntimeEngine上。
     /// </summary>

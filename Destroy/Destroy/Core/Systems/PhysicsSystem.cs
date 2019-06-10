@@ -10,7 +10,6 @@
  */
 namespace Destroy
 {
-    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -31,7 +30,7 @@ namespace Destroy
         /// <summary>
         /// 发生碰撞的地点和碰到的碰撞体
         /// </summary>
-        public List<KeyValuePair<Vector2,Collider>> ColliderList = new List<KeyValuePair<Vector2, Collider>>();
+        public List<KeyValuePair<Vector2, Collider>> ColliderList = new List<KeyValuePair<Vector2, Collider>>();
     }
 
     /// <summary>
@@ -79,7 +78,7 @@ namespace Destroy
                     Vector2 pos = collider.Position + dis;
                     if (Colliders.ContainsKey(pos))
                     {
-                        foreach(Collider otherCollider in Colliders[pos])
+                        foreach (Collider otherCollider in Colliders[pos])
                         {
                             SafeAddResult(collider, otherCollider, pos);
                             SafeAddResult(otherCollider, collider, pos);
@@ -92,14 +91,14 @@ namespace Destroy
                     }
                 }
             }
-            void SafeAddResult(Collider thisCollider,Collider otherCollider,Vector2 pos)
+            void SafeAddResult(Collider thisCollider, Collider otherCollider, Vector2 pos)
             {
-                if(!result.ContainsKey(thisCollider))
+                if (!result.ContainsKey(thisCollider))
                     result.Add(thisCollider, new Collision());
                 result[thisCollider].ColliderList.Add(new KeyValuePair<Vector2, Collider>(pos, otherCollider));
             }
             //通知所有产生碰撞的物体
-            foreach(var pair in result)
+            foreach (var pair in result)
             {
                 pair.Key.OnCollisionEvent?.Invoke(pair.Value);
             }

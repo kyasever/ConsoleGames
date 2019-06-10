@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace WizardAdvanture
 {
@@ -110,7 +108,7 @@ namespace WizardAdvanture
             {
                 v.isActive = true;
             }
-            for (int i = lists.Count-1; i > -1; i--)
+            for (int i = lists.Count - 1; i > -1; i--)
             {
                 try
                 {
@@ -118,7 +116,7 @@ namespace WizardAdvanture
                 }
                 catch
                 {
-                    
+
                 }
             }
 
@@ -228,7 +226,7 @@ namespace WizardAdvanture
             if (route.Count == 1)
             {
                 route = scene.BFS(location, focus.location, BFSSearchRoute);
-                route.RemoveAt(route.Count-1);
+                route.RemoveAt(route.Count - 1);
                 //如果这次搜索还是找不到
                 if (route.Count == 0)
                 {
@@ -250,13 +248,13 @@ namespace WizardAdvanture
                 }
             }
             //这是已经可以攻击了,不用判定了
-            if (route.Count < aimRange + 2&& route.Count != 1)
+            if (route.Count < aimRange + 2 && route.Count != 1)
             {
                 canAttack = true;
                 return location;
             }
             //如果距离上来看能走到,那么试图进入精确定位模式
-            if (route.Count <= act + 2&&route.Count != 1)
+            if (route.Count <= act + 2 && route.Count != 1)
             {
                 //如果能找到可以落脚的点 靠谱的移动路径
                 Pos p = FindPosToMove();
@@ -323,7 +321,7 @@ namespace WizardAdvanture
 
             if (canAttack)
             {
-                if(name == "冲击骑士"&&attackFlag)
+                if (name == "冲击骑士" && attackFlag)
                 {
                     focus.BeHit(skills[1]);
                     attackFlag = false;
@@ -414,11 +412,11 @@ namespace WizardAdvanture
                     }
                 }
             }
-            
+
             //路上所有的火都可以增加自己的移动力
-            foreach(var v in route)
+            foreach (var v in route)
             {
-                if(scene.SelectBlock(v).name == "fire")
+                if (scene.SelectBlock(v).name == "fire")
                 {
                     act++;
                 }
@@ -438,7 +436,7 @@ namespace WizardAdvanture
                 if (p != new Pos(0, 0))
                 {
                     //如果太远的话只能冲刺到脸上但不能立即攻击
-                    if(route.Count > act/3 + 2)
+                    if (route.Count > act / 3 + 2)
                     {
                         canAttack = false;
                         return p;
@@ -501,13 +499,13 @@ namespace WizardAdvanture
 
             scene.Show();
             MoveTo(route.Last());
-     
+
             scene.Show();
 
             if (canAttack)
             {
                 scene.MoveCursorTo(location);
-                    scene.environmentController.ShowMessageBox("自爆球炸了!!!");
+                scene.environmentController.ShowMessageBox("自爆球炸了!!!");
                 foreach (var v in SetNearbyPos(0))
                 {
                     //检测所有爆炸点,如果不为0产生自爆攻击
@@ -556,7 +554,7 @@ namespace WizardAdvanture
         int turns = 0;
         public List<Target> bossList = new List<Target>();
         public Boss bossSelf;
-        public int hp = 9999, hpMax= 9999;
+        public int hp = 9999, hpMax = 9999;
         public bool isDead = false;
         public int hugeHandCooldown = 3;
         List<Pos> hugeHandRange = new List<Pos>();
@@ -573,7 +571,7 @@ namespace WizardAdvanture
         {
             this.scene = scene;
         }
-        
+
         public void Dead()
         {
             scene.AddDebugMessage("BOSS挂了");
@@ -585,20 +583,20 @@ namespace WizardAdvanture
         {
             //加载boss的贴图
             StreamReader sr = FileController.GetFileReader("Boss.txt");
-            for(int i=0;i<20;i++)
+            for (int i = 0; i < 20; i++)
             {
                 bossPic[i] = sr.ReadLine();
             }
             sr.Close();
             //真正的本体
-            bossSelf = new Boss(scene, new Pos(33, 0),this);
+            bossSelf = new Boss(scene, new Pos(33, 0), this);
             //加载boss的模型
             int wx = 33, wy = 0;
-            for(int i=0;i<20;i++)
+            for (int i = 0; i < 20; i++)
             {
-                for(int j=0;j<6;j++)
+                for (int j = 0; j < 6; j++)
                 {
-                    Boss b = new Boss(scene, new Pos(wx + i, wy + j),this);
+                    Boss b = new Boss(scene, new Pos(wx + i, wy + j), this);
                     bossList.Add(b);
                     b.pic = bossPic[14 + j].Substring(2 * i, 2);
                 }
@@ -612,15 +610,15 @@ namespace WizardAdvanture
                 }
             }
             //添加封锁烈焰的施法范围和生成范围
-            int sx = 33,sy = 10;
+            int sx = 33, sy = 10;
             sr = FileController.GetFileReader("CrossFireRange.txt");
             for (int y = 0; y < 10; y++)
             {
                 string str = sr.ReadLine();
                 char[] cs = str.ToCharArray();
-                for(int x = 0;x<cs.Length;x++)
+                for (int x = 0; x < cs.Length; x++)
                 {
-                    if(cs[x]=='X')
+                    if (cs[x] == 'X')
                     {
                         crossFireRange.Add(new Pos(sx + x, sy + y));
                     }
@@ -638,7 +636,7 @@ namespace WizardAdvanture
             turns++;
             hugeHandCooldown--;
             crossFireCooldown--;
-            if(bornFlag)
+            if (bornFlag)
             {
                 PointContinueTurns++;
             }
@@ -651,7 +649,7 @@ namespace WizardAdvanture
                 foreach (var v in hugeHandRange)
                 {
                     Target t = scene.blocks[v.x, v.y].target;
-                    scene.blocks[v.x,v.y] = BlockFactory.CreateFire();
+                    scene.blocks[v.x, v.y] = BlockFactory.CreateFire();
                     scene.blocks[v.x, v.y].target = t;
                 }
                 scene.Show();
@@ -669,7 +667,7 @@ namespace WizardAdvanture
                     if (t != null)
                     {
                         //将t加入list进行下一步处理 攻击分类结算等等等
-                        if(t.faction == Target.Faction.Enemy)
+                        if (t.faction == Target.Faction.Enemy)
                         {
                             attackListEnemy.Add(t);
                         }
@@ -685,14 +683,14 @@ namespace WizardAdvanture
                     scene.blocks[v.x, v.y] = BlockFactory.CreateGround();
                     scene.blocks[v.x, v.y].target = t;
                 }
-                
+
                 int sum = attackListEnemy.Count + attackListOther.Count + attackListPlayer.Count;
-                if(sum == 0)
+                if (sum == 0)
                 {
                     sum = 1;
                 }
                 int attack = 0;
-                if(scene.difficult == Scene.Difficult.easy)
+                if (scene.difficult == Scene.Difficult.easy)
                 {
                     attack = 400 + angry * 50;
                 }
@@ -718,7 +716,7 @@ namespace WizardAdvanture
                 int c = 0;
                 foreach (var v in attackListEnemy)
                 {
-                    if(v.isDead)
+                    if (v.isDead)
                     {
                         c++;
                     }
@@ -727,11 +725,11 @@ namespace WizardAdvanture
                 angry++;
                 angry += c;
                 //石头直接打就行
-                foreach(var v in attackListOther)
+                foreach (var v in attackListOther)
                 {
                     v.BeHit(s);
                 }
-                if(attackListPlayer.Count>0)
+                if (attackListPlayer.Count > 0)
                 {
                     foreach (var v in attackListPlayer)
                     {
@@ -742,9 +740,9 @@ namespace WizardAdvanture
                 else
                 {
                     //如果还有敌人可以打... 由于均摊数量太少,/2降低每次伤害
-                    if(scene.playerController.lists.Count>0)
+                    if (scene.playerController.lists.Count > 0)
                     {
-                        perAttack = attack / scene.playerController.lists.Count /2;
+                        perAttack = attack / scene.playerController.lists.Count / 2;
                         //用来释放的技能
                         s = Skill.CreateBoss1(perAttack, bossSelf);
 
@@ -763,15 +761,15 @@ namespace WizardAdvanture
                 hugeHandCooldown = 3;
 
                 int count = 0;
-                if(scene.difficult == Scene.Difficult.easy)
+                if (scene.difficult == Scene.Difficult.easy)
                 {
                     count = 1 + angry / 3;
                 }
-                if(scene.difficult == Scene.Difficult.hard)
+                if (scene.difficult == Scene.Difficult.hard)
                 {
                     count = 0 + angry / 5;
                 }
-                for(int i =0;i<count;i++)
+                for (int i = 0; i < count; i++)
                 {
                     int r = scene.random.Next(0, bossList.Count - 1);
                     bossList[r].isWeakness = true;
@@ -783,7 +781,7 @@ namespace WizardAdvanture
                 scene.AddDebugMessage("震颤过后,boss露出了弱点,可以使用神杖攻击!");
             }
 
-            if(crossFireCooldown == 3)
+            if (crossFireCooldown == 3)
             {
                 scene.environmentController.ShowMessageBox("封锁烈焰!!!!!!!!!!");
                 foreach (var v in crossFireRange)
@@ -808,27 +806,27 @@ namespace WizardAdvanture
                     scene.blocks[v.x, v.y] = BlockFactory.CreateDoor();
                 }
             }
-            if(crossFireCooldown == 0)
+            if (crossFireCooldown == 0)
             {
                 bornFlag = true;
             }
 
-            if(bornFlag)
+            if (bornFlag)
             {
                 int during = 4;
-                if(scene.difficult == Scene.Difficult.hard)
+                if (scene.difficult == Scene.Difficult.hard)
                 {
                     during = 8;
                 }
                 //普通持续4个回合 困难持续8个回合
-                if(PointContinueTurns == during)
+                if (PointContinueTurns == during)
                 {
                     scene.environmentController.ShowMessageBox("场地清除");
                     for (int y = 0; y < 10; y++)
                     {
                         for (int x = 0; x < 20; x++)
                         {
-                            Target t = scene.blocks[33+x, 10+y].target;
+                            Target t = scene.blocks[33 + x, 10 + y].target;
                             scene.blocks[33 + x, 10 + y] = BlockFactory.CreateGround();
                             scene.blocks[33 + x, 10 + y].target = t;
                         }
@@ -872,11 +870,11 @@ namespace WizardAdvanture
                 }
             }
 
-        //    public int hugeHandCooldown = 3;
-        //public int crossFireCooldown = 5;
-        //public int PointContinueTurns = 0;
-        scene.AddDebugMessage("boss技能冷却:神击"+hugeHandCooldown.ToString()+"火墙"+crossFireCooldown.ToString()
-            +"刷怪"+PointContinueTurns.ToString()+"愤怒"+angry.ToString());
+            //    public int hugeHandCooldown = 3;
+            //public int crossFireCooldown = 5;
+            //public int PointContinueTurns = 0;
+            scene.AddDebugMessage("boss技能冷却:神击" + hugeHandCooldown.ToString() + "火墙" + crossFireCooldown.ToString()
+                + "刷怪" + PointContinueTurns.ToString() + "愤怒" + angry.ToString());
             /* 简单难度 极大增加封锁烈焰的冷却,只有开始时放一轮. 极大降低泯灭神击的愤怒值加成,将怪都拉进神击中击杀
              * 封锁烈焰 第一个回合按照迷宫形状遍历txt 按照形状创建灼热之地,第二个回合按照形状先对目标的地点进行神之击秒杀站在上面的目标,然后造墙(红门贴图).
                第三个回合选取三个刷怪地点开始铺灼热地面并开始刷三种小怪.持续刷小怪,刷一轮大怪,隔一定时间刷炸弹.
@@ -885,13 +883,16 @@ namespace WizardAdvanture
         }
     }
 
-    public class Boss:Target
+    public class Boss : Target
     {
         BossCollection bossCollection;
 
         //不能重写父类变量么....
-        public int Hp { get { return bossCollection.hp; }
-            set { bossCollection.hp = value; } }
+        public int Hp
+        {
+            get { return bossCollection.hp; }
+            set { bossCollection.hp = value; }
+        }
         public int HpMax
         {
             get { return bossCollection.hpMax; }
@@ -906,7 +907,7 @@ namespace WizardAdvanture
         //这其实只是boss的一个零件,不需要主动行动,只要挨打就行了,挨打掉的是本体的血.允许被AOE伤害
         //target分为弱点和普通两种部件.普通部件只会受到1/4伤害(aoe损失) 
         //弱点会受到全额单体伤害,弱点被神杖点了会被点爆,并造成500点直接伤害.
-        public Boss(Scene scene,Pos location,BossCollection bossCollection) : base(scene)
+        public Boss(Scene scene, Pos location, BossCollection bossCollection) : base(scene)
         {
             this.bossCollection = bossCollection;
             hp = Hp; hpMax = HpMax;
@@ -924,7 +925,7 @@ namespace WizardAdvanture
 
         public override void BeHit(Skill s)
         {
-            if(isWeakness&&s.type == SkillType.Holy)
+            if (isWeakness && s.type == SkillType.Holy)
             {
                 //先受到普通伤害
                 hp = Hp; hpMax = HpMax;

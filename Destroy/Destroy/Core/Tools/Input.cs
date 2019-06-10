@@ -1,7 +1,6 @@
 ﻿namespace Destroy
 {
     using System;
-    using System.Collections.Generic;
 
     /// <summary>
     /// 获取标准输入 对外接口 <see langword="static"/>

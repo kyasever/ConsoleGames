@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Linq;
 using System.Media;
+using System.Text;
 using System.Threading;
 
 /**    
@@ -183,7 +183,7 @@ namespace WizardAdvanture
         //游戏模式
         public enum GameMode
         {
-            single,miuti,
+            single, miuti,
         }
         public GameMode gameMode;
 
@@ -217,7 +217,7 @@ namespace WizardAdvanture
         }
         public NetPlayer netPlayer;
 
-        public Scene(GameMode gameMode,NetPlayer netPlayer)
+        public Scene(GameMode gameMode, NetPlayer netPlayer)
         {
             this.gameMode = gameMode;
             this.netPlayer = netPlayer;
@@ -226,7 +226,7 @@ namespace WizardAdvanture
             InitMap();
             cursorLayer = new CursorLayer(this, new Pos(5, 5));
             playerController = new PlayerController(this);
-            if(gameMode == GameMode.miuti)
+            if (gameMode == GameMode.miuti)
             {
                 netController = new NetController(this);
             }
@@ -247,7 +247,7 @@ namespace WizardAdvanture
 
         public enum BattleResult
         {
-            battle,gameOver,gameWin,
+            battle, gameOver, gameWin,
         }
         //返回战斗是否还在进行
         public BattleResult Battle()
@@ -256,7 +256,7 @@ namespace WizardAdvanture
             {
                 return BattleResult.gameOver;
             }
-            if(environmentController.bossCollection.isDead)
+            if (environmentController.bossCollection.isDead)
             {
                 return BattleResult.gameWin;
             }
@@ -265,22 +265,22 @@ namespace WizardAdvanture
             //环境控制器
             environmentController.Action();
 
-            if(gameMode == GameMode.single)
+            if (gameMode == GameMode.single)
             {
                 AddDebugMessage("#D己方回合");
                 playerController.Action();
             }
             //多人游戏下P1先行动P2后行动
-            else if(gameMode == GameMode.miuti)
+            else if (gameMode == GameMode.miuti)
             {
-                if(netPlayer == NetPlayer.P1)
+                if (netPlayer == NetPlayer.P1)
                 {
                     AddDebugMessage("#D己方回合 等待自己行动");
                     playerController.Action();
                     AddDebugMessage("#D友方回合 等待NetC行动");
                     netController.Action();
                 }
-                else if(netPlayer == NetPlayer.P2)
+                else if (netPlayer == NetPlayer.P2)
                 {
                     AddDebugMessage("#D友方回合 等待NetC行动");
                     netController.Action();
@@ -614,7 +614,7 @@ namespace WizardAdvanture
                 //canvas.MoveCamera(new Pos(0, -1));
             }
             if (CursorPos.y > canvas.startPos.y + (20 - canvas.limitToMove))
-            { 
+            {
                 canvas.MoveCameraTo(new Pos(0, CursorPos.y - canvas.startPos.y - (20 - canvas.limitToMove)));
                 //canvas.MoveCamera(new Pos(0, 1));
 

@@ -1,6 +1,5 @@
 ﻿namespace Destroy
 {
-    using Destroy.Windows;
     using Destroy.Winform;
     using System;
     using System.Threading;
@@ -13,16 +12,17 @@
     {
         private static Thread EditorThread;
 
+
         /// <summary>
         /// Winform的初始化.
         /// </summary>
         [STAThread]
         public static void OpenWithEditor(Action action)
         {
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            MainForm editorForm = new MainForm();
+
+            var mainForm = new FormEditor();
 
             #region 关于注册的说明
             //任何引擎入口要搞定的事情就是注册好这几个事件
@@ -49,7 +49,7 @@
             StandardIO.RendererEvent += EditorSystem.Renderer;
 
             //开启Editor线程
-            EditorThread = new Thread(() =>{ Application.Run(editorForm); });
+            EditorThread = new Thread(() => { Application.Run(mainForm); });
             EditorThread.Start();
 
 

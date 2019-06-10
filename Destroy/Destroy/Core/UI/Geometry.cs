@@ -15,18 +15,18 @@
 
         private bool isHorizontal = false;
 
-        public Line(Vector2 startPos,Vector2 endPos)
+        public Line(Vector2 startPos, Vector2 endPos)
         {
             StartPos = startPos;
             EndPos = endPos;
             PosList = new List<Vector2>();
-            if(StartPos.X == EndPos.X)
+            if (StartPos.X == EndPos.X)
             {
                 isHorizontal = true;
                 int x = StartPos.X;
                 int ymin = Math.Min(StartPos.Y, EndPos.Y);
                 int ymax = Math.Max(StartPos.Y, EndPos.Y);
-                for (int i = ymin;i<= ymax; i++)
+                for (int i = ymin; i <= ymax; i++)
                 {
                     PosList.Add(new Vector2(x, i));
                 }
@@ -50,7 +50,7 @@
         public string GetStr()
         {
             string rawStr;
-            if(isHorizontal)
+            if (isHorizontal)
             {
                 rawStr = BoxDrawingCharacter.BoxHorizontal.ToString() + BoxDrawingCharacter.BoxHorizontal.ToString();
             }

@@ -42,7 +42,7 @@
         public Color(ConsoleColor consoleColor)
         {
             this.consoleColor = consoleColor;
-            ParseConsoleColor(consoleColor,out r,out g,out b);
+            ParseConsoleColor(consoleColor, out r, out g, out b);
         }
         #region 静态颜色
         /// <summary>
@@ -141,7 +141,7 @@
         /// <summary>
         /// System.ConsoleColor转换为System.Drawing.Color
         /// </summary>
-        public static void ParseConsoleColor(ConsoleColor consoleColor,out uint r,out uint g,out uint b)
+        public static void ParseConsoleColor(ConsoleColor consoleColor, out uint r, out uint g, out uint b)
         {
             switch (consoleColor)
             {
@@ -286,7 +286,7 @@
                 string name = Enum.GetName(typeof(ConsoleColor), each);
 
                 uint R, G, B;
-                ParseConsoleColor(each,out R,out G,out B);
+                ParseConsoleColor(each, out R, out G, out B);
                 double t = Math.Pow(R - r, 2.0) + Math.Pow(G - g, 2.0) + Math.Pow(B - b, 2.0);
                 if (t == 0.0)
                     return each;

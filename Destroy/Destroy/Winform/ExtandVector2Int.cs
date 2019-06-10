@@ -1,22 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace Destroy.Winform
-{ 
-    /// <summary>
-    /// 
-    /// </summary>
-    public static class ExtandColor 
-    {
+{
 
-
-
-
-    }
     /// <summary>
     /// Vector2Int扩展,这个属于Destroy.Winform
     /// </summary>

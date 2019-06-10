@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 // Layer集合
 namespace WizardAdvanture
@@ -48,9 +44,9 @@ namespace WizardAdvanture
         public static Cursor CreateLLine(Scene scene)
         {
             Cursor cursor = new Cursor(scene);
-                cursor.cursorAera = new List<Pos>() { new Pos(0, 1),
+            cursor.cursorAera = new List<Pos>() { new Pos(0, 1),
             new Pos(0,2),new Pos(0,-1),new Pos(0,-2)};
-        
+
             return cursor;
         }
         //横线光标

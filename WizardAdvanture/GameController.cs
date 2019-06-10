@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace WizardAdvanture
 {
@@ -31,16 +28,16 @@ namespace WizardAdvanture
             win,
         };
 
-        
+
         State state = State.start;
         Scene scene;
         int turns = 0;
-        
+
         public GameController()
         {
             Console.SetBufferSize(180, 50);
-            scene = new Scene(Scene.GameMode.single,Scene.NetPlayer.single);
-           // Thread t = new Thread(scene.PlayMusic);
+            scene = new Scene(Scene.GameMode.single, Scene.NetPlayer.single);
+            // Thread t = new Thread(scene.PlayMusic);
             //t.Start();
         }
         public void Action()
@@ -54,7 +51,7 @@ namespace WizardAdvanture
                 {
                     case State.start:
                         result = LoadStartScene();
-                        if(result == Result.startSingleEasy)
+                        if (result == Result.startSingleEasy)
                         {
                             state = State.select;
                             scene.difficult = Scene.Difficult.easy;
@@ -77,18 +74,18 @@ namespace WizardAdvanture
                         break;
                     case State.select:
                         result = LoadSelectScene();
-                        if(result == Result.cancel)
+                        if (result == Result.cancel)
                         {
                             state = State.start;
                         }
-                        else if(result == Result.confirm)
+                        else if (result == Result.confirm)
                         {
                             state = State.battle;
                         }
                         break;
                     case State.battle:
                         Scene.BattleResult re = scene.Battle();
-                        if(re == Scene.BattleResult.battle)
+                        if (re == Scene.BattleResult.battle)
                         {
                             break;
                         }
@@ -97,7 +94,7 @@ namespace WizardAdvanture
                             turns = scene.turns;
                             state = State.dead;
                         }
-                        else if(re == Scene.BattleResult.gameWin)
+                        else if (re == Scene.BattleResult.gameWin)
                         {
                             turns = scene.turns;
                             state = State.win;
@@ -105,7 +102,7 @@ namespace WizardAdvanture
                         break;
                     case State.login:
                         result = LoadLoginScene();
-                        if(result==Result.confirm)
+                        if (result == Result.confirm)
                         {
                             state = State.battle;
                             Console.Clear();
@@ -122,7 +119,7 @@ namespace WizardAdvanture
                             state = State.start;
                             Console.Clear();
                         }
-                        else if(result == Result.cancel)
+                        else if (result == Result.cancel)
                         {
                             flag = false;
                         }
@@ -145,7 +142,7 @@ namespace WizardAdvanture
 
         #region 网络连接部分
         Scene.NetPlayer netPlayer;
-        string otherPlayerSelect; 
+        string otherPlayerSelect;
         MyTCPClient client;
         void OnHeartBeat(ResponseMessage msg)
         {
@@ -171,7 +168,7 @@ namespace WizardAdvanture
             //直接提取第6,7,8个byte作为另一个角色选择的结果
             otherPlayerSelect = msg.message.Substring(1);
             Console.WriteLine("收到服务器消息,本局游戏你是:" + netPlayer);
-            Console.WriteLine("你的队友选择的角色是"+otherPlayerSelect);
+            Console.WriteLine("你的队友选择的角色是" + otherPlayerSelect);
             Console.ReadLine();
         }
 
@@ -250,7 +247,7 @@ namespace WizardAdvanture
             }
             catch
             {
-                
+
                 return false;
             }
         }
@@ -324,7 +321,7 @@ namespace WizardAdvanture
                     //这个选择是有效的,可以进入下一步了
                     break;
                 }
-                else if(selectStr.Length == 0)
+                else if (selectStr.Length == 0)
                 {
                     Console.WriteLine("自动选择了456");
                     scene.playerController.SelectPlayer("456", 3);
@@ -362,7 +359,7 @@ namespace WizardAdvanture
             }
 
             //初始化游戏 重新初始化一个新的场景作为多人生成场景
-            scene = new Scene(Scene.GameMode.miuti,netPlayer);
+            scene = new Scene(Scene.GameMode.miuti, netPlayer);
 
 
             //初始化自己的角色
@@ -377,7 +374,7 @@ namespace WizardAdvanture
             Console.ReadKey();
 
             scene.AddDebugMessage("欢迎进入游戏,本局游戏你是" + scene.netPlayer);
-            
+
             /*快两天过去了...终于可以准备开始写包了..
              *进行初始化的时候添加一个NetController.从网络上获取这次操作的信息.
              *搞一个队列.NetC不停的检测这个队列中有没有进新的操作.检测到就发送新的操作.
@@ -427,11 +424,11 @@ namespace WizardAdvanture
                 }
                 else if (ck.Key == ConsoleKey.Enter)
                 {
-                    if(selected == 0)
+                    if (selected == 0)
                     {
                         return Result.confirm;
                     }
-                    else if(selected == 1)
+                    else if (selected == 1)
                     {
                         return Result.cancel;
                     }
@@ -505,8 +502,8 @@ namespace WizardAdvanture
             void Show()
             {
                 Console.BackgroundColor = ConsoleColor.Black;
-                Console.SetCursorPosition(1,1);
-                Console.Write(scene.canvas.ShowString("坚持了"+turns+"个回合", 10));
+                Console.SetCursorPosition(1, 1);
+                Console.Write(scene.canvas.ShowString("坚持了" + turns + "个回合", 10));
                 for (int i = 0; i < 2; i++)
                 {
                     if (i == selected)
@@ -521,7 +518,7 @@ namespace WizardAdvanture
                     Console.Write(listS[i]);
                 }
             }
- 
+
         }
         public Result LoadSelectScene()
         {
@@ -564,11 +561,11 @@ namespace WizardAdvanture
                 Console.WriteLine("请选择要选择的角色: 可以选择五个");
                 Console.WriteLine("输入五个不同的数字之后按Enter.");
                 string selectPlayer = Console.ReadLine();
-                if(selectPlayer == "q")
+                if (selectPlayer == "q")
                 {
                     return Result.cancel;
                 }
-                if(scene.playerController.SelectPlayer(selectPlayer,5)!="f")
+                if (scene.playerController.SelectPlayer(selectPlayer, 5) != "f")
                 {
                     Console.Clear();
                     return Result.confirm;
@@ -606,11 +603,11 @@ namespace WizardAdvanture
                 Console.WriteLine(str);
             }
 
-            while(true)
+            while (true)
             {
                 Show();
                 ConsoleKeyInfo ck = Console.ReadKey();
-                if(ck.Key ==  ConsoleKey.DownArrow)
+                if (ck.Key == ConsoleKey.DownArrow)
                 {
                     selected++;
                     if (selected == 5)
@@ -647,5 +644,5 @@ namespace WizardAdvanture
 
 
     }
-    
+
 }

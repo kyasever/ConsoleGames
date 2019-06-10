@@ -147,7 +147,7 @@
 
                 while (allSystemsSpendTime < tickTime) //Wait
                 {
-                    Thread.Sleep(0); //短暂让出线程防止死循环
+                    Thread.Sleep(1); //短暂让出线程防止死循环
                     Windows.Windows.QueryPerformanceCounter(ref stopPoint);
                     allSystemsSpendTime = (stopPoint - startPoint) / (float)(frequence);
                 }

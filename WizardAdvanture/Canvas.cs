@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WizardAdvanture
 {
@@ -434,9 +431,9 @@ namespace WizardAdvanture
 
                 if (t.GetType() == typeof(PlayerCharacter))
                 {
-                    if(t.belongsTo == Target.BelongsTo.PlayerSelf)
+                    if (t.belongsTo == Target.BelongsTo.PlayerSelf)
                         WriteBuffer(namePos, StringToSetColor(ShowString("#B" + t.name.ToString(), 8)));
-                    else if(t.belongsTo == Target.BelongsTo.PlayerNet)
+                    else if (t.belongsTo == Target.BelongsTo.PlayerNet)
                         WriteBuffer(namePos, StringToSetColor(ShowString("#C" + t.name.ToString() + "[友]", 8)));
                     WriteBuffer(targetPos + new Pos(0, 4), StringToSetColor(ShowString("#BMP: " + t.mp.ToString() + "/" + t.mpMax.ToString(), 24)));
 
@@ -454,7 +451,7 @@ namespace WizardAdvanture
                     {
                         color = ConsoleColor.Green;
                     }
-                    WriteBuffer(targetPos + new Pos(0, 5), ShowString("ACT: " + t.act.ToString() + "/" + t.actMax.ToString()+"["+t.moveAct.ToString()+"]", 25));
+                    WriteBuffer(targetPos + new Pos(0, 5), ShowString("ACT: " + t.act.ToString() + "/" + t.actMax.ToString() + "[" + t.moveAct.ToString() + "]", 25));
 
                     for (int i = 0; i < 4; i++)
                     {
@@ -497,8 +494,8 @@ namespace WizardAdvanture
                 else
                 {
                     WriteBuffer(namePos, StringToSetColor(ShowString("#R" + t.name.ToString(), 8)));
-                    if(t.belongsTo == Target.BelongsTo.OtherEnemy)
-                    WriteBuffer(targetPos + new Pos(0, 5), StringToSetColor(ShowString("#R" + "仇恨目标"+t.focus.name, 20)));
+                    if (t.belongsTo == Target.BelongsTo.OtherEnemy)
+                        WriteBuffer(targetPos + new Pos(0, 5), StringToSetColor(ShowString("#R" + "仇恨目标" + t.focus.name, 20)));
                 }
 
             }

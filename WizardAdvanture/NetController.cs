@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WizardAdvanture
 {
@@ -57,7 +54,7 @@ namespace WizardAdvanture
                 i++;
             }
             //强调一下它们处于网络控制器
-            foreach(var v in lists)
+            foreach (var v in lists)
             {
                 v.belongsTo = Target.BelongsTo.PlayerNet;
                 v.colorActive = ConsoleColor.Cyan;
@@ -115,14 +112,14 @@ namespace WizardAdvanture
                 Console.SetCursorPosition(5, 25);
                 ConsoleKey ck = ConsoleKey.Spacebar;
 
-                
+
                 if (state != State.stop)
                 {
                     //ck = Console.ReadKey().Key;
-                    while(true)
+                    while (true)
                     {
                         //循环检测 直到发现收到了包 从网络中读取一个按键
-                        if(netInputKeys.Count > 0)
+                        if (netInputKeys.Count > 0)
                         {
                             ck = (ConsoleKey)netInputKeys[0];
                             netInputKeys.RemoveAt(0);
@@ -161,7 +158,7 @@ namespace WizardAdvanture
                     {
                         if ((currertTarget = scene.SelectBlock(scene.CursorPos).target) != null)
                         {
-                            if (currertTarget.belongsTo == Target.BelongsTo.PlayerNet&& currertTarget.isActive)
+                            if (currertTarget.belongsTo == Target.BelongsTo.PlayerNet && currertTarget.isActive)
                             {
                                 if (currertTarget.CostSkill(currertTarget.skills[0]))
                                 {

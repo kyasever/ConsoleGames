@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Destroy.Standard
+﻿namespace Destroy.Standard
 {
     /// <summary>
     /// 战棋策略游戏的角色控制器
@@ -20,7 +14,7 @@ namespace Destroy.Standard
         public override void Awake()
         {
             Renderer.Depth = (int)Layer.Agent;
-            DrawString("岩", new Destroy.Color(222, 178, 222),Config.DefaultBackColor);
+            DrawString("岩", new Destroy.Color(222, 178, 222), Config.DefaultBackColor);
         }
 
         /// <summary>

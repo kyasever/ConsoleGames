@@ -1,6 +1,5 @@
 ﻿namespace Destroy
 {
-    using System;
     using System.Collections.Generic;
     using System.Text;
 
@@ -157,7 +156,7 @@
                 }
                 else if (args[1].GetType() == typeof(RenderPoint))
                 {
-                    foreach(var v in rect.PosList)
+                    foreach (var v in rect.PosList)
                     {
                         SafeAdd(v, (RenderPoint)args[1]);
                     }

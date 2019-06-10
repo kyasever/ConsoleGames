@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace WizardAdvanture
 {
@@ -100,9 +96,9 @@ namespace WizardAdvanture
         {
             this.scene = scene;
 
-            if(scene.gameMode == Scene.GameMode.miuti)
+            if (scene.gameMode == Scene.GameMode.miuti)
             {
-                if(scene.netPlayer == Scene.NetPlayer.P1)
+                if (scene.netPlayer == Scene.NetPlayer.P1)
                 {
                     spawnPlayerPos = spawnP1Pos;
                 }
@@ -148,7 +144,7 @@ namespace WizardAdvanture
                 if (state != State.stop)
                 {
                     ck = Console.ReadKey().Key;
-                    if(scene.gameMode == Scene.GameMode.miuti)
+                    if (scene.gameMode == Scene.GameMode.miuti)
                     {
                         //当读取到一个按键之后原封不动的把这个按键顺着网络发出去....
                         var writer = MyTCPClient.Instance.GetSendStream(GameAction.Game, GameCmd.Action);
@@ -156,7 +152,7 @@ namespace WizardAdvanture
                         MyTCPClient.Instance.Send(writer);
                     }
                 }
-                    
+
 
                 if (ck == ConsoleKey.End)
                 {
@@ -601,7 +597,7 @@ namespace WizardAdvanture
             {
                 int t = act;
                 changeAct(-act);
-                changeHP(s.heal * t); 
+                changeHP(s.heal * t);
                 changeMP(s.addMana * t);
                 string message = name + "休息:消耗行动" + t.ToString() + ";";
                 if (s.heal != 0)

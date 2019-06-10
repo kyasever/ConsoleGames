@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace WizardAdvanture
 {
@@ -26,7 +23,7 @@ namespace WizardAdvanture
 
         private List<Pos> ItemPos = new List<Pos>()
         {new Pos(2, 4),new Pos(4, 4),new Pos(6, 4),new Pos(8, 4),
-            new Pos(4, 6),new Pos(6, 6),}; 
+            new Pos(4, 6),new Pos(6, 6),};
 
         private List<Pos> MiutiModeItemPos = new List<Pos>()
         {new Pos(7, 3),new Pos(7, 20),new Pos(9, 3),new Pos(9, 20),
@@ -41,7 +38,7 @@ namespace WizardAdvanture
             bossCollection = new BossCollection(scene);
             bossCollection.Init();
 
-            if(scene.gameMode == Scene.GameMode.miuti)
+            if (scene.gameMode == Scene.GameMode.miuti)
             {
                 ItemPos = MiutiModeItemPos;
             }
@@ -216,7 +213,7 @@ namespace WizardAdvanture
                 {
                     if (v.target != null)
                     {
-                        if(v.target.faction == Target.Faction.Player)
+                        if (v.target.faction == Target.Faction.Player)
                             v.target.BeHit(Skill.CreateFireGround(20, world));
                     }
                 }
@@ -231,7 +228,7 @@ namespace WizardAdvanture
             foreach (var v in ItemPos)
             {
                 Block b = scene.SelectBlock(v);
-                if ( b.target != null)
+                if (b.target != null)
                 {
                     if (b.target.GetItem(b.name))
                     {
@@ -240,13 +237,13 @@ namespace WizardAdvanture
                 }
             }
 
-                //处理交给第三方行动的单位
-                for (int i = lists.Count - 1; i > -1; i--)
+            //处理交给第三方行动的单位
+            for (int i = lists.Count - 1; i > -1; i--)
             {
                 lists[i].Action();
             }
             //第一个回合 
-            if (scene.turns == 1&&state == State.begin)
+            if (scene.turns == 1 && state == State.begin)
             {
                 Init();
 
@@ -282,14 +279,14 @@ namespace WizardAdvanture
                 }
 
                 //每两个回合创造一次
-                if (levelTurns < 20 && levelTurns > 3&& levelTurns % 2 == 0)
+                if (levelTurns < 20 && levelTurns > 3 && levelTurns % 2 == 0)
                 {
                     foreach (var v in spawnEnemyPos)
                     {
                         if (scene.SelectBlock(v).target == null)
                         {
                             int r = scene.random.Next(0, 99);
-                            if(r<20)
+                            if (r < 20)
                             {
                                 scene.enemyController.CreatKnight(v);
                             }
@@ -302,11 +299,11 @@ namespace WizardAdvanture
                         }
                     }
                 }
-                if(levelTurns ==5)
+                if (levelTurns == 5)
                 {
                     ShowMessageBox("◉自爆球,贴近产生AOE自爆攻击.被神杖攻击过会破壳变成◎,此时可以正常受到伤害");
                 }
-                
+
                 if (levelTurns == 5 || levelTurns == 9 || levelTurns == 13 || levelTurns == 17)
                 {
                     foreach (var v in spawnEnemyPos)
@@ -336,7 +333,7 @@ namespace WizardAdvanture
                         {
                             scene.enemyController.CreatRook(v);
                         }
-                        else if(scene.SelectBlock(v).target.faction != Target.Faction.Enemy)
+                        else if (scene.SelectBlock(v).target.faction != Target.Faction.Enemy)
                         {
                             scene.SelectBlock(v).target.BeHit(Skill.CreateNormalDamage(200, world));
                         }
@@ -397,7 +394,7 @@ namespace WizardAdvanture
             //是否开始了第二关
             else if (state == State.level2)
             {
-                if(levelTurns == 1)
+                if (levelTurns == 1)
                 {
                     //片头动画
 
@@ -442,7 +439,7 @@ namespace WizardAdvanture
 
             void BossAnimate()
             {
-                for(int i =0;i<5;i++)
+                for (int i = 0; i < 5; i++)
                 {
                     ShowBoss0();
                     Thread.Sleep(100);

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WizardAdvanture
+﻿namespace WizardAdvanture
 {
     //只有三种类型 直接伤害 创造对象 治疗目标
     public enum SkillType
@@ -46,7 +40,7 @@ namespace WizardAdvanture
         {
             Skill skill = new Skill();
             skill.type = SkillType.Damage;
-            
+
             skill.range = 2;
 
             if (isIncreased)
@@ -104,7 +98,7 @@ namespace WizardAdvanture
             skill.type = SkillType.Damage;
 
             skill.costAct = 7;
-            
+
             skill.cursorType = Scene.CursorType.Point;
             if (isIncreased)
             {
@@ -129,7 +123,7 @@ namespace WizardAdvanture
         {
             Skill skill = new Skill();
             skill.type = SkillType.Damage;
-            
+
             skill.costMana = 120;
 
             if (isIncreased)
@@ -158,7 +152,7 @@ namespace WizardAdvanture
         #region 治疗的技能
         public static Skill CreateLingQuan(bool isIncreased)
         {
-            Skill skill = new Skill(); 
+            Skill skill = new Skill();
             skill.type = SkillType.Heal;
             skill.range = 2;
             skill.cursorType = Scene.CursorType.Point;
@@ -187,7 +181,7 @@ namespace WizardAdvanture
         {
             Skill skill = new Skill();
             skill.type = SkillType.Heal;
-            
+
             skill.heal = 100;
             if (isIncreased)
             {
@@ -214,7 +208,7 @@ namespace WizardAdvanture
 
         #region 冰法的技能
         public static Skill CreateBilzzard(bool isIncreased)
-        { 
+        {
             Skill skill = new Skill();
             skill.type = SkillType.Damage;
             skill.costAct = 6;
@@ -246,7 +240,7 @@ namespace WizardAdvanture
             skill.costMana = 140;
             skill.range = 6;
             skill.cursorType = Scene.CursorType.Sline;
-            
+
             if (isIncreased)
             {
                 skill.discription = "强化冰墙,直线造墙,墙350HP";
@@ -269,7 +263,7 @@ namespace WizardAdvanture
         {
             Skill skill = new Skill();
             skill.type = SkillType.Damage;
-            
+
             skill.range = 1;
             skill.costAct = 1;
             skill.cursorType = Scene.CursorType.Point;
@@ -530,8 +524,8 @@ namespace WizardAdvanture
         }
 
         //最普通的普通攻击
-        public static Skill CreateNormalDamage(int damage,Target caster)
-        { 
+        public static Skill CreateNormalDamage(int damage, Target caster)
+        {
             Skill skill = new Skill();
             skill.name = " ";
             skill.type = SkillType.Damage;
@@ -566,7 +560,7 @@ namespace WizardAdvanture
         public static Skill CreateBastionRestore(int heal, Target caster)
         {
             Skill skill = new Skill();
-            skill.name = "堡垒回复"; 
+            skill.name = "堡垒回复";
             skill.type = SkillType.Heal;
             skill.heal = heal;
             skill.addMana = heal;

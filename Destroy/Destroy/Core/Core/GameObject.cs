@@ -1,7 +1,6 @@
 ﻿namespace Destroy
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
 
     public enum ObjectType
@@ -294,7 +293,16 @@
         }
         #endregion
 
-
+        /// <summary>
+        /// 销毁一个游戏物体
+        /// </summary>
+        public static void Destroy(GameObject gameObject)
+        {
+            //进行这个设置的时候,就已经关掉了所有组件了.对于系统来说相当于已经被移除
+            gameObject.SetActive(false);
+            //在最后移除它 可能没有移除子物体
+            RuntimeEngine.GetSystem<DeleteSystem>().GameObjectsToDelete.Add(gameObject);
+        }
 
         /// <summary>
         /// ?检测是否为空

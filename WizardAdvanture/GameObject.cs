@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 /* 游戏基础对象
  */
@@ -438,9 +435,9 @@ namespace WizardAdvanture
             //先根据类型检测
             if (s.type == SkillType.Damage || s.type == SkillType.Holy)
             {
-                if(s.name == "背刺"|| s.name == "致命伏击")
+                if (s.name == "背刺" || s.name == "致命伏击")
                 {
-                    if(hp == hpMax)
+                    if (hp == hpMax)
                     {
                         damage = damage * 4;
                     }
@@ -464,13 +461,13 @@ namespace WizardAdvanture
                     }
                 }
 
-                if(belongsTo == BelongsTo.OtherEnemy)
+                if (belongsTo == BelongsTo.OtherEnemy)
                 {
                     //如果当前目标是坦克单位
-                    if(focus.name == "岩山" || focus.name == "圣者")
+                    if (focus.name == "岩山" || focus.name == "圣者")
                     {
                         //如果释放者是坦克单位
-                        if(s.caster.name == "岩山" || s.caster.name == "圣者")
+                        if (s.caster.name == "岩山" || s.caster.name == "圣者")
                         {
                             //仇恨释放者
                             focus = s.caster;
@@ -489,7 +486,7 @@ namespace WizardAdvanture
                 {
                     if (damage >= 20)
                     {
-                        damage = damage *6/10;
+                        damage = damage * 6 / 10;
                     }
                 }
                 //boss具有66%减伤
@@ -500,10 +497,10 @@ namespace WizardAdvanture
                         damage = damage / 3;
                     }
                 }
-                if(name == "圣者")
+                if (name == "圣者")
                 {
                     //如果血量大于1并受到攻击 最多抵挡1000点伤害
-                    if(hp!=1&&damage>hp&&damage<hp+1000)
+                    if (hp != 1 && damage > hp && damage < hp + 1000)
                     {
                         damage = hp - 1;
                         scene.AddDebugMessage("#R圣者触发了拯救者,回复1点HP");
@@ -558,14 +555,14 @@ namespace WizardAdvanture
             else if (s.type == SkillType.Heal)
             {
                 int heal = s.heal;
-                if(s.name == "拯救之光" || s.name == "救赎之光")
+                if (s.name == "拯救之光" || s.name == "救赎之光")
                 {
-                    int percent = hp*100 / hpMax;
+                    int percent = hp * 100 / hpMax;
                     int reMp = s.costMana * (100 - percent) / 100;
                     heal = s.heal + s.heal * 3 * (100 - percent) / 100;
 
                     s.caster.changeMP(reMp);
-                    scene.AddDebugMessage("#B"+s.name+"消耗了" + (s.costMana - reMp).ToString() + "MP");
+                    scene.AddDebugMessage("#B" + s.name + "消耗了" + (s.costMana - reMp).ToString() + "MP");
                 }
 
                 string str = "";
@@ -611,7 +608,7 @@ namespace WizardAdvanture
         }
         public virtual bool GetItem(string str)
         {
-            if ((belongsTo == BelongsTo.PlayerSelf|| belongsTo == BelongsTo.PlayerNet) && !hasItem)
+            if ((belongsTo == BelongsTo.PlayerSelf || belongsTo == BelongsTo.PlayerNet) && !hasItem)
             {
                 switch (str)
                 {

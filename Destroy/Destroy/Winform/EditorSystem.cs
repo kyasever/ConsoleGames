@@ -1,8 +1,5 @@
 ﻿using System;
-using Destroy;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Destroy.Winform
@@ -18,7 +15,9 @@ namespace Destroy.Winform
         /// 用于指示当前鼠标所处位置
         /// </summary>
         public static Vector2 MousePosition = new Vector2(-8, -8);
-        private static MainForm mainForm = MainForm.Instanse;
+
+        private static FormEditor mainForm = FormEditor.Instanse;
+
         private static Task updateTask, drawTask;
 
         /// <summary>
@@ -26,13 +25,7 @@ namespace Destroy.Winform
         /// </summary>
         public override void Start()
         {
-            mainForm = MainForm.Instanse;
-            //初始化Editor窗口
-            mainForm.Invoke(new Action(() =>
-            {
-                mainForm.InitSize();
-                mainForm.RefreshEditoerPosition();
-            }));
+            mainForm = FormEditor.Instanse;
         }
 
         /// <summary>
@@ -44,6 +37,7 @@ namespace Destroy.Winform
             {
                 return;
             }
+
             updateTask = Task.Run(() =>
             {
                 mainForm.Invoke(new Action(() =>
@@ -51,7 +45,7 @@ namespace Destroy.Winform
                     mainForm.RefrestGameObjects();
                     if (mainForm.CurrertGameObject != null)
                     {
-                        mainForm.SetRightTreeView(mainForm.CurrertGameObject,false);
+                        mainForm.SetRightTreeView(mainForm.CurrertGameObject, false);
                     }
                 }));
             });
@@ -70,6 +64,7 @@ namespace Destroy.Winform
             }
             drawTask = Task.Run(() =>
             {
+                //return;
                 mainForm.Invoke(new Action(() =>
                 {
                     mainForm.Draw(list);
@@ -93,7 +88,5 @@ namespace Destroy.Winform
                 mainForm.AddMessage(msg);
             }));
         }
-
-
     }
 }

@@ -59,6 +59,7 @@ namespace Destroy
     /// <summary>
     /// 除0异常
     /// </summary>
+    [Serializable]
     public class NaNException : Exception
     {
         /// <summary>

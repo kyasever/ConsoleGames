@@ -1,11 +1,6 @@
 ﻿using Destroy;
-using Destroy.Winform;
 using Destroy.Standard;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Wizard2
 {
@@ -14,7 +9,7 @@ namespace Wizard2
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
-        [STAThread]
+
         static void Main()
         {
             Config.TickPerSecond = 30;
@@ -32,7 +27,7 @@ namespace Wizard2
         {
             //SRPGScene scene = new SRPGScene();
             //var scene = new TPSScene();
-            
+
             var scene = new newTestScene();
 
             SceneManager.Load(scene, LoadSceneMode.Single);

@@ -13,7 +13,7 @@
         /// <summary>
         /// 相当于Initialize 在添加的时候进行调用
         /// </summary>
-        public virtual void Awake() { } 
+        public virtual void Awake() { }
 
         /// <summary>
         /// 在生命周期的开始调用. 如果在Update中创建,那么就在下一次生命周期的时候调用

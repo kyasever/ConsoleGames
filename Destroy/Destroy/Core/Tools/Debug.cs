@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Destroy
+﻿namespace Destroy
 {
     /// <summary>
     /// 调试类(用于调试程序) <see langword="static"/>
