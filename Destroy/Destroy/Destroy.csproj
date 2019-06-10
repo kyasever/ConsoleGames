@@ -68,13 +68,16 @@
     <Compile Include="Core\Core\Enums.cs" />
     <Compile Include="Core\UI\TextBox.cs" />
     <Compile Include="Windows\Windows.cs" />
-    <Compile Include="Winform\EditorSystem.cs" />
-    <Compile Include="Winform\ExtandVector2Int.cs" />
-    <Compile Include="Winform\MainForm.cs">
+    <Compile Include="Winform\EditorController.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Winform\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <Compile Include="Winform\EditorSystem.cs" />
+    <Compile Include="Winform\ExtandVector2Int.cs" />
+    <Compile Include="Winform\FormEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Winform\FormEditor.Designer.cs">
+      <DependentUpon>FormEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\Tools\Navigation .cs" />
     <Compile Include="Core\Tools\Resource.cs" />
@@ -116,8 +119,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Winform\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <EmbeddedResource Include="Winform\FormEditor.resx">
+      <DependentUpon>FormEditor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

@@ -10,8 +10,15 @@ namespace Destroy
     /// 变换 包含父子关系和坐标变化.坐标相关
     /// 默认带有,不使用AddCom来添加这个
     /// </summary>
-    public class Transform : RawComponent
+    public class Transform : IComponent
     {
+        #region ICom接口
+        protected GameObject gameObject;
+        public GameObject GameObject { get => gameObject; set => gameObject = value; }
+        protected bool enable = true;
+        public bool Enable { get => enable; set => enable = value; }
+        #endregion
+
         #region 父子关系 Parent
 
         private Transform parent;

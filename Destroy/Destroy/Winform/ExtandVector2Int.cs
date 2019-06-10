@@ -7,16 +7,7 @@ using System.Threading.Tasks;
 
 namespace Destroy.Winform
 { 
-    /// <summary>
-    /// 
-    /// </summary>
-    public static class ExtandColor 
-    {
 
-
-
-
-    }
     /// <summary>
     /// Vector2Int扩展,这个属于Destroy.Winform
     /// </summary>
