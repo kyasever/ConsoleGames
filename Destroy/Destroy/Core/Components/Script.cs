@@ -8,7 +8,7 @@
     /// <summary>
     /// 所有脚本的基类,通常开发者继承这个类来自定义组件
     /// </summary>
-    public abstract class Script : Component
+    public class Script : Component
     {
         /// <summary>
         /// 相当于Initialize 在添加的时候进行调用

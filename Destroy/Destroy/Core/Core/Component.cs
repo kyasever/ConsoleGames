@@ -64,7 +64,7 @@
     /// <summary>
     /// 具体的接口,已经获得了各项引用 本身只实现自身的功能,但是可以通过Actor转接调用别的组件直接实现方法
     /// </summary>
-    public class Component : RawComponent
+    public abstract class Component : RawComponent
     {
         public ObjectType ObjectType { get => gameObject.ObjectType; }
 

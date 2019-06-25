@@ -66,6 +66,7 @@
     <Compile Include="Core\Tools\Maze.cs" />
     <Compile Include="Core\Core\StandardIO.cs" />
     <Compile Include="Core\Core\Enums.cs" />
+    <Compile Include="Core\UI\ProgressBar.cs" />
     <Compile Include="Core\UI\TextBox.cs" />
     <Compile Include="Windows\Windows.cs" />
     <Compile Include="Winform\EditorSystem.cs" />

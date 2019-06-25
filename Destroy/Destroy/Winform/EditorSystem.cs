@@ -42,12 +42,13 @@ namespace Destroy.Winform
             {
                 mainForm.Invoke(new Action(() =>
                 {
-                    mainForm.RefrestGameObjects();
-                    if (mainForm.CurrertGameObject != null)
-                    {
-                        mainForm.SetRightTreeView(mainForm.CurrertGameObject, false);
-                    }
+                    mainForm.UpdateForm();
                 }));
+            });
+
+            updateTask = Task.Run(() =>
+            {
+                mainForm.Invoke(new Action(mainForm.UpdateForm));
             });
         }
 

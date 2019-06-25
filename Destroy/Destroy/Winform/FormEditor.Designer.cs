@@ -43,6 +43,7 @@
             this.panelMsg = new System.Windows.Forms.Panel();
             this.listBoxMsg = new System.Windows.Forms.ListBox();
             this.panelGameWindow = new System.Windows.Forms.Panel();
+            this.toolStripStatusLabelMousePosition = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panelMain.SuspendLayout();
@@ -59,7 +60,7 @@
             this.顶部信息ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(727, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(720, 25);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -72,10 +73,11 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 572);
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabelMousePosition});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 371);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(727, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(720, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -92,7 +94,7 @@
             this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelMain.Location = new System.Drawing.Point(0, 25);
             this.panelMain.Name = "panelMain";
-            this.panelMain.Size = new System.Drawing.Size(727, 547);
+            this.panelMain.Size = new System.Drawing.Size(720, 346);
             this.panelMain.TabIndex = 2;
             // 
             // panelEditor
@@ -103,14 +105,14 @@
             this.panelEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelEditor.Location = new System.Drawing.Point(342, 0);
             this.panelEditor.Name = "panelEditor";
-            this.panelEditor.Size = new System.Drawing.Size(385, 547);
+            this.panelEditor.Size = new System.Drawing.Size(378, 346);
             this.panelEditor.TabIndex = 1;
             // 
             // splitter1
             // 
             this.splitter1.Location = new System.Drawing.Point(200, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 547);
+            this.splitter1.Size = new System.Drawing.Size(3, 346);
             this.splitter1.TabIndex = 0;
             this.splitter1.TabStop = false;
             // 
@@ -120,7 +122,7 @@
             this.panelCom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelCom.Location = new System.Drawing.Point(200, 0);
             this.panelCom.Name = "panelCom";
-            this.panelCom.Size = new System.Drawing.Size(185, 547);
+            this.panelCom.Size = new System.Drawing.Size(178, 346);
             this.panelCom.TabIndex = 1;
             // 
             // treeViewCom
@@ -128,7 +130,7 @@
             this.treeViewCom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewCom.Location = new System.Drawing.Point(0, 0);
             this.treeViewCom.Name = "treeViewCom";
-            this.treeViewCom.Size = new System.Drawing.Size(185, 547);
+            this.treeViewCom.Size = new System.Drawing.Size(178, 346);
             this.treeViewCom.TabIndex = 0;
             // 
             // panelObj
@@ -137,7 +139,7 @@
             this.panelObj.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelObj.Location = new System.Drawing.Point(0, 0);
             this.panelObj.Name = "panelObj";
-            this.panelObj.Size = new System.Drawing.Size(200, 547);
+            this.panelObj.Size = new System.Drawing.Size(200, 346);
             this.panelObj.TabIndex = 0;
             // 
             // treeViewObj
@@ -145,7 +147,7 @@
             this.treeViewObj.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewObj.Location = new System.Drawing.Point(0, 0);
             this.treeViewObj.Name = "treeViewObj";
-            this.treeViewObj.Size = new System.Drawing.Size(200, 547);
+            this.treeViewObj.Size = new System.Drawing.Size(200, 346);
             this.treeViewObj.TabIndex = 0;
             this.treeViewObj.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeViewObj_AfterSelect);
             // 
@@ -156,16 +158,16 @@
             this.panelGame.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelGame.Location = new System.Drawing.Point(0, 0);
             this.panelGame.Name = "panelGame";
-            this.panelGame.Size = new System.Drawing.Size(342, 547);
+            this.panelGame.Size = new System.Drawing.Size(342, 346);
             this.panelGame.TabIndex = 0;
             // 
             // panelMsg
             // 
             this.panelMsg.Controls.Add(this.listBoxMsg);
             this.panelMsg.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMsg.Location = new System.Drawing.Point(0, 437);
+            this.panelMsg.Location = new System.Drawing.Point(0, 191);
             this.panelMsg.Name = "panelMsg";
-            this.panelMsg.Size = new System.Drawing.Size(342, 110);
+            this.panelMsg.Size = new System.Drawing.Size(342, 155);
             this.panelMsg.TabIndex = 1;
             // 
             // listBoxMsg
@@ -180,7 +182,7 @@
             "3213123123"});
             this.listBoxMsg.Location = new System.Drawing.Point(0, 0);
             this.listBoxMsg.Name = "listBoxMsg";
-            this.listBoxMsg.Size = new System.Drawing.Size(342, 110);
+            this.listBoxMsg.Size = new System.Drawing.Size(342, 155);
             this.listBoxMsg.TabIndex = 0;
             // 
             // panelGameWindow
@@ -188,15 +190,21 @@
             this.panelGameWindow.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelGameWindow.Location = new System.Drawing.Point(0, 0);
             this.panelGameWindow.Name = "panelGameWindow";
-            this.panelGameWindow.Size = new System.Drawing.Size(342, 437);
+            this.panelGameWindow.Size = new System.Drawing.Size(342, 191);
             this.panelGameWindow.TabIndex = 0;
             this.panelGameWindow.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PanelGameWindow_MouseMove);
+            // 
+            // toolStripStatusLabelMousePosition
+            // 
+            this.toolStripStatusLabelMousePosition.Name = "toolStripStatusLabelMousePosition";
+            this.toolStripStatusLabelMousePosition.Size = new System.Drawing.Size(131, 17);
+            this.toolStripStatusLabelMousePosition.Text = "toolStripStatusLabel2";
             // 
             // FormEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(727, 594);
+            this.ClientSize = new System.Drawing.Size(720, 393);
             this.Controls.Add(this.panelMain);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -237,5 +245,6 @@
         private System.Windows.Forms.TreeView treeViewCom;
         private System.Windows.Forms.Panel panelObj;
         private System.Windows.Forms.TreeView treeViewObj;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMousePosition;
     }
 }

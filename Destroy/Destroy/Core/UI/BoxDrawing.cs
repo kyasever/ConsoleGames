@@ -2,7 +2,18 @@
 {
     using System.Text;
 
-
+    public class UnicodeDrawing
+    {
+        public static char Block8_8 = '█';
+        public static char Block7_8 = '▉';
+        public static char Block6_8 = '▊';
+        public static char Block5_8 = '▋';
+        public static char Block4_8 = '▌';
+        public static char Block3_8 = '▍';
+        public static char Block2_8 = '▎';
+        public static char Block1_8 = '▏';
+        public static char Block0_8 = ' '; 
+    }
 
     /// <summary>
     /// 用于制表符加法运算的一个辅助类

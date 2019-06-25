@@ -1,6 +1,8 @@
 ﻿using Destroy;
 using Destroy.Standard;
+using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Wizard2
 {
@@ -10,6 +12,8 @@ namespace Wizard2
         /// 应用程序的主入口点。
         /// </summary>
 
+        //
+        [STAThread]
         static void Main()
         {
             Config.TickPerSecond = 30;

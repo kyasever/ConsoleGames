@@ -58,6 +58,8 @@
         {
             if (IsTabChar(c))
                 return 1;
+            else if (c >= UnicodeDrawing.Block8_8 && c <= UnicodeDrawing.Block1_8)
+                return 2;
             else if (c >= 0x4e00 && c <= 0x9fbb)   //只要不低于127都算Chinese
                 return 2;
             else

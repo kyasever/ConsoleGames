@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Reflection;
-using System.Windows.Forms;
+﻿
 
 
 namespace Destroy.Winform
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Reflection;
+    using System.Windows.Forms;
+
+    /// <summary>
+    /// 界面窗体交互部分
+    /// </summary>
     public partial class FormEditor : Form
     {
         /// <summary>
@@ -25,41 +30,15 @@ namespace Destroy.Winform
             this.Size = new Size(windowSize.Width + 500, windowSize.Height + 200);
         }
 
-
-        private void TreeViewObj_AfterSelect(object sender, TreeViewEventArgs e)
+        public void UpdateForm()
         {
-            //如果有对应的GameObject 刷新对应组件的数据
-            if (tree_NodeDic.ContainsKey(treeViewObj.SelectedNode))
+            RefrestGameObjects();
+            if (CurrertGameObject != null)
             {
-                CurrertGameObject = tree_NodeDic[treeViewObj.SelectedNode];
-                treeViewCom.Nodes.Clear();
-                SetRightTreeView(CurrertGameObject, true);
+                SetRightTreeView(CurrertGameObject, false);
             }
+            toolStripStatusLabelMousePosition.Text = Input.MousePosition.ToString();
         }
-
-        private void FormEditor_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (treeViewObj.Focused || treeViewCom.Focused)
-            {
-                //一个权宜之计,当检测到按键的时候,自动把焦点设置成别的,避免TreeView在那搞事情
-                //最好的做法还是重写一下TreeView.然后把那东西的键盘删了
-                //或者搞一个选中设置.
-                panelGame.Focus();
-            }
-        }
-
-        private void PanelGameWindow_MouseMove(object sender, MouseEventArgs e)
-        {
-            EditorSystem.MousePosition = e.Location.ToVector2Int();
-        }
-
-        private void FormEditor_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            RuntimeEngine.Enabled = false;
-            //关闭主窗口时关闭所有线程
-            System.Environment.Exit(0);
-        }
-
 
         /// <summary>
         /// 用来保存节点和游戏对象的对应关系
@@ -213,7 +192,8 @@ namespace Destroy.Winform
                     //    font = new Font("新宋体", 14, FontStyle.Bold);
                     //}
 
-                    font = new Font("Consolas", 12, FontStyle.Bold);
+                    font = new Font("新宋体", 12, FontStyle.Bold);
+                    //font = new Font("Consolas", 12, FontStyle.Bold);
                     if (Config.RendererSize.Y > 30)
                     {
                         font = new Font("Consolas", 20, FontStyle.Bold);
@@ -401,5 +381,43 @@ namespace Destroy.Winform
         }
 
         #endregion
+
+        #region 界面回调
+        private void TreeViewObj_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            //如果有对应的GameObject 刷新对应组件的数据
+            if (tree_NodeDic.ContainsKey(treeViewObj.SelectedNode))
+            {
+                CurrertGameObject = tree_NodeDic[treeViewObj.SelectedNode];
+                treeViewCom.Nodes.Clear();
+                SetRightTreeView(CurrertGameObject, true);
+            }
+        }
+
+        private void FormEditor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (treeViewObj.Focused || treeViewCom.Focused)
+            {
+                //一个权宜之计,当检测到按键的时候,自动把焦点设置成别的,避免TreeView在那搞事情
+                //最好的做法还是重写一下TreeView.然后把那东西的键盘删了
+                //或者搞一个选中设置.
+                panelGame.Focus();
+            }
+        }
+
+        private void PanelGameWindow_MouseMove(object sender, MouseEventArgs e)
+        {
+            EditorSystem.MousePosition = e.Location.ToVector2Int();
+        }
+
+        private void FormEditor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            RuntimeEngine.Enabled = false;
+            //关闭主窗口时关闭所有线程
+            System.Environment.Exit(0);
+        }
+
+        #endregion
+
     }
 }
