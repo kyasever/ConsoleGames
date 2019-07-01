@@ -9,6 +9,16 @@
     }
 
     /// <summary>
+    /// OOPActor 是位于GO和Com之上的系统. 拥有OOP模式的全部API
+    /// 可以重写其构造,从而进行组件上的扩展,这个东西是自组装的. 当调用new Actor的时候,
+    /// 完成了 创建对象 - 挂载组件 - 可以继续使用全部API 的过程
+    /// </summary>
+    public class OOPActor
+    {
+
+    }
+
+    /// <summary>
     /// Destroy更新后的设计哲学
     /// 大幅度减少暴露的接口. 只允许开发者操作Script一个类
     /// Actor应该是一个组件而不是游戏物体本身. 但是又是可new组件.
