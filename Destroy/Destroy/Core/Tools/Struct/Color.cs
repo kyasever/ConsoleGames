@@ -7,9 +7,20 @@
     /// </summary>
     public struct Color
     {
+        /// <summary>
+        /// alpha通道,支持颜色混合和颜色相加操作,同等depth会进行颜色混合
+        /// alpha = 255,不透明 alpha = 0,透明
+        /// </summary>
+        private uint alpha;
         private uint r;
         private uint g;
         private uint b;
+
+        /// <summary>
+        /// alpha
+        /// </summary>
+        public uint Alpha { get => alpha; set => alpha = value; }
+
         /// <summary>
         /// red
         /// </summary>
@@ -28,11 +39,12 @@
         /// <summary>
         /// 使用RGB构造
         /// </summary>
-        public Color(uint r, uint g, uint b)
+        public Color(uint r, uint g, uint b,uint alpha)
         {
             this.r = r;
             this.g = g;
             this.b = b;
+            this.alpha = alpha;
             consoleColor = null;
         }
 
@@ -43,8 +55,13 @@
         {
             this.consoleColor = consoleColor;
             ParseConsoleColor(consoleColor, out r, out g, out b);
+            alpha = 255;
         }
         #region 静态颜色
+        /// <summary>
+        /// 默认透明色
+        /// </summary>
+        public static Color TransParent = new Color(ConsoleColor.White).SetTransParent();
         /// <summary>
         /// 
         /// </summary>

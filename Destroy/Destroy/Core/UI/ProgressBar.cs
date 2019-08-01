@@ -140,5 +140,10 @@ namespace Destroy
 
             return progressBar;
         }
+
+        public override string ToString()
+        {
+            return Value.ToString() + "/" + MaxValue.ToString() + "  ";
+        }
     }
 }

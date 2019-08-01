@@ -44,7 +44,7 @@ namespace Destroy.Standard
         }
 
         /// <summary>
-        /// 沿中心点展开一个范围指示器
+        /// 沿中心点展开一个范围指示器,并处理其数据
         /// </summary>
         /// <param name="center">中心点</param>
         /// <param name="expandWidth">展开范围</param>
@@ -55,6 +55,20 @@ namespace Destroy.Standard
             ClearRenderer();
             //使用蓝色填充该范围
             Draw(list, Color.Blue);
+        }
+
+        /// <summary>
+        /// 沿中心点展开一个范围指示器包括颜色
+        /// </summary>
+        /// <param name="center">中心点</param>
+        /// <param name="expandWidth">展开范围</param>
+        public void ExpandAera(Vector2 center, int expandWidth,Color color)
+        {
+            //获取该展开的范围
+            List<Vector2> list = Navigation.ExpandAera(center, expandWidth, Navigation.CanMoveInPhysics);
+            ClearRenderer();
+            //使用蓝色填充该范围
+            Draw(list, color);
         }
 
         /// <summary>
@@ -151,6 +165,18 @@ namespace Destroy.Standard
             cursorCom.Renderer.Depth = (int)Layer.Cursor;
             cursorCom.Draw(Vector2.Zero, Color.DarkRed);
             return cursorCom;
+        }
+
+        public void ChangeColor(bool b)
+        {
+            if(b)
+            {
+                Renderer.SetBackColor(Color.DarkCyan);
+            }
+            else
+            {
+                Renderer.SetBackColor(Color.DarkRed);
+            }
         }
 
         /// <summary>

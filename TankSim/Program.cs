@@ -41,18 +41,24 @@ namespace TankSim
     {
         public override void OnStart()
         {
-            UIObject.CreateWith<BossHP>("BOSSHP", "UI");
+            
+            //UIObject.CreateWith<BossHP>("BOSSHP", "UI");
         }
     }
+
 
     public class BossHP : Script
     {
         private ProgressBar slider;
-
+        private Label label;
         public override void Awake()
         {
-            DrawString("BOSS:");
-            DrawString("200/200", new Vector2(3, 0));
+            Label label1 = Label.Create("BOSS:");
+            label1.Parent = GameObject; label1.LocalPosition = new Vector2(0, 0);
+            label = Label.Create("200/200");
+            label.Parent = GameObject;
+            label.LocalPosition = new Vector2(3, 0);
+
             Position = new Vector2(1, 39);
             slider = ProgressBar.Create(10,100,0);
             slider.Parent = gameObject;
@@ -64,6 +70,7 @@ namespace TankSim
             slider.Value += 0.1f;
             if (slider.Value == 100)
                 slider.Value = 0;
+            label.Text = ((int)slider.Value).ToString() + "/" + ((int)slider.MaxValue).ToString();
         }
     }
 

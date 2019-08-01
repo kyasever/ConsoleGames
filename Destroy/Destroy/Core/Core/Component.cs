@@ -20,6 +20,9 @@
         bool Enable { get; set; }
     }
 
+    /// <summary>
+    /// 系统接口原型,仅包含TransformAPI. 用于提供给其他底层接口使用
+    /// </summary>
     public class RawComponent : IComponent
     {
 
@@ -62,7 +65,7 @@
     }
 
     /// <summary>
-    /// 具体的接口,已经获得了各项引用 本身只实现自身的功能,但是可以通过Actor转接调用别的组件直接实现方法
+    /// 具体的接口,包含Transform,Renderer,Collider的API. 并包含添加和移除的回调操作.用于扩展系统
     /// </summary>
     public abstract class Component : RawComponent
     {

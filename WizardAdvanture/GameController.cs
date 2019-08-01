@@ -15,7 +15,7 @@ namespace WizardAdvanture
             startSingleEasy,
             startSingleHard,
             startMiuti,
-            startAchivement,
+            startSingleTest,
             startQuit,
         }
         public enum State
@@ -589,7 +589,7 @@ namespace WizardAdvanture
             List<Result> listR = new List<Result>()
             {
                 Result.startSingleEasy,Result.startSingleHard,Result.startMiuti,
-                Result.startAchivement,Result.startQuit
+                Result.startSingleTest,Result.startQuit
             };
 
 

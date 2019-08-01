@@ -66,7 +66,7 @@ namespace Wizard2
 
             SRPGAgent sRPGAgent = Actor.CreateWith<SRPGAgent>("Player", "PP");
             sRPGAgent.Position = new Vector2(10, 10);
-            sRPGAgent.moveAera = moveIndicator;
+            sRPGAgent.aera = moveIndicator;
             sRPGAgent.routeAera = routeIndicator;
 
 

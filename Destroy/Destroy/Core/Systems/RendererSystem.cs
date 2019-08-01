@@ -50,6 +50,8 @@
     /// </summary>
     public class RendererSystem : DestroySystem
     {
+        internal SortedSet<Renderer> lists;
+
         internal List<Renderer> ActorRendererCollection { get; set; } = new List<Renderer>();
 
         internal List<Renderer> UIRendererCollection { get; set; } = new List<Renderer>();
@@ -63,6 +65,7 @@
         /// </summary>
         public override void Start()
         {
+
             int screenWidth = Config.ScreenWidth;
             int screenHeight = Config.ScreenHeight;
             int charWidth = (int)Config.CharWidth;

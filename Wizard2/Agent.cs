@@ -5,7 +5,7 @@
     /// </summary>
     public class SRPGAgent : Script
     {
-        public MoveIndicator moveAera;
+        public MoveIndicator aera;
         public RouteIndicator routeAera;
 
         /// <summary>
@@ -16,6 +16,7 @@
             Renderer.Depth = (int)Layer.Agent;
             DrawString("岩", new Destroy.Color(222, 178, 222), Config.DefaultBackColor);
         }
+
 
         /// <summary>
         /// 角色状态
@@ -34,6 +35,10 @@
             /// 搜索
             /// </summary>
             Search,
+            /// <summary>
+            /// 瞄准准备攻击
+            /// </summary>
+            Aim,
         }
         /// <summary>
         /// 角色状态
@@ -48,6 +53,8 @@
         /// </summary>
         public override void Update()
         {
+            Vector2 cursorPos = Cursor.Instance.Position;
+            bool needRefresh = (cursorPos != lastPos);
             switch (state)
             {
                 case State.None:
@@ -56,8 +63,8 @@
                         if (Input.GetMouseButtonUp(MouseButton.Left))
                         {
                             Debug.Log(GameObject.Name + "ExpandAera:10");
-                            moveAera.SetActive(true);
-                            moveAera.ExpandAera(Position, 10);
+                            aera.SetActive(true);
+                            aera.ExpandAera(Position, 10);
                             state = State.Move;
                         }
                         else if (Input.GetMouseButtonUp(MouseButton.Right))
@@ -68,11 +75,9 @@
                     }
                     break;
                 case State.Move:
-                    //Debug.Log(Cursor.Instanse.Position.ToString() + moveAera.Contains(Cursor.Instanse.Position).ToString());
-                    Vector2 cursorPos = Cursor.Instance.Position;
-                    if (moveAera.Contains(Cursor.Instance.Position))
+                    if (aera.Contains(Cursor.Instance.Position))
                     {
-                        if (cursorPos != lastPos)
+                        if (needRefresh)
                         {
                             routeAera.SetActive(true);
                             routeAera.SearchRoute(Position, Cursor.Instance.Position);
@@ -82,19 +87,22 @@
                             Debug.Log(GameObject.Name + "MoveTo:" + cursorPos.ToString());
                             Position = cursorPos;
                             routeAera.SetActive(false);
-                            moveAera.SetActive(false);
-                            state = State.None;
+
+                            //展开攻击范围
+                            aera.ExpandAera(Position, 2, Color.Red);
+                            aera.SetActive(true);
+
+                            //移动阶段结束,进入攻击阶段
+                            state = State.Aim;
                         }
                     }
                     else
                     {
                         routeAera.SetActive(false);
                     }
-                    lastPos = cursorPos;
                     break;
                 case State.Search:
-                    cursorPos = Cursor.Instance.Position;
-                    if (cursorPos != lastPos)
+                    if (needRefresh)
                     {
                         routeAera.SetActive(true);
                         routeAera.SearchRoute(Position, Cursor.Instance.Position);
@@ -108,12 +116,35 @@
                         Debug.Log(GameObject.Name + "MoveTo:" + cursorPos.ToString());
                         Position = cursorPos;
                         routeAera.SetActive(false);
-                        moveAera.SetActive(false);
+                        aera.SetActive(false);
                         state = State.None;
                     }
-                    lastPos = cursorPos;
+                    break;
+                case State.Aim:
+                    if (aera.Contains(Cursor.Instance.Position))
+                    {
+                        if (needRefresh)
+                        {
+                            Cursor.Instance.ChangeColor(true);
+                        }
+                        if (Input.GetMouseButtonUp(MouseButton.Left))
+                        {
+                            Debug.Log(GameObject.Name + "attack:" + cursorPos.ToString());
+
+                            aera.SetActive(false);
+                            //攻击结束 回归初始状态
+                            state = State.None;
+                        }
+                    }
+                    else
+                    {
+                        if(needRefresh)
+                            Cursor.Instance.ChangeColor(false);
+                        routeAera.SetActive(false);
+                    }
                     break;
             }
+            lastPos = cursorPos;
 
         }
 

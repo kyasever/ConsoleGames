@@ -39,7 +39,6 @@
         /// 渲染结果,允许直接操作它来进行渲染.
         /// 没毛病 本质上所有对Renderer的操作都是为了给这个字典添加值
         /// </summary>
-        [HideInInspector]
         public virtual Dictionary<Vector2, RenderPoint> RendererPoints { get; set; } = new Dictionary<Vector2, RenderPoint>();
 
         /// <summary>
@@ -49,6 +48,9 @@
         {
             RendererPoints = new Dictionary<Vector2, RenderPoint>();
         }
+
+        
+
         /// <summary>
         /// 核心DrawString方法.从左至右的给对象增加一个字符串的渲染
         /// </summary>
@@ -58,7 +60,7 @@
         /// <param name="StartPosition">字符串渲染的起始点(相对中心点的偏移量)</param>
         /// <param name="MaxWidth">字符串最大渲染宽度</param>
         /// <param name="MinWidth">字符串最小渲染宽度</param>
-        public void DrawString(string str, Color foreColor, Color backColor, Vector2 StartPosition, int MaxWidth = int.MaxValue, int MinWidth = 0)
+        public void DrawString(string str, Color foreColor = default, Color backColor = default, Vector2 StartPosition = default, int MaxWidth = int.MaxValue, int MinWidth = 0)
         {
             List<string> grids = CharUtils.DivideString(str);
             int index = 0;
@@ -306,7 +308,6 @@
         /// </summary>
         public static RenderPoint operator +(RenderPoint left, RenderPoint right)
         {
-            //考虑了一些乱七八糟的问题,目前先都删了,只保留深度比较
             if (left.Depth < right.Depth)
             {
                 if (left.Depth < 0)
@@ -382,6 +383,20 @@
 
                 return rp;
             }
+        }
+
+        /// <summary>
+        /// 渲染优先级高的相对于渲染优先级低的做alpha渲染.如果二者相等,则直接进行混合
+        /// </summary>
+        /// <returns></returns>
+        public static Color AlphaMix(Color back, Color draw)
+        {
+            uint alpha = draw.Alpha;
+            //显示颜色 = 源像素颜色 X alpha / 255 + 背景颜色 X (255 - alpha) / 255 
+            uint r = draw.R * draw.Alpha / 255 + back.R * (255 - draw.Alpha) / 255;
+            uint g = draw.G * draw.Alpha / 255 + back.G * (255 - draw.Alpha) / 255;
+            uint b = draw.B * draw.Alpha / 255 + back.B * (255 - draw.Alpha) / 255;
+            return new Color(r, g, b, 255);
         }
 
         /// <summary>

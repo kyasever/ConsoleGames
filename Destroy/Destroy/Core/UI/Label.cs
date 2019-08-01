@@ -7,8 +7,15 @@
     {
         public static Label Create()
         {
-            UIObject obj = new UIObject();
+            UIObject obj = new UIObject("Label","UI");
             Label label = obj.AddComponent<Label>();
+            return label;
+        }
+
+        public static Label Create(string text)
+        {
+            var label = Create();
+            label.Text = text;
             return label;
         }
 
@@ -18,8 +25,11 @@
             get => text;
             set
             {
-                text = value;
-                DrawString(value);
+                if(value != text)
+                {
+                    text = value;
+                    DrawString(value);
+                }
             }
         }
     }
