@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{29678C39-7511-4CE8-925F-08E663872CDA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Destroy</RootNamespace>
+    <AssemblyName>Destroy</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Destroy.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\Tools\Maze.cs" />
+    <Compile Include="Core\UI\BoxDrawing.cs" />
+    <Compile Include="Core\UI\SystemUI.cs" />
+    <Compile Include="Core\Core\StandardIO.cs" />
+    <Compile Include="Core\Core\Enums.cs" />
+    <Compile Include="Standard\Box-TPS\CameraController.cs" />
+    <Compile Include="Standard\Box-TPS\Shooter.cs" />
+    <Compile Include="Standard\Box-TPS\TPSScene.cs" />
+    <Compile Include="Standard\Maze-SRPG\Cursor.cs" />
+    <Compile Include="Standard\Maze-SRPG\SRPGScene.cs" />
+    <Compile Include="Standard\Maze-SRPG\Layer.cs" />
+    <Compile Include="Standard\Maze-SRPG\Map.cs" />
+    <Compile Include="Standard\Maze-SRPG\WizardAgent.cs" />
+    <Compile Include="Standard\Start\StartScene.cs" />
+    <Compile Include="Windows\WindorsEngine.cs" />
+    <Compile Include="Windows\Windows.cs" />
+    <Compile Include="Winform\EditorSystem.cs" />
+    <Compile Include="Winform\ExtandVector2Int.cs" />
+    <Compile Include="Winform\FormEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Winform\FormEditor.Designer.cs">
+      <DependentUpon>FormEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Tools\Navigation .cs" />
+    <Compile Include="Core\Tools\Resource.cs" />
+    <Compile Include="Winform\EditorRuntime.cs" />
+    <Compile Include="Winform\WinformEngine.cs" />
+    <Compile Include="Core\Components\Camera.cs" />
+    <Compile Include="Core\Components\CharacterController.cs" />
+    <Compile Include="Core\Object\RayCastTarget.cs" />
+    <Compile Include="Core\Core\DestroySystem.cs" />
+    <Compile Include="Core\Core\TypeRootConverter.cs" />
+    <Compile Include="Core\Systems\CallScriptSystem.cs" />
+    <Compile Include="Core\Systems\EventHandlerSystem.cs" />
+    <Compile Include="Core\Core\SceneManager.cs" />
+    <Compile Include="Winform\ComAttribute.cs" />
+    <Compile Include="Core\Tools\RefHelper.cs" />
+    <Compile Include="Core\UI\Rectangle.cs" />
+    <Compile Include="Core\Systems\InputSystem.cs" />
+    <Compile Include="Core\Tools\Struct\Color.cs" />
+    <Compile Include="Core\Core\Config.cs" />
+    <Compile Include="Core\UI\UIFactory.cs" />
+    <Compile Include="Core\Tools\Utils\Matrix.cs" />
+    <Compile Include="Core\Tools\Utils\Singleton.cs" />
+    <Compile Include="Core\Systems\InvokeSystem.cs" />
+    <Compile Include="Core\Systems\RendererSystem.cs" />
+    <Compile Include="Core\Tools\Time.cs" />
+    <Compile Include="Core\Object\Renderer.cs" />
+    <Compile Include="Core\Core\RuntimeEngine.cs" />
+    <Compile Include="Core\Object\Component.cs" />
+    <Compile Include="Core\Object\GameObject.cs" />
+    <Compile Include="Core\Components\Script.cs" />
+    <Compile Include="Core\Tools\Struct\Vector2Float.cs" />
+    <Compile Include="Core\Tools\Utils\Mathematics.cs" />
+    <Compile Include="Core\Object\Collider.cs" />
+    <Compile Include="Core\Systems\PhysicsSystem.cs" />
+    <Compile Include="Core\Tools\Debug.cs" />
+    <Compile Include="Core\Tools\Input.cs" />
+    <Compile Include="Core\Tools\Struct\Vector2.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\Tools\Utils\CharUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Versions.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Winform\FormEditor.resx">
+      <DependentUpon>FormEditor.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F451CFBD-B30E-49CD-B16D-D588D24942F1}</ProjectGuid>
+    <ProjectGuid>{F1A3EC9C-1340-4E7F-A778-63D1C687853E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>TankSim</RootNamespace>
-    <AssemblyName>TankSim</AssemblyName>
+    <RootNamespace>HealerSimulator</RootNamespace>
+    <AssemblyName>HealerSimulator</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -46,6 +46,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrameWork\ProgressBar.cs" />
+    <Compile Include="FrameWork\Utils.cs" />
+    <Compile Include="GameCore\Character.cs" />
+    <Compile Include="GameCore\Controller.cs" />
+    <Compile Include="GameCore\GameMode.cs" />
+    <Compile Include="GameCore\Skada.cs" />
+    <Compile Include="GameCore\Skill.cs" />
+    <Compile Include="Interface\FocusPanel.cs" />
+    <Compile Include="Interface\PlayerPanel.cs" />
+    <Compile Include="Interface\TeamGridPanel.cs" />
+    <Compile Include="Interface\MainScene.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -69,6 +80,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Destroy\Destroy.csproj">
+      <Project>{29678c39-7511-4ce8-925f-08e663872cda}</Project>
+      <Name>Destroy</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
