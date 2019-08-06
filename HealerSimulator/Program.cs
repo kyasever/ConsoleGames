@@ -16,6 +16,7 @@ namespace HealerSimulator
             Config.TickPerSecond = 120;
             Config.ScreenWidth = 70;
             Config.ScreenHeight = 40;
+            Config.CharWidth = CharWidthEnum.Double;
             //用编辑器模式开始游戏
             WinformEngine.OpenWithEditor(StartGame);
         }
@@ -36,13 +37,11 @@ namespace HealerSimulator
     {
         //开启游戏主场景
         MainScene scene;
-
         public override void OnStart()
         {
             Destroy.Button btn = UIFactroy.CreateButton(new Vector2(20, 20), "开始游戏", 
                 () => { scene = new MainScene(); SceneManager.Load(scene, LoadSceneMode.Single);  });
         }
+
     }
-
-
 }
