@@ -27,9 +27,8 @@ namespace HealerSimulator
         public static Random RandomInstance = new Random(5);
 
         /// <summary>
-        /// 使用一个极度复杂的方法来解决技能结算问题,内部之后可能再考虑用设计模式来进行整理,但是入口一定是只有这一个
-        /// s: 准备结算的技能 t:技能的攻击目标
-        /// 方法通过判定s和t的各种数据来得出结论和操作攻击结果
+        /// 之后要更换方式
+        /// 依旧使用Behit方式,然后给Player中的增加
         /// </summary>
         public void CastSkill(Skill s,Character t)
         {
@@ -91,7 +90,11 @@ namespace HealerSimulator
 
         public Character FocusCharacter;
 
-        public List<Character> TeamCharaters; 
+        public List<Character> TeamCharaters;
+
+        public Action UpdateEvent;
+
+
 
         /// <summary>
         /// 创建教学关
@@ -108,8 +111,28 @@ namespace HealerSimulator
             TeamCharaters.Add(Character.CreateNPC("中", "水晶核心", 6000));
             Character c= Character.CreateHealerPaladin();
 
+            var controller = new PlayerController(c);
 
             TeamCharaters.Add(c);
+
+            Player = c;
+            FocusCharacter = Player;
+        }
+
+        public void InitGame(int difficultyLevel)
+        {
+            Boss = Character.CreateNPC("B", "这一个长长长的BOSS", 25000);
+            Boss.HP = 22000;
+
+            TeamCharaters = new List<Character>();
+            TeamCharaters.Add(Character.CreateNPC("法", "粗心的法师", 1650));
+            TeamCharaters.Add(Character.CreateNPC("坦", "平庸的坦克", 2800));
+            TeamCharaters.Add(Character.CreateNPC("斗", "鲁莽的斗士", 2200));
+            TeamCharaters.Add(Character.CreateNPC("中", "水晶核心", 6000));
+            Character c = Character.CreateHealerPaladin();
+
+            TeamCharaters.Add(c);
+
             Player = c;
             FocusCharacter = Player;
         }

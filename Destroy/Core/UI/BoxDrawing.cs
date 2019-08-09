@@ -1,14 +1,27 @@
 ﻿namespace Destroy
 {
-    using Destroy;
     using System.Text;
 
-
+    /// <summary>
+    /// 保存一些特殊Unicode字符
+    /// </summary>
     public class UnicodeDrawing
     {
+        /// <summary>
+        /// '█'
+        /// </summary>
         public static char Block8_8 = '█';
+        /// <summary>
+        /// '▉'
+        /// </summary>
         public static char Block7_8 = '▉';
+        /// <summary>
+        /// '▊'
+        /// </summary>
         public static char Block6_8 = '▊';
+        /// <summary>
+        /// '▋'
+        /// </summary>
         public static char Block5_8 = '▋';
         public static char Block4_8 = '▌';
         public static char Block3_8 = '▍';

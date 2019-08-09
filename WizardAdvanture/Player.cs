@@ -412,9 +412,9 @@ namespace WizardAdvanture
             sg.pic = "岩";
 
             //添加三个技能
-            sg.skills.Add(Skill.CreateZhongChui(false));
-            sg.skills.Add(Skill.CreateShanFeng(false));
-            sg.skills.Add(Skill.CreateVoid());
+            sg.skills.Add(Skill.CreateZhongChui(true));
+            sg.skills.Add(Skill.CreateShanFeng(true));
+            sg.skills.Add(Skill.CreateShenZhang(sg.name));
             sg.skills.Add(Skill.CreateRest(5, 2));
             //把另两个增强版本藏起来算了
             sg.skills.Add(Skill.CreateZhongChui(true));
@@ -438,14 +438,14 @@ namespace WizardAdvanture
             sg.act = 0; sg.actMax = 10;
             sg.pic = "烈";
 
-            sg.skills.Add(Skill.CreateHuoYanDan(false));
-            sg.skills.Add(Skill.CreateYunShi(false));
-            sg.skills.Add(Skill.CreateVoid());
+            sg.skills.Add(Skill.CreateHuoYanDan(true));
+            sg.skills.Add(Skill.CreateYunShi(true));
+            sg.skills.Add(Skill.CreateShenZhang(sg.name));
             sg.skills.Add(Skill.CreateRest(0, 2));
             sg.skills.Add(Skill.CreateHuoYanDan(true));
             sg.skills.Add(Skill.CreateYunShi(true));
 
-            sg.skills.Add(Skill.CreateRestAfterTurn(0, 20));
+            sg.skills.Add(Skill.CreateRestAfterTurn(0, 30));
             foreach (var v in sg.skills)
                 v.caster = sg;
             return sg;
@@ -464,13 +464,13 @@ namespace WizardAdvanture
             sg.pic = "愈";
 
             //添加三个技能
-            sg.skills.Add(Skill.CreateLingQuan(false));
-            sg.skills.Add(Skill.CreateYuHe(false));
-            sg.skills.Add(Skill.CreateVoid());
+            sg.skills.Add(Skill.CreateLingQuan(true));
+            sg.skills.Add(Skill.CreateYuHe(true));
+            sg.skills.Add(Skill.CreateShenZhang(sg.name));
             sg.skills.Add(Skill.CreateRest(5, 5));
             sg.skills.Add(Skill.CreateLingQuan(true));
             sg.skills.Add(Skill.CreateYuHe(true));
-            sg.skills.Add(Skill.CreateRestAfterTurn(20, 20));
+            sg.skills.Add(Skill.CreateRestAfterTurn(20, 30));
             foreach (var v in sg.skills)
                 v.caster = sg;
             return sg;
@@ -489,10 +489,10 @@ namespace WizardAdvanture
             sg.pic = "寒";
 
             //添加三个技能
-            sg.skills.Add(Skill.CreateBilzzard(false));
-            sg.skills.Add(Skill.CreateIceWall(false));
-            sg.skills.Add(Skill.CreateVoid());
-            sg.skills.Add(Skill.CreateRest(0, 8));
+            sg.skills.Add(Skill.CreateBilzzard(true));
+            sg.skills.Add(Skill.CreateIceWall(true));
+            sg.skills.Add(Skill.CreateShenZhang(sg.name));
+            sg.skills.Add(Skill.CreateRest(0, 10));
             sg.skills.Add(Skill.CreateBilzzard(true));
             sg.skills.Add(Skill.CreateIceWall(true));
             sg.skills.Add(Skill.CreateRestAfterTurn(0, 40));
@@ -517,13 +517,13 @@ namespace WizardAdvanture
             sg.pic = "影";
 
             //添加三个技能
-            sg.skills.Add(Skill.CreateBeiCi(false));
-            sg.skills.Add(Skill.CreateDaoShan(false));
-            sg.skills.Add(Skill.CreateVoid());
+            sg.skills.Add(Skill.CreateBeiCi(true));
+            sg.skills.Add(Skill.CreateDaoShan(true));
+            sg.skills.Add(Skill.CreateShenZhang(sg.name));
             sg.skills.Add(Skill.CreateRest(10, 0));
             sg.skills.Add(Skill.CreateBeiCi(true));
             sg.skills.Add(Skill.CreateDaoShan(true));
-            sg.skills.Add(Skill.CreateRestAfterTurn(0, 10));
+            sg.skills.Add(Skill.CreateRestAfterTurn(0, 20));
             foreach (var v in sg.skills)
                 v.caster = sg;
             return sg;
@@ -539,19 +539,19 @@ namespace WizardAdvanture
             sg.discription1 = "坦克,产生仇恨与治疗";
             sg.discription2 = "拯救者,濒死时抵挡一次伤害";
             sg.name = "圣者";
-            sg.hp = 300; sg.hpMax = 300;
+            sg.hp = 400; sg.hpMax = 400;
             sg.mp = 150; sg.mpMax = 150;
             sg.act = 8; sg.actMax = 8;
             sg.pic = "圣";
 
             //添加三个技能
-            sg.skills.Add(Skill.CreateCuiZi(false));
-            sg.skills.Add(Skill.CreateZhengjiu(false));
-            sg.skills.Add(Skill.CreateVoid());
+            sg.skills.Add(Skill.CreateCuiZi(true));
+            sg.skills.Add(Skill.CreateZhengjiu(true));
+            sg.skills.Add(Skill.CreateShenZhang(sg.name));
             sg.skills.Add(Skill.CreateRest(0, 5));
             sg.skills.Add(Skill.CreateCuiZi(true));
             sg.skills.Add(Skill.CreateZhengjiu(true));
-            sg.skills.Add(Skill.CreateRestAfterTurn(0, 20));
+            sg.skills.Add(Skill.CreateRestAfterTurn(0, 30));
             foreach (var v in sg.skills)
                 v.caster = sg;
             return sg;

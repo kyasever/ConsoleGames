@@ -265,7 +265,7 @@
             skill.type = SkillType.Damage;
 
             skill.range = 1;
-            skill.costAct = 1;
+            skill.costAct = 2;
             skill.cursorType = Scene.CursorType.Point;
             if (isIncreased)
             {
@@ -320,12 +320,12 @@
             skill.type = SkillType.Damage;
 
             skill.costMana = 10;
-            skill.damage = 5;
+            skill.damage = 10;
             skill.costAct = 2;
 
             if (isIncreased)
             {
-                skill.discription = "神圣之锤,远距离大范围,产生仇恨,5伤害";
+                skill.discription = "神圣之锤,远距离大范围,产生仇恨,10伤害";
                 skill.cursorType = Scene.CursorType.Square;
                 skill.range = 6;
                 skill.name = "神圣之锤";
@@ -333,7 +333,7 @@
             }
             else
             {
-                skill.discription = "正义之锤,中距离单体,产生仇恨,5伤害";
+                skill.discription = "正义之锤,中距离单体,产生仇恨,10伤害";
                 skill.cursorType = Scene.CursorType.Point;
                 skill.range = 4;
                 skill.name = "正义之锤";
@@ -432,7 +432,7 @@
                 skill.discription = "妨碍之击,远距离10伤害,造成仇恨和减速效果";
                 skill.name = "神杖-妨碍之击";
                 skill.range = 6;
-                skill.damage = 10;
+                skill.damage = 20;
                 skill.costAct = 2;
                 skill.costMana = 20;
                 skill.cursorType = Scene.CursorType.Cross;

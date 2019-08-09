@@ -97,7 +97,8 @@ namespace HealerSimulator
 
         public void Refresh(Character c)
         {
-            if(c.CurSkill == null)
+            Skill s = c.CastingSkill;
+            if(s == null)
             {
                 labelUp.Rendering("当前没有释放技能");
 
@@ -107,14 +108,14 @@ namespace HealerSimulator
                 progressCasting.Value = 0;
                 return;
             }
-            float duringTime = c.CurSkill.CastingInterval - c.CurSkill.CastingRelease;
+            float duringTime = s.CastingInterval - s.CastingRelease;
             StringBuilder sb = new StringBuilder();
             sb.Append("[");
-            sb.Append(c.CurSkill.skillName);
+            sb.Append(s.skillName);
             sb.Append("][");
             sb.Append(duringTime.ToString("F2"));
             sb.Append("/");
-            sb.Append(c.CurSkill.CastingInterval.ToString("F2"));
+            sb.Append(s.CastingInterval.ToString("F2"));
             sb.Append("]");
             labelUp.Rendering(sb.ToString());
 
@@ -122,7 +123,7 @@ namespace HealerSimulator
             progressCommonCD.MaxValue = c.CommonInterval;
 
             progressCasting.Value = duringTime;
-            progressCasting.MaxValue = c.CurSkill.CastingInterval;
+            progressCasting.MaxValue = s.CastingInterval;
         }
     }
 

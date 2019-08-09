@@ -15,21 +15,32 @@ namespace HealerSimulator
     /// </summary>
     public class Skill
     {
-        public int Atk = 100;
-         
         public enum SkillType
         {
             NomalHeal,
             MiutiHeal,
+            NomalHit,
         }
 
+        //技能的种类,这个之后会考虑删除. 然后用多个标准处理函数进行处理
         public SkillType Type;
+
+        #region 静态创建某些特定的Skill,之后考虑移动到别的类里
+        public static Skill CreateNormalHitSkill(Character caster,string name , int atk , float cd)
+        {
+            Skill s = new Skill()
+            {
+                Caster = caster,
+                Type = SkillType.NomalHit,
+                Atk = atk,
+                CDDefault = cd,
+                skillName = name,
+            };
+            return s;
+        }
 
         public static Skill CreateSkillP1(Character caster, ConsoleKey key)
         {
-            //secDecrypt 
-
-
             Skill s = new Skill()
             {
                 Key = key,
@@ -108,31 +119,26 @@ namespace HealerSimulator
             };
             return s;
         }
+        #endregion
 
+        public string skillName = "技能名";
+        public string skillDiscription = "技能效果";
+        public int Atk = 100;
 
-
+        //技能的绑定按键
         public ConsoleKey Key;
 
+        //这个技能的释放者
         public Character Caster;
 
+        /// <summary>
+        /// 技能被释放时执行的操作,通常使用静态函数进行托管,特定技能需要编写特定的静态函数进行处理
+        /// 参数1 Skill    代表攻击者  
+        /// 参数2 GameMode 代表被攻击者
+        /// </summary>
+        public Action<Skill,GameMode> OnCastEvent;
 
-
-        public bool CanCast
-        {
-            get
-            {
-                if (CDRelease > 0)
-                {
-                    return false;
-                }
-                if (Caster.MP < MPCost)
-                {
-                    return false;
-                }
-                return true;
-            }
-        }
-
+        //技能的MP消耗
         public int MPCost = 10;
 
         /// <summary>
@@ -151,9 +157,33 @@ namespace HealerSimulator
         public float CDRelease = -1;
 
         /// <summary>
+        /// 剩余施法时间
+        /// </summary>
+        public float CastingRelease = -1f;
+
+        /// <summary>
         /// 默认施法时间,负数表示为瞬发技能
         /// </summary>
         public float CastingDefaultInterval = 1.5f;
+
+        /// <summary>
+        /// 判断是否满足这个技能的使用条件
+        /// </summary>
+        public bool CanCast
+        {
+            get
+            {
+                if (CDRelease > 0)
+                {
+                    return false;
+                }
+                if (Caster.MP < MPCost)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
 
         /// <summary>
         /// 判断是否是瞬发技能
@@ -164,13 +194,5 @@ namespace HealerSimulator
         /// 实际施法时间
         /// </summary>
         public float CastingInterval { get => CastingDefaultInterval / Caster.Speed; }
-
-        /// <summary>
-        /// 剩余施法时间
-        /// </summary>
-        public float CastingRelease = -1f;
-
-        public string skillName = "技能名";
-        public string skillDiscription = "技能效果";
     }
 }

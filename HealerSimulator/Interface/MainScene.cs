@@ -36,9 +36,18 @@ namespace HealerSimulator
             GameObject.CreateWith<BossHUD>("BossUI", "GameState", localPosition: new Vector2(1, 36));
 
             //控制器也是创建出来,然后控制器自己去取数据
-            GameObject.CreateWith<PlayerController>("PlayerController", "Controller");
+            GameObject.CreateWith<GameLogic>("GameLogic", "Controller");
         }
     }
+
+    public class GameLogic : Script
+    {
+        public override void Update()
+        {
+            GameMode.Instance.UpdateEvent.Invoke();
+        }
+    }
+
 
 
 

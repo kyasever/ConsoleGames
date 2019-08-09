@@ -7,7 +7,13 @@ using Destroy;
 
 namespace HealerSimulator
 {
-
+    public enum TeamDuty
+    {
+        Tank,
+        Healer,
+        MeleeDPS,
+        RangeDPS,
+    }
 
     /// <summary>
     /// 角色类 主要负责处理游戏逻辑和数据,和显示完全脱钩,和Destroy完全脱钩,没有生命周期,只有数据,和处理数据的函数
@@ -59,12 +65,25 @@ namespace HealerSimulator
         }
 
         /// <summary>
+        /// 暂时加一个这个,让Character接受某个Controller的托管
+        /// </summary>
+        public Controller controller;
+
+        public TeamDuty Duty = TeamDuty.MeleeDPS;
+
+        /// <summary>
+        /// 闪避率,这个值通常取决于这个角色的操作水平,只有可以被闪避的伤害才可以触发闪避效果
+        /// 取值范围0-1 1为完全闪避. 通常玩家控制角色闪避率为1,NPC闪避率较低
+        /// </summary>
+        public float Evasion = 0f;
+
+        /// <summary>
         /// 耐力 提升20血量
         /// </summary>
         public int Stama = 150;
 
         /// <summary>
-        /// 急速. 取值0-1
+        /// 急速. 取值1+ 2则为2倍速,0.5则为0.5倍速
         /// </summary>
         public float Speed = 1.2f;
 
@@ -89,19 +108,14 @@ namespace HealerSimulator
         public float Defense = 0f;
 
         /// <summary>
-        /// 当前正在释放的法术
+        /// 当前正在释放的法术,为null说明当前没有正在释放法术
         /// </summary>
-        public Skill CurSkill = null;
+        public Skill CastingSkill = null;
 
         /// <summary>
         /// 当开始施法时,只有空格可以打断施法.
         /// </summary>
-        public bool IsCasting = false;
-
-        /// <summary>
-        /// 当开始一个施法时,即刻进入公cd,公cd中不可以施法
-        /// </summary>
-        public bool CanCast = true;
+        public bool IsCasting { get { return CastingSkill != null; } }
 
         /// <summary>
         /// 公cd = 1.5s减急速加成
@@ -117,7 +131,6 @@ namespace HealerSimulator
         /// 保存对应键位对应的技能
         /// </summary>
         public List<Skill> SkillList = new List<Skill>();
-
 
         /// <summary>
         /// 角色职业
@@ -149,15 +162,12 @@ namespace HealerSimulator
                 else if (hp <= 0)
                 {
                     hp = 0;
-                    OnDeath();
+                    //OnDeath();
                 }
             }
         }
 
-        public virtual void OnDeath()
-        {
-
-        }
+        public bool IsAlive = true;
 
         /// <summary>
         /// 当前最大生命

@@ -38,6 +38,8 @@ namespace WizardAdvanture
             bossCollection = new BossCollection(scene);
             bossCollection.Init();
 
+            ItemPos = new List<Pos>();
+
             if (scene.gameMode == Scene.GameMode.miuti)
             {
                 ItemPos = MiutiModeItemPos;
@@ -57,41 +59,36 @@ namespace WizardAdvanture
                 scene.blocks[v.x, v.y] = bb;
             }
 
-            Block b;
-            b = BlockFactory.CreateItem();
-            b.name = "聚能手套";
-            b.Pic = "➀";
-            scene.blocks[ItemPos[0].x, ItemPos[0].y] = b;
-
-            b = BlockFactory.CreateItem();
-            b.name = "聚能手套";
-            b.Pic = "➀";
-            scene.blocks[ItemPos[1].x, ItemPos[1].y] = b;
-
-            b = BlockFactory.CreateItem();
-            b.name = "强能手套";
-            b.Pic = "➁";
-            scene.blocks[ItemPos[2].x, ItemPos[2].y] = b;
-
-            b = BlockFactory.CreateItem();
-            b.name = "强能手套";
-            b.Pic = "➁";
-            scene.blocks[ItemPos[3].x, ItemPos[3].y] = b;
+            //Block b;
+            //b = BlockFactory.CreateItem();
+            //b.name = "聚能手套";
+            //b.Pic = "➀";
+            //scene.blocks[ItemPos[0].x, ItemPos[0].y] = b;
 
             //b = BlockFactory.CreateItem();
-            //b.name = "大盾";
-            //b.Pic = "⛨";
-            //scene.blocks[8, 2] = b;
+            //b.name = "聚能手套";
+            //b.Pic = "➀";
+            //scene.blocks[ItemPos[1].x, ItemPos[1].y] = b;
 
-            b = BlockFactory.CreateItem();
-            b.name = "神杖";
-            b.Pic = "⛏";
-            scene.blocks[ItemPos[4].x, ItemPos[4].y] = b;
+            //b = BlockFactory.CreateItem();
+            //b.name = "强能手套";
+            //b.Pic = "➁";
+            //scene.blocks[ItemPos[2].x, ItemPos[2].y] = b;
 
-            b = BlockFactory.CreateItem();
-            b.name = "神杖";
-            b.Pic = "⛏";
-            scene.blocks[ItemPos[5].x, ItemPos[5].y] = b;
+            //b = BlockFactory.CreateItem();
+            //b.name = "强能手套";
+            //b.Pic = "➁";
+            //scene.blocks[ItemPos[3].x, ItemPos[3].y] = b;
+
+            //b = BlockFactory.CreateItem();
+            //b.name = "神杖";
+            //b.Pic = "⛏";
+            //scene.blocks[ItemPos[4].x, ItemPos[4].y] = b;
+
+            //b = BlockFactory.CreateItem();
+            //b.name = "神杖";
+            //b.Pic = "⛏";
+            //scene.blocks[ItemPos[5].x, ItemPos[5].y] = b;
 
             //后两个门的位置
             scene.blocks[32, 17] = BlockFactory.CreateDoor();
