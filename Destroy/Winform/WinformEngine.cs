@@ -11,8 +11,8 @@
     /// </summary>
     public class WinformEngine
     {
-        private static Thread FormThread;
-        private static Thread EditorThread;
+        public static Thread FormThread;
+        public static Thread EditorThread;
 
         /// <summary>
         /// 使用Winform渲染,但是不打开Editor组件.目前实现的有点偷懒
@@ -28,12 +28,14 @@
         /// Winform的初始化.
         /// </summary>
         [STAThread]
-        public static void OpenWithEditor(Action action)
+        public static void OpenWithEditor(Action action, string FormName = "Destroy")
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             var mainForm = new FormEditor();
+
+            mainForm.Text = FormName;
 
             #region 关于注册的说明
             //任何引擎入口要搞定的事情就是注册好这几个事件

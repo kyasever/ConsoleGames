@@ -37,7 +37,7 @@ namespace HealerSimulator
         /// 使用静态方法创建一个标准玩家控制的角色,这个角色的职业是Paladin
         /// </summary>
         /// <returns></returns>
-        public static Character CreateHealerPaladin()
+        public static Character CreateHealer()
         {
             Character c = new Character()
             {
@@ -49,7 +49,7 @@ namespace HealerSimulator
                 Master = 0f,
                 Defense = 0f,
                 MaxAP = 0,
-                ClassName = "圣",
+                ClassName = "奶",
                 CharacterName = "完美的操纵者",
                 Description = "玩家控制单位",
             };
@@ -76,6 +76,29 @@ namespace HealerSimulator
         /// 取值范围0-1 1为完全闪避. 通常玩家控制角色闪避率为1,NPC闪避率较低
         /// </summary>
         public float Evasion = 0f;
+
+
+        /// <summary>
+        /// 返回是否可以命中该单位的判定,取决于该单位的闪避,和命中
+        /// </summary>
+        /// <param name="hit">命中修正 0为无修正 -1为 -100%命中 1为+100%命中</param>
+        /// <returns></returns>
+        public bool CanHit(float hit)
+        {
+            float f = Evasion - hit;
+            double d = GameMode.RandomInstance.NextDouble();
+            return d > f;
+        }
+
+        /// <summary>
+        /// 是否可以爆击的判定
+        /// </summary>
+        /// <returns></returns>
+        public bool CanCrit()
+        {
+            return GameMode.RandomInstance.NextDouble() < Crit;
+        }
+
 
         /// <summary>
         /// 耐力 提升20血量
@@ -162,6 +185,7 @@ namespace HealerSimulator
                 else if (hp <= 0)
                 {
                     hp = 0;
+                    IsAlive = false;
                     //OnDeath();
                 }
             }

@@ -32,7 +32,7 @@ namespace HealerSimulator
         public static List<Vector2> CreateRecMesh(int width, int height)
         {
             List<Vector2> result = new List<Vector2>();
-            for (int h = height - 1; h > 0; h--)
+            for (int h = height - 1; h >= 0; h--)
             {
                 for (int w = 0; w < width; w++)
                 {

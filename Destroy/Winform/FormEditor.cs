@@ -420,6 +420,7 @@ namespace Destroy.Winform
 
         private void FormEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
+            WinformEngine.EditorThread.Interrupt();
             RuntimeEngine.Enabled = false;
             //关闭主窗口时关闭所有线程
             System.Environment.Exit(0);

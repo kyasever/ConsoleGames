@@ -48,7 +48,7 @@ namespace HealerSimulator
             }
             else if(s.Type == Skill.SkillType.MiutiHeal)
             {
-                foreach(var c in TeamCharaters)
+                foreach(var c in TeamCharacters)
                 {
                     c.HP += s.Atk;
 
@@ -67,15 +67,11 @@ namespace HealerSimulator
             Debug.Log(sb.ToString());
         }
 
-        private static GameMode instance;
+        private static readonly GameMode instance = new GameMode();
         public static GameMode Instance
         {
             get
             {
-                if(instance == null)
-                {
-                    instance = new GameMode();
-                }
                 return instance;
             }
         }
@@ -90,11 +86,22 @@ namespace HealerSimulator
 
         public Character FocusCharacter;
 
-        public List<Character> TeamCharaters;
+        public List<Character> TeamCharacters;
+
+        public List<Character> DeadCharacters = new List<Character>();
 
         public Action UpdateEvent;
 
 
+        public void Clear()
+        {
+            TeamCharacters = new List<Character>();
+            DeadCharacters = new List<Character>();
+            Boss = null;
+            Player = null;
+            FocusCharacter = null;
+            UpdateEvent = null;
+        }
 
         /// <summary>
         /// 创建教学关
@@ -104,16 +111,18 @@ namespace HealerSimulator
             Boss = Character.CreateNPC("B", "这一个长长长的BOSS", 25000);
             Boss.HP = 22000;
 
-            TeamCharaters = new List<Character>();
-            TeamCharaters.Add(Character.CreateNPC("法", "粗心的法师", 1650));
-            TeamCharaters.Add(Character.CreateNPC("坦", "平庸的坦克", 2800));
-            TeamCharaters.Add(Character.CreateNPC("斗", "鲁莽的斗士", 2200));
-            TeamCharaters.Add(Character.CreateNPC("中", "水晶核心", 6000));
-            Character c= Character.CreateHealerPaladin();
+            TeamCharacters = new List<Character>();
+            TeamCharacters.Add(Character.CreateNPC("远", "粗心的法师", 1650));
+            TeamCharacters.Add(Character.CreateNPC("坦", "平庸的坦克", 2800));
+            TeamCharacters.Add(Character.CreateNPC("近", "鲁莽的斗士", 2200));
+            TeamCharacters.Add(Character.CreateNPC("近", "水晶核心", 6000));
+            Character c= Character.CreateHealer();
 
             var controller = new PlayerController(c);
 
-            TeamCharaters.Add(c);
+
+
+            TeamCharacters.Add(c);
 
             Player = c;
             FocusCharacter = Player;
@@ -121,18 +130,37 @@ namespace HealerSimulator
 
         public void InitGame(int difficultyLevel)
         {
-            Boss = Character.CreateNPC("B", "这一个长长长的BOSS", 25000);
-            Boss.HP = 22000;
+            //创建小队
+            TeamCharacters = new List<Character>();
+            TeamCharacters.Add(Character.CreateNPC("远", "粗心的法师", 1650));
+            TeamCharacters.Add(Character.CreateNPC("坦", "平庸的坦克", 2800));
+            TeamCharacters[1].Duty = TeamDuty.Tank;
+            TeamCharacters.Add(Character.CreateNPC("近", "鲁莽的斗士", 2200));
+            TeamCharacters.Add(Character.CreateNPC("近", "可靠的武士", 1800));
 
-            TeamCharaters = new List<Character>();
-            TeamCharaters.Add(Character.CreateNPC("法", "粗心的法师", 1650));
-            TeamCharaters.Add(Character.CreateNPC("坦", "平庸的坦克", 2800));
-            TeamCharaters.Add(Character.CreateNPC("斗", "鲁莽的斗士", 2200));
-            TeamCharaters.Add(Character.CreateNPC("中", "水晶核心", 6000));
-            Character c = Character.CreateHealerPaladin();
+            foreach(var v in TeamCharacters)
+            {
+                v.HP = v.MaxHP;
+                v.Evasion = 0.7f;
+                v.controller = new NPCController(v);
+            }
+            
+            //创建玩家
+            Character c = Character.CreateHealer();
+            c.Evasion = 1f - difficultyLevel * 0.1f;
+            c.controller = new PlayerController(c);
+            TeamCharacters.Add(c);
 
-            TeamCharaters.Add(c);
+            //创建BOSS
+            int hp = (int)(25000 * (1 + difficultyLevel / 10f));
+            Boss = Character.CreateNPC("B", "这一个长长长的BOSS", hp);
+            Boss.HP = Boss.MaxHP;
+            Boss.controller = new BossController(Boss, difficultyLevel);
 
+            //创建游戏控制器
+            new GameContrtoller();
+
+            //初始化game设定
             Player = c;
             FocusCharacter = Player;
         }

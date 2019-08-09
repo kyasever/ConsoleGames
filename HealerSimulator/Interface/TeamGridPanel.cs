@@ -19,7 +19,7 @@ namespace HealerSimulator
 
         public override void Awake()
         {
-            foreach(var c in game.TeamCharaters)
+            foreach(var c in game.TeamCharacters)
             {
                 var hud = CreateCharacterHUD();
                 hud.sourceCharacter = c;
@@ -142,7 +142,9 @@ namespace HealerSimulator
 
         public void Refresh(Character c)
         {
-            labelCom.Rendering("BOSS:" + c.CharacterName);
+            StringBuilder sb = new StringBuilder().Append("BOSS:").Append(c.CharacterName).Append("   ");
+            sb.Append("[").Append(c.HP).Append("/").Append(c.MaxHP).Append("]");
+            labelCom.Rendering(sb.ToString());
             progressBar.Value = c.HP;
             progressBar.MaxValue = c.MaxHP;
         }
@@ -273,7 +275,7 @@ namespace HealerSimulator
 
             if(b)
             {
-                if(GameMode.Instance.FocusCharacter != sourceCharacter)
+                if(GameMode.Instance.FocusCharacter != sourceCharacter && sourceCharacter.IsAlive)
                 {
                     GameMode.Instance.FocusCharacter = sourceCharacter;
                 }

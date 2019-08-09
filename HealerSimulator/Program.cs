@@ -18,13 +18,11 @@ namespace HealerSimulator
             Config.ScreenHeight = 40;
             Config.CharWidth = CharWidthEnum.Double;
             //用编辑器模式开始游戏
-            WinformEngine.OpenWithEditor(StartGame);
+            WinformEngine.OpenWithEditor(StartGame,"HealerSimulator");
         }
 
         private static void StartGame()
         {
-            //开始游戏的主逻辑
-            GameMode.Instance.Init();
             //开启游戏进入场景
             StartScene scene = new StartScene();
             SceneManager.Load(scene, LoadSceneMode.Single);
@@ -39,18 +37,33 @@ namespace HealerSimulator
         MainScene scene;
         public override void OnStart()
         {
-            Destroy.Button btn = UIFactroy.CreateButton(new Vector2(20, 20), "开始游戏", 
-                () => { scene = new MainScene(); SceneManager.Load(scene, LoadSceneMode.Single);   });
+            UIFactroy.CreateButton(new Vector2(20, 23), "开始教学关卡",
+                () => { GameMode.Instance.Init(); LoadScene(); });
+            UIFactroy.CreateButton(new Vector2(20, 22), "开始关卡简单(0)",
+                () => { GameMode.Instance.InitGame(0); LoadScene(); });
+            UIFactroy.CreateButton(new Vector2(20, 21), "开始关卡中等(5)",
+                () => { GameMode.Instance.InitGame(5); LoadScene(); });
+            UIFactroy.CreateButton(new Vector2(20, 20), "开始关卡理论极限(10)",
+                () => { GameMode.Instance.InitGame(10); LoadScene(); });
+            UIFactroy.CreateButton(new Vector2(20, 19), "开始关卡测试用(100)",
+                () => { GameMode.Instance.InitGame(100); LoadScene(); });
 
 
 
+            var text = Utils.CreateTextAera(20, 3, true);
+            text.Position = new Vector2(10, 14);
+            text.Rendering("欢迎来到本游戏,本游戏目前只有一个试玩关卡. 建议游玩简单或者中等难度,后面两个仅供测试用(大概是过不了关的)");
 
-
-            var text = Utils.CreateTextAera(20, 5, true);
-            text.Position = new Vector2(10, 10);
-            text.Rendering("欢迎来到本游戏,本游戏目前只有一个试玩关卡.");
+            text = Utils.CreateTextAera(20, 5, true);
+            text.Position = new Vector2(10, 8);
+            text.Rendering("操作说明,鼠标指向为治疗目标,123为单体治疗技能,45为群体治疗技能。(推荐多用134技能,应急使用25技能，并注意自己的蓝条不要oom)");
         }
-      
+
+        private void LoadScene()
+        {
+            scene = new MainScene();
+            SceneManager.Load(scene, LoadSceneMode.Single);
+        }
     }
 
 }

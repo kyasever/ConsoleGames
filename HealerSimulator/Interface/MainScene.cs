@@ -40,11 +40,20 @@ namespace HealerSimulator
         }
     }
 
+    /// <summary>
+    /// 这个类负责展示GameMode中的数据.并负责更新GameMode的进度(Controller)
+    /// </summary>
     public class GameLogic : Script
     {
+        public int ControllerNum { get => GameMode.Instance.UpdateEvent.GetInvocationList().Length; }
+
+        public int TeamCharacterCount { get => GameMode.Instance.TeamCharacters.Count; }
+
+        public int DeathCharacterCount { get => GameMode.Instance.DeadCharacters.Count; }
+
         public override void Update()
         {
-            GameMode.Instance.UpdateEvent.Invoke();
+            GameMode.Instance.UpdateEvent?.Invoke();
         }
     }
 

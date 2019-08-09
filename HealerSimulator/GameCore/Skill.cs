@@ -136,7 +136,7 @@ namespace HealerSimulator
         /// 参数1 Skill    代表攻击者  
         /// 参数2 GameMode 代表被攻击者
         /// </summary>
-        public Action<Skill,GameMode> OnCastEvent;
+        public Action<Skill> OnCastEvent;
 
         //技能的MP消耗
         public int MPCost = 10;

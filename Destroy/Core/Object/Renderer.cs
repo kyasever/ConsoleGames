@@ -71,15 +71,16 @@
         /// <summary>
         /// 添加一个char
         /// </summary>
-        public void AppendChar(char c)
+        public ColorStringBuilder AppendChar(char c)
         {
             result.Add(new RenderPoint(c.ToString(), ForeColor, BackColor));
+            return this;
         }
 
         /// <summary>
         /// 添加一个字符串
         /// </summary>
-        public void AppendString(string str)
+        public ColorStringBuilder AppendString(string str)
         {
             //从贴图加载字符串信息,并切分成List String
             List<string> grids = CharUtils.DivideString(str);
@@ -87,20 +88,21 @@
             {
                 result.Add(new RenderPoint(s, ForeColor, BackColor));
             }
+            return this;
         }
 
         /// <summary>
         /// 添加一个字符串,指定特定的前景色,不影响别的,加个塞
         /// </summary>
-        public void AppendString(string str,Color foreColor)
+        public ColorStringBuilder AppendString(string str,Color foreColor)
         {
-            
             //从贴图加载字符串信息,并切分成List String
             List<string> grids = CharUtils.DivideString(str);
             foreach (string s in grids)
             {
                 result.Add(new RenderPoint(s, foreColor, BackColor));
             }
+            return this;
         }
 
         /// <summary>

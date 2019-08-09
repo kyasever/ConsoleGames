@@ -18,8 +18,6 @@ namespace HealerSimulator
         protected Character c;
         protected GameMode game;
 
-
-
         /// <summary>
         /// 需要手动调用这个函数来给Controller指明其负责的对象
         /// </summary>
@@ -41,6 +39,16 @@ namespace HealerSimulator
         {
             if (c == null)
             {
+                return;
+            }
+
+            //如果检测到控制的人挂了,那么解除关系
+            if(!c.IsAlive)
+            {
+                game.TeamCharacters.Remove(c);
+                game.DeadCharacters.Add(c);
+                c.controller = null;
+                c = null;
                 return;
             }
 
@@ -153,17 +161,90 @@ namespace HealerSimulator
         }
     }
 
-    public static class BossSkillCaster
+    public static class SkillCaster
     {
-        public static void CastAOESkill(Skill s, GameMode game)
+        /// <summary>
+        /// 一个单位受到一个技能的攻击,返回伤害,日后可以改成返回结果
+        /// </summary>
+        /// <param name="s">攻击方的技能,日后可以改成一个新的结构体,包含攻击放技能的数据</param>
+        /// <param name="target">防守方的角色目标</param>
+        /// <returns>伤害,日后改成结果结构体</returns>
+        public static int HitCharacter(Skill s, Character target)
         {
-            foreach (var v in game.TeamCharaters)
-            {
-                game.CastSkill(s, v);
-            }
+            target.HP -= s.Atk;
+            return s.Atk;
         }
 
+        //加血
+        public static int HealCharacter(Skill s, Character target)
+        {
+            target.HP += s.Atk;
+            return s.Atk;
+        }
 
+        //向目标群体发动攻击
+        public static void CastAOESkill(Skill s, List<Character> target)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat("{0} 释放了 {1} ", s.Caster.CharacterName, s.skillName);
+
+            //消耗蓝
+            s.Caster.MP -= s.MPCost;
+
+            //掉血
+            foreach (var t in target)
+            {
+                int damage = HitCharacter(s, t);
+                sb.AppendFormat("对{0} | 造成了:{1}伤害", t.CharacterName, damage.ToString());
+            }
+
+            //进入CD
+            if (s.CDDefault > 0)
+            {
+                s.CDRelease = s.CD;
+            }
+            //输出结果
+            Debug.Log(sb.ToString());
+        }
+
+        //向目标发动单体攻击
+        public static void CastSingleSkill(Skill s, Character target)
+        {
+            if(target == null)
+            {
+                return;
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat("{0} 释放了 {1} ", s.Caster.CharacterName, s.skillName);
+
+            //消耗蓝
+            s.Caster.MP -= s.MPCost;
+
+            //掉血
+            int damage = HitCharacter(s, target);
+            sb.AppendFormat("对{0} | 造成了:{1}伤害", target.CharacterName, damage.ToString());
+
+            //进入CD
+            if (s.CDDefault > 0)
+            {
+                s.CDRelease = s.CD;
+            }
+            //输出结果
+            Debug.Log(sb.ToString());
+        }
+
+    }
+
+    public class NPCController : Controller
+    {
+        public NPCController(Character c) : base(c)
+        { 
+        }
+
+        public override void TickPerSecond()
+        {
+            GameMode.Instance.Boss.HP -= GameMode.RandomInstance.Next(64, 144);
+        }
     }
 
     /// <summary>
@@ -171,33 +252,55 @@ namespace HealerSimulator
     /// </summary>
     public class BossController : Controller
     {
-        public BossController(Character c , int diffcultyLevel) : base(c)
+        /// <summary>
+        /// 难度等级每增加10 boss的输出增加1倍
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="diffcultyLevel"></param>
+        public BossController(Character c, int diffcultyLevel) : base(c)
         {
-            //难度等级每增加10 boss的输出增加1倍
-            float miuti = (float)Math.Sqrt( 1 + diffcultyLevel * 0.1);
+            float miuti = (float)Math.Sqrt(1 + diffcultyLevel * 0.1);
             c.Speed = miuti;
 
             c.SkillList = new List<Skill>();
-            var skill = Skill.CreateNormalHitSkill(c, "地震", (int)(30 * miuti) , 2f);
+            var skill = Skill.CreateNormalHitSkill(c, "地震", (int)(30 * miuti), 2f);
             skill.CDRelease = 1f;
-            skill.OnCastEvent += BossSkillCaster.CastAOESkill;
+            skill.OnCastEvent += CastSkill1;
             c.SkillList.Add(skill);
 
             skill = Skill.CreateNormalHitSkill(c, "重击", (int)(1200 * miuti), 20f);
+            skill.CDRelease = 10f;
             skill.OnCastEvent += CastSkill2;
             c.SkillList.Add(skill);
 
             skill = Skill.CreateNormalHitSkill(c, "流火", (int)(450 * miuti), 20f);
-            skill.CDRelease = 10f;
+            skill.CDRelease = 20f;
             skill.OnCastEvent += CastSkill3;
             c.SkillList.Add(skill);
 
         }
 
-        // 2技能 打坦克
-        public void CastSkill2(Skill s, GameMode game)
+        private void CastSkill1(Skill s)
         {
-            game.CastSkill(s, GetTank());
+            SkillCaster.CastAOESkill(s, game.TeamCharacters);
+        }
+
+        private void CastSkill2(Skill s)
+        {
+            SkillCaster.CastSingleSkill(s, GetTank());
+        }
+
+        private void CastSkill3(Skill s)
+        {
+            List<Character> list = new List<Character>();
+            foreach (var c in game.TeamCharacters)
+            {
+                if (c.CanHit(0f))
+                {
+                    list.Add(c);
+                }
+            }
+            SkillCaster.CastAOESkill(s, list);
         }
 
         /// <summary>
@@ -205,39 +308,79 @@ namespace HealerSimulator
         /// </summary>
         private Character GetTank()
         {
-            foreach(var v in game.TeamCharaters)
+            foreach (var v in game.TeamCharacters)
             {
-                if(v.Duty == TeamDuty.Tank)
+                if (v.Duty == TeamDuty.Tank)
                 {
                     return v;
                 }
             }
-            return game.TeamCharaters[0];
+            if (game.TeamCharacters.Count > 0)
+                return game.TeamCharacters[0];
+            else
+                return null;
         }
 
-        // 3技能 打dps 取决于角色的控制力
-        public static void CastSkill3(Skill s, GameMode game)
-        {
-            foreach (var v in game.TeamCharaters)
-            {
-                game.CastSkill(s, v);
-            }
-        }
 
         //卡cd释放技能
         public override void Update()
         {
-            foreach(var s in c.SkillList)
+            if(game.TeamCharacters.Count == 0)
             {
-                if(s.CDRelease < 0)
+                return;
+            }
+            foreach (var s in c.SkillList)
+            {
+                s.CDRelease -= Time.DeltaTime;
+                if (s.CDRelease < 0)
                 {
-                    s.OnCastEvent.Invoke(s,game);
+                    s.OnCastEvent.Invoke(s);
                     s.CDRelease = s.CD;
                 }
+
             }
 
         }
+    }
 
+    /// <summary>
+    /// 游戏控制器,判断游戏是否结束了
+    /// </summary>
+    public class GameContrtoller
+    {
+        private GameMode game;
 
+        public GameContrtoller()
+        {
+            game = GameMode.Instance;
+            GameMode.Instance.UpdateEvent += Update;
+        }
+
+        private bool Enable = true;
+
+        public void Update()
+        {
+            if (!Enable)
+                return;
+            //全死光了
+            if(game.TeamCharacters.Count == 0)
+            {
+                Debug.Log("游戏结束");
+                ReturnScene();
+                Enable = false;
+            }
+            else if(!game.Boss.IsAlive)
+            {
+                Debug.Log("游戏胜利");
+                ReturnScene();
+                Enable = true;
+            }
+        }
+
+        private void ReturnScene()
+        {
+            game.Clear();
+            SceneManager.Load(new StartScene(), LoadSceneMode.Single);
+        }
     }
 }
