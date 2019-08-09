@@ -51,7 +51,7 @@ namespace TankSim
             SceneManager.Load(scene, LoadSceneMode.Single);
 
             MiutiObject miuti = MiutiObject.Create(false);
-            SingleObject single = GameObject.CreateWith<Single>();
+            SingleObject single = GameObject.CreateWith<SingleObject>();
         }
     }
 
@@ -78,10 +78,12 @@ namespace TankSim
             GameObject gameObject = new GameObject();
             gameObject.AddComponent<Renderer>();
             gameObject.AddComponent<Collider>();
+
             if(hasCom)
             {
-                gameObject.AddComponent<MyScript>();
+                gameObject.AddComponent<SingleObject>();
             }
+            return gameObject.AddComponent<MiutiObject>();
         }
     }
 

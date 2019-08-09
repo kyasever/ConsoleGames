@@ -97,4 +97,4 @@ Destroy引擎
 
 四.API文档
 ------
- - [wiki]()页面现已开放,点击跳转查看详细文档.
+ - [wiki](https://github.com/kyasever/ConsoleGames/wiki)页面现已开放,[点击跳转](https://github.com/kyasever/ConsoleGames/wiki)查看详细文档.

@@ -156,6 +156,7 @@ Methods
 
 | Type | Name | Summary | 
 | --- | --- | --- | 
+| `void` | Awake() |  | 
 | `void` | OnCollision(`Collision` collision) | 碰撞检测 测试用 | 
 | `void` | Update() | Update | 
 
@@ -177,6 +178,7 @@ Static Methods
 | `Int32` | GetCharWidth(`Char` c) | 返回一个字符的宽度 | 
 | `Int32` | GetStringWidth(`String` str) | 返回一个字符串的宽度 | 
 | `Boolean` | IsTabChar(`Char` c) | 判断一个char是不是制表符 | 
+| `String` | ParseNum(`Int32` num, `Int32` width) | 按照标准长度截断数字作为字符串,不足用空格补上(使用左补空格),超出截断 | 
 | `String` | SubStr(`String` str, `Int32` width) | 按照标准长度截断字符串,不足用空格补上,超出截断 | 
 
 
@@ -206,18 +208,17 @@ public class Destroy.Collider
 
 ```
 
-Properties
+Fields
 
 | Type | Name | Summary | 
 | --- | --- | --- | 
-| `List<Vector2>` | ColliderList | 碰撞体包含的点的列表,通常情况下来说保持和Mesh的数据相同 | 
+| `Action<Collision>` | OnCollisionEvent | 碰撞回调事件. | 
 
 
 Methods
 
 | Type | Name | Summary | 
 | --- | --- | --- | 
-| `void` | Initialize() |  | 
 | `void` | OnAdd() |  | 
 | `void` | OnRemove() |  | 
 
@@ -353,6 +354,7 @@ Methods
 | --- | --- | --- | 
 | `void` | AppendChar(`Char` c) | 添加一个char | 
 | `void` | AppendString(`String` str) | 添加一个字符串 | 
+| `void` | AppendString(`String` str, `Color` foreColor) | 添加一个字符串 | 
 | `List<RenderPoint>` | ToRenderer() | 输出为List,供Renderer使用 | 
 
 
@@ -412,6 +414,7 @@ Static Properties
 | `Int32` | ScreenHeight | 屏幕高度 | 
 | `Int32` | ScreenWidth | 屏幕宽度 | 
 | `Int32` | TickPerSecond | 引擎每秒Update的频率 | 
+| `Vector2` | WindowsSize | 游戏打开的面板大小 | 
 
 
 ## `CoordinateType`
@@ -505,27 +508,21 @@ public class Destroy.GameObject
 
 ```
 
-Fields
-
-| Type | Name | Summary | 
-| --- | --- | --- | 
-| `Action<Collision>` | OnCollisionEvent | 碰撞回调事件. | 
-
-
 Properties
 
 | Type | Name | Summary | 
 | --- | --- | --- | 
-| `Boolean` | Active | 是否激活 | 
-| `Int32` | ChildCount | 获取子物体个数 | 
+| `Int32` | ChildCount | 子物体的数量 | 
 | `List<GameObject>` | Childs | 该游戏物体的子物体集合 | 
 | `Int32` | ComponentCount | 获取组件个数 | 
 | `Dictionary<Type, Component>` | ComponentDict | 存成字典形式的组件 | 
 | `List<Component>` | Components | 存成列表形式的组件 | 
+| `Boolean` | IsActive | 是否激活 | 
 | `Vector2` | LocalPosition | 本地坐标 | 
 | `String` | Name | 名字 | 
 | `GameObject` | Parent | 父物体 | 
 | `Vector2` | Position | 世界坐标 | 
+| `List<Vector2>` | PosList | Mesh对象的列表 | 
 | `Scene` | Scene | 这个游戏物体属于哪个scene | 
 | `String` | Tag | 标签 | 
 
@@ -534,7 +531,7 @@ Events
 
 | Type | Name | Summary | 
 | --- | --- | --- | 
-| `Func<Vector2, Vector2, Boolean>` | ChangePositionEvnet | 当发生坐标改变时产生的回调事件,将自己的Position告诉组件,组件自行管理  参数一 发生改变之前所处的位置 参数二 发生改变之后所处的位置 | 
+| `Func<Vector2, Vector2, Boolean>` | ChangePositionEvent | 当发生坐标改变时产生的回调事件,将自己的Position告诉组件,组件自行管理  参数一 发生改变之前所处的位置 参数二 发生改变之后所处的位置 | 
 
 
 Methods
@@ -547,6 +544,7 @@ Methods
 | `List<GameObject>` | FindWithTag(`String` tag) | 在当前场景中根据标签寻找游戏物体, 若有多个则返回多个。 | 
 | `T` | GetComponent() | 获取指定组件 | 
 | `List<T>` | GetComponents() | 获取指定的类型及其子类的集合 | 
+| `void` | InitMesh(`List<Vector2>` list) | 进行多点初始化 | 
 | `void` | SetActive(`Boolean` value) | 设置自己所有组件的active以及所有子物体组件的active | 
 
 
@@ -554,12 +552,9 @@ Static Methods
 
 | Type | Name | Summary | 
 | --- | --- | --- | 
-| `T` | CreateWith(`String` name = GameObject, `String` tag = None, `GameObject` parent = null) | 3.20测试添加  提供一种新的更便捷的创建物体的思路.直接返回具体脚本而不是游戏物体 | 
+| `T` | CreateWith(`String` name = GameObject, `String` tag = None, `GameObject` parent = null, `Vector2` localPosition = null, `List<Vector2>` posList = null) | 3.20测试添加  提供一种新的更便捷的创建物体的思路.直接返回具体脚本而不是游戏物体 | 
 | `void` | Destroy(`GameObject` gameObject) | 销毁一个游戏物体 | 
 | `void` | Destroy(`GameObject` gameObject, `Single` delayTime) | 销毁一个游戏物体 | 
-| `void` | DontDestroyOnLoad(`GameObject` gameObject) | 将一个游戏物体的引用加入DontDestroyOnLoad | 
-| `GameObject` | Find(`String` sceneName, `String` name) | 在当前场景中根据名字寻找游戏物体, 若有多个同名物体也只返回一个。 | 
-| `List<GameObject>` | FindWithTag(`String` sceneName, `String` tag) | 在当前场景中根据标签寻找游戏物体, 若有多个则返回多个。 | 
 
 
 ## `HideInInspector`
@@ -804,30 +799,6 @@ Static Methods
 | `List<Vector2>` | GetMazeMesh(`Int32` height, `Int32` width) | 生成迷宫Mesh信息 包含的信息为墙的位置 | 
 
 
-## `Mesh`
-
-Mesh组件 默认生成单点Mesh
-```csharp
-public class Destroy.Mesh
-    : Component
-
-```
-
-Properties
-
-| Type | Name | Summary | 
-| --- | --- | --- | 
-| `List<Vector2>` | PosList | Mesh对象的列表 | 
-
-
-Methods
-
-| Type | Name | Summary | 
-| --- | --- | --- | 
-| `void` | Init(`List<Vector2>` list) | 进行多点初始化 | 
-| `Boolean` | Rotate() | TODO 这个方法需要重写或者删除  顺时针旋转90度,如果有碰撞的话会认为旋转失败 | 
-
-
 ## `MouseButton`
 
 鼠标按键
@@ -900,23 +871,6 @@ Fields
 | `Int32` | ServerSyncRate | //服务器同步频率 | 
 
 
-## `ObjectPool`
-
-对象池
-```csharp
-public class Destroy.ObjectPool
-
-```
-
-Methods
-
-| Type | Name | Summary | 
-| --- | --- | --- | 
-| `GameObject` | GetInstance() |  | 
-| `void` | PreAllocate(`Int32` count) |  | 
-| `void` | ReturnInstance(`GameObject` instance) |  | 
-
-
 ## `Physics`
 
 物理检测 待补完
@@ -932,9 +886,44 @@ Static Methods
 | `Boolean` | RayCast(`Collision` collision) | 射线检测,输入要的结构,和点集或者射线,返回是否发生了碰撞 | 
 
 
+## `RawRenderer`
+
+搞一个RawRenderer,尽可能的精简功能. 另外研究删除一下RP的depth,这个可能得等到alpha更新之后再说了
+```csharp
+public class Destroy.RawRenderer
+    : Component
+
+```
+
+Fields
+
+| Type | Name | Summary | 
+| --- | --- | --- | 
+| `Int32` | depth |  | 
+
+
+Properties
+
+| Type | Name | Summary | 
+| --- | --- | --- | 
+| `Int32` | Depth | 渲染深度 越低的渲染优先级越高 | 
+| `RendererMode` | Mode | 渲染模式 | 
+| `Dictionary<Vector2, RenderPoint>` | RendererPoints | 渲染结果,允许直接操作它来进行渲染.没毛病 | 
+
+
+Methods
+
+| Type | Name | Summary | 
+| --- | --- | --- | 
+| `void` | SetBackColor(`Color` backColor) | 更改背景色 | 
+| `void` | SetDepth(`Int32` depth) | 更改渲染深度 | 
+| `void` | SetForeColor(`Color` foreColor) | 更改前景色 | 
+| `void` | SetString(`String` str) | 更改渲染的字符 将string分割放入字典.不太好 | 
+
+
 ## `RayCastTarget`
 
-通过挂载这个组件来接收UI点击事件.
+通过挂载这个组件来接收UI点击事件.  其实这种实现方法是尤其优越性的.不过应该考虑一下更改mesh会产生的问题
 ```csharp
 public class Destroy.RayCastTarget
     : Component
@@ -945,7 +934,6 @@ Fields
 
 | Type | Name | Summary | 
 | --- | --- | --- | 
-| `List<Vector2>` | colliderList | 保存一个来自Mesh的引用.有点偷懒 | 
 | `Action` | OnClickEvent | 当点击组件时产生的事件 | 
 | `Action` | OnMoveInEvent | 当进入组件时产生的事件 | 
 | `Action` | OnMoveOutEvent | 当离开组件时产生的事件 | 
@@ -1005,37 +993,23 @@ Static Methods
 渲染组件,最基础的渲染组件只负责维护这点东西,理论上这个也是能用的.甚至不依赖Mesh组件,直接编辑渲染结果就好了
 ```csharp
 public class Destroy.Renderer
-    : Component
+    : RawRenderer
 
 ```
-
-Properties
-
-| Type | Name | Summary | 
-| --- | --- | --- | 
-| `Int32` | Depth | 渲染深度 越低的渲染优先级越高 | 
-| `RendererMode` | Mode | 渲染模式 | 
-| `Dictionary<Vector2, RenderPoint>` | RendererPoints | 渲染结果,允许直接操作它来进行渲染.没毛病 | 
-
 
 Methods
 
 | Type | Name | Summary | 
 | --- | --- | --- | 
-| `String` | GetString() | 获取渲染的字符串信息 | 
 | `void` | Init(`RendererMode` mode = GameObject, `Int32` depth = 2147483647) | 初始化的时候指定mode和深度. | 
 | `void` | Initialize() |  | 
 | `void` | OnAdd() |  | 
 | `void` | OnRemove() |  | 
 | `void` | Rendering(`RenderPoint` renderPoint) | 修改这个API,变为使用这个点填充所有Mesh | 
 | `void` | Rendering(`String` str) | 修改这个API,变为使用这个点填充所有Mesh | 
-| `void` | Rendering(`String` str, `Color` foreColor, `Color` backColor) | 修改这个API,变为使用这个点填充所有Mesh | 
+| `void` | Rendering(`String` str, `Color` foreColor = null, `Color` backColor = null) | 修改这个API,变为使用这个点填充所有Mesh | 
 | `void` | Rendering(`List<RenderPoint>` list) | 修改这个API,变为使用这个点填充所有Mesh | 
 | `void` | Rendering(`Dictionary<Vector2, RenderPoint>` dic) | 修改这个API,变为使用这个点填充所有Mesh | 
-| `void` | SetBackColor(`Color` backColor) | 更改背景色 | 
-| `void` | SetDepth(`Int32` depth) | 更改渲染深度 | 
-| `void` | SetForeColor(`Color` foreColor) | 更改前景色 | 
-| `void` | SetString(`String` str) | 更改渲染的字符 | 
 
 
 ## `RendererMode`
@@ -1225,7 +1199,7 @@ Static Properties
 | --- | --- | --- | 
 | `Scene` | ActiveScene | 当前激活的场景,所有新创建的对象都自动属于当前激活的场景 | 
 | `DefaultScene` | DefaultScene |  | 
-| `DontDestroyOnLoad` | DontDestroyOnLoad |  | 
+| `DontDestroyOnLoad` | DontDestroyOnLoadScene |  | 
 | `Int32` | SceneCount | 场景数量 | 
 | `Dictionary<String, Scene>` | Scenes | 字符串索引,保存着所有场景 | 
 
@@ -1234,6 +1208,9 @@ Static Methods
 
 | Type | Name | Summary | 
 | --- | --- | --- | 
+| `void` | DontDestroyOnLoad(`GameObject` gameObject) | 将一个游戏物体的引用加入DontDestroyOnLoad | 
+| `GameObject` | Find(`String` sceneName, `String` name) | 在指定场景中根据名字寻找游戏物体, 若有多个同名物体也只返回一个。 | 
+| `List<GameObject>` | FindWithTag(`String` sceneName, `String` tag) | 在指定场景中根据标签寻找游戏物体, 若有多个则返回多个。 | 
 | `void` | Init() | 在初始化的时候创建两个默认的Scene. 这两个Scene永远不会被销毁 | 
 | `void` | Load(`Scene` newScene, `LoadSceneMode` loadSceneMode = Single) | 加载场景 | 
 | `void` | SetActiveScene(`Scene` scene) | 设置某个场景为活动场景 | 
@@ -1259,7 +1236,6 @@ Methods
 | `void` | Invoke(`String` methodName, `Single` delayTime) | 延迟调用一个方法(该方法必须为实例无参public方法) | 
 | `Boolean` | IsInvoking(`String` methodName) | 该方法是否在延迟调用 | 
 | `void` | OnAdd() |  | 
-| `void` | OnCollision(`Collision` collision) | 重载来接收碰撞回调消息 | 
 | `void` | OnRemove() |  | 
 | `void` | Start() | 在生命周期的开始调用. 如果在Update中创建,那么就在下一次生命周期的时候调用 | 
 | `void` | Update() | 每帧调用一次 | 
@@ -1426,6 +1402,28 @@ Static Methods
 | `TextBox` | CreateTextBox(`Vector2` pos, `Int32` height, `Int32` width) | 文本框UI组件 | 
 
 
+## `UnicodeDrawing`
+
+```csharp
+public class Destroy.UnicodeDrawing
+
+```
+
+Static Fields
+
+| Type | Name | Summary | 
+| --- | --- | --- | 
+| `Char` | Block0_8 |  | 
+| `Char` | Block1_8 |  | 
+| `Char` | Block2_8 |  | 
+| `Char` | Block3_8 |  | 
+| `Char` | Block4_8 |  | 
+| `Char` | Block5_8 |  | 
+| `Char` | Block6_8 |  | 
+| `Char` | Block7_8 |  | 
+| `Char` | Block8_8 |  | 
+
+
 ## `Vector2`
 
 整数型二维向量  原Vector2Int更改为Vector2为了简化
@@ -1545,5 +1543,6 @@ Static Methods
 | Type | Name | Summary | 
 | --- | --- | --- | 
 | `void` | OpenWithEditor(`Action` action) | Winform的初始化. | 
+| `void` | OpenWithoutEditor(`Action` action) | 使用Winform渲染,但是不打开Editor组件.目前实现的有点偷懒 | 
 
 
