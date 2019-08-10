@@ -58,7 +58,7 @@ namespace HealerSimulator
         /// <summary>
         /// 创建一个label,由于renderer组件的强大.所以直接返回renderer对象就行了
         /// </summary>
-        public static Renderer CreateLabel(int width, string name = "StateLabel", string tag = "UI", GameObject parent = null, Vector2 localPosition = default)
+        public static Renderer CreateLabel(int width, string name = "StateLabel", string tag = "UI", GameObject parent = null, Vector2 localPosition = default(Vector2))
         {
             //左上的的label 长度20 表示正在释放的技能的名字和施法时间等
             var obj = new GameObject(name, tag, parent, localPosition, CreateLineMesh(width));

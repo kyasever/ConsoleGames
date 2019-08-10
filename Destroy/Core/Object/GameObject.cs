@@ -14,7 +14,7 @@
         /// <summary>
         /// 创建一个游戏物体 (相当于在当前场景中实例化)
         /// </summary>
-        public GameObject(string name = "GameObject", string tag = "None", GameObject parent = null,Vector2 localPosition = default, List<Vector2> posList = default)
+        public GameObject(string name = "GameObject", string tag = "None", GameObject parent = null,Vector2 localPosition = default(Vector2), List<Vector2> posList = default(List<Vector2>))
         {
             if (posList == null)
                 PosList = new List<Vector2>() { Vector2.Zero };
@@ -59,7 +59,7 @@
         /// 3.20测试添加
         /// 提供一种新的更便捷的创建物体的思路.直接返回具体脚本而不是游戏物体
         /// </summary>
-        public static T CreateWith<T>(string name = "GameObject", string tag = "None", GameObject parent = null ,Vector2 localPosition = default, List<Vector2> posList = default) where T : Component, new()
+        public static T CreateWith<T>(string name = "GameObject", string tag = "None", GameObject parent = null ,Vector2 localPosition = default(Vector2), List<Vector2> posList = default(List<Vector2>)) where T : Component, new()
         {
             GameObject obj = new GameObject(name, tag, parent, localPosition, posList);
             T com = obj.AddComponent<T>();
