@@ -256,7 +256,7 @@
         /// <param name="str">使用的字符串</param>
         /// <param name="foreColor">前景色</param>
         /// <param name="backColor">背景色</param>
-        public void Rendering(string str, Color foreColor = default, Color backColor = default)
+        public void Rendering(string str, Color foreColor = default(Color), Color backColor = default(Color))
         {
             if(foreColor == null)
             {
@@ -502,7 +502,7 @@
         /// <summary>
         /// 完整的初始化
         /// </summary>
-        public RenderPoint(string str = "  ", Color foreColor = default, Color backColor = default, int depth = int.MaxValue)
+        public RenderPoint(string str = "  ", Color foreColor = default(Color), Color backColor = default(Color), int depth = int.MaxValue)
         {
             Str = str;
             
