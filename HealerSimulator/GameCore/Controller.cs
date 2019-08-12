@@ -109,8 +109,9 @@ namespace HealerSimulator
                 c.CastingSkill.CastingRelease -= Time.DeltaTime;
                 if (c.CastingSkill.CastingRelease < 0)
                 {
-                    //技能出手,没有公cd
-                    game.CastSkill(c.CastingSkill, game.FocusCharacter);
+                    //技能出手 如果出手的时候已经死掉了,那么不能出手
+                    if (game.FocusCharacter.IsAlive)
+                        game.CastSkill(c.CastingSkill, game.FocusCharacter);
                     c.CastingSkill = null;
                 }
                 //空格键打断当前施法
@@ -161,6 +162,13 @@ namespace HealerSimulator
         }
     }
 
+    public struct SkillLog
+    {
+        public int damege;
+        public string Log;
+        public SkadaRecord Record;
+    }
+
     public static class SkillCaster
     {
         /// <summary>
@@ -204,7 +212,8 @@ namespace HealerSimulator
                 s.CDRelease = s.CD;
             }
             //输出结果
-            Debug.Log(sb.ToString());
+            
+            //Debug.Log(sb.ToString());
         }
 
         //向目标发动单体攻击

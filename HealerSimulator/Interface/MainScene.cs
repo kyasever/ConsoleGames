@@ -57,6 +57,15 @@ namespace HealerSimulator
         }
     }
 
+    public class DBMPanel : Script
+    {
+        //public static DBMPanel Create(Vector2 location)
+        //{
+        //    GameObject obj = new GameObject("DBMPanel", "GameState", localPosition: location);
+        //    var text = UIFactroy.CreateTextBox(location, 3, 10);
+        //}
+
+    }
 
 
 

@@ -36,6 +36,8 @@ namespace HealerSimulator
         /// 变动的数值
         /// </summary>
         public int Value;
+
+
     }
 
     /// <summary>
