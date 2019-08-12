@@ -4,12 +4,12 @@ Destroy引擎
 
 如果想贡献代码👍欢迎提交[Pull request](https://github.com/kyasever/ConsoleGames/pulls)
 
-同时本工程含有两个控制台游戏可供游玩.百度网盘分流下载.可能需要较高版本的.netframework运行库.
+同时本工程含有两个控制台游戏可供游玩.可以直接点击链接下载编译后版本,运行需要.netframework4.6.1
 * 图
-* [点击下载试玩][HealerSimulater(治疗模拟器)]() 扮演一个团队中的治疗者~~WOW打本模拟器~~ , 拯救团队于危难之中.~~保护我的敌人,痛击我的队友~~
+* [点击下载试玩][HealerSimulater(治疗模拟器)](https://github.com/kyasever/ConsoleGames/raw/master/HealerSimulator.rar) 扮演一个团队中的治疗者~~WOW打本模拟器~~ , 拯救团队于危难之中.~~保护我的敌人,痛击我的队友~~
 * 图
-* [点击下载试玩][WizardAdventrue(巫师冒险)]() 控制一队小队探索地下城,战胜敌人,战棋策略游戏.
-* [分流下载][Destroy.dll]()引擎编译后版本.
+* [点击下载试玩][WizardAdventrue(巫师冒险)](https://github.com/kyasever/ConsoleGames/raw/master/WizardAdvanture.rar) 控制一队小队探索地下城,战胜敌人,战棋策略游戏.
+* [分流下载][Destroy.dll](https://github.com/kyasever/ConsoleGames/raw/master/Destroy.dll)引擎编译后版本.
 
 ### 
 
