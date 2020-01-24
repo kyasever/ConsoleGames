@@ -14,31 +14,21 @@
         /// </summary>
         public static char BoxDrawingAdd(char c1, char c2)
         {
-            bool b1 = IsTabChar(c1);
-            bool b2 = IsTabChar(c2);
-            if (b1)
+            if (IsTabChar(c1))
             {
-                if (b2)
+                if (IsTabChar(c2))
                 {
                     BoxDrawingCharacter bdc1 = BoxDrawingCharacter.Prase(c1);
                     BoxDrawingCharacter bdc2 = BoxDrawingCharacter.Prase(c2);
-                    return (bdc1 + bdc2).ToChar();
                     //制表符运算
+                    return (bdc1 + bdc2).ToChar();
                 }
                 else
                 {
                     return c1;
                 }
             }
-            else if (b2)
-            {
-                return c2;
-            }
-            else
-            {
-                //默认输出右侧
-                return c2;
-            }
+            return c2;
         }
 
         /// <summary>

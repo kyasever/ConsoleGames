@@ -64,7 +64,11 @@ namespace Destroy.Winform
             toolStripStatusLabelMousePosition.Text = Input.MousePosition.ToString();
         }
 
-        public void UpdateLabel2(string s)
+        /// <summary>
+        /// 帧率更新
+        /// </summary>
+        /// <param name="s"></param>
+        public void UpdateLabelFrameCount(string s)
         {
             toolStripStatusLabel1.Text = s;
         }
@@ -189,17 +193,13 @@ namespace Destroy.Winform
 
 
         /// <summary>
-        /// panel绘制方法
+        /// panel绘制方法，将map渲染到panel上
         /// </summary>
-        public void Draw()
+        public void Draw(Bitmap map)
         {
             using (Graphics graphics = panelGameWindow.CreateGraphics())
             {
-                //lock(PreRenderer.bufferBitmap)
-                //{
-                    graphics.DrawImage(EditorRuntime.bufferBitmap, new PointF(0, 0));
-
-                //}
+                graphics.DrawImage(map, new PointF(0, 0));
                 EditorSystem.RenderCount++;
             }
         }

@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace Destroy.Winform
 {
     /// <summary>
-    /// 将引擎传来的数据处理为图像,受独立线程管辖
+    /// 将引擎传来的数据处理为图像,受独立线程管辖。
+    /// Core -> this -> form
     /// </summary>
     public class EditorRuntime
     {
@@ -22,35 +23,33 @@ namespace Destroy.Winform
             while (true)
             {
                 Thread.Sleep(0);
-                //将搜集到的列表转换为图片
+                //将引擎提供的原始数据绘制到图片上
                 PreDraw();
                 //将图片绘制到界面上
                 if (bufferBitmap != null)
-                    form.Draw();
-
+                    form.Draw(bufferBitmap);
             }
         }
 
         /// <summary>
-        /// 当前渲染的数据来源
+        /// 当前渲染的数据来源，先将其复制进一级缓存
         /// </summary>
         public static List<RenderPoint> renderList = new List<RenderPoint>();
 
         /// <summary>
-        /// 上次的渲染结果
+        /// 本次要渲染的结果，一级缓存
         /// </summary>
         public static List<RenderPoint> buffer = new List<RenderPoint>();
 
         /// <summary>
-        /// 差异化,然后只渲染差异化的内容
+        /// 上次的渲染结果，二级缓存，用于进行对比输出
         /// </summary>
-        public static List<int> diffIndex = new List<int>();
+        public static List<RenderPoint> bufferbuffer = new List<RenderPoint>();
 
         /// <summary>
         /// 第一次调用渲染的时候初始化buffer
         /// </summary>
         public static bool firstLoad = true;
-
 
         /// <summary>
         /// 用于缓存的图片
@@ -58,13 +57,9 @@ namespace Destroy.Winform
         public static Bitmap bufferBitmap;
 
 
-        /// <summary>
-        /// 二级缓存
-        /// </summary>
-        public static List<RenderPoint> bufferbuffer = new List<RenderPoint>();
 
         /// <summary>
-        /// 预加载缓存
+        /// 将引擎提供的原始数据绘制到图片上
         /// </summary>
         public static void PreDraw()
         {
@@ -75,10 +70,10 @@ namespace Destroy.Winform
 
             lock(renderList)
             {
-                bufferbuffer.Clear();
+                buffer.Clear();
                 foreach(var v in renderList)
                 {
-                    bufferbuffer.Add(v);
+                    buffer.Add(v);
                 }
             }
 
@@ -91,9 +86,9 @@ namespace Destroy.Winform
                 g = Graphics.FromImage(bufferBitmap);
                 g.FillRectangle(new SolidBrush(Config.DefaultBackColor.ToColor()),
                     new RectangleF(new Point(0, 0), new SizeF(Config.WindowsSize.X, Config.WindowsSize.Y)));
-                foreach (var r in bufferbuffer)
+                foreach (var r in buffer)
                 {
-                    buffer.Add(new RenderPoint());
+                    bufferbuffer.Add(new RenderPoint());
                 }
                 firstLoad = false;
             }
@@ -147,12 +142,12 @@ namespace Destroy.Winform
             #endregion
 
 
-            diffIndex = new List<int>();
+            List<int> diffIndex = new List<int>();
 
             //挑出不同的点
-            for (int i = 0; i < bufferbuffer.Count; i++)
+            for (int i = 0; i < buffer.Count; i++)
             {
-                if (!buffer[i].Equals(bufferbuffer[i]))
+                if (!bufferbuffer[i].Equals(buffer[i]))
                 {
                     diffIndex.Add(i);
                 }
@@ -161,7 +156,7 @@ namespace Destroy.Winform
 
             foreach (int index in diffIndex)
             {
-                RenderPoint rp = bufferbuffer[index];
+                RenderPoint rp = buffer[index];
 
                 solidBrushFore.Color = rp.ForeColor.ToColor();
                 solidBrushBack.Color = rp.BackColor.ToColor();
@@ -187,11 +182,20 @@ namespace Destroy.Winform
             }
 
             //复制缓存
-            for (int i = 0; i < bufferbuffer.Count; i++)
+            for (int i = 0; i < buffer.Count; i++)
             {
-                buffer[i] = bufferbuffer[i];
+                bufferbuffer[i] = buffer[i];
             }
             EditorSystem.PreRenderCount++;
+        }
+
+        /// <summary>
+        /// 将编辑器调试数据也绘制到图片上。 Editor信息最后绘制，位于最上层
+        /// </summary>
+        public static void EditorDraw() {
+            GameObject obj = FormEditor.Instanse.CurrertGameObject;
+            //Input.MousePositionInPixel;
+            //Vector2 screenV = EditorSyste
         }
 
     }

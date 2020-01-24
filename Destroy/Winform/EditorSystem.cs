@@ -51,7 +51,7 @@ namespace Destroy.Winform
             if(Time.TotalTime - lastTime > 1f)
             {
                 string s = new StringBuilder().AppendFormat("预渲染帧数:{0} | 游戏帧数:{1} | 逻辑帧数:{2}", PreRenderCount, RenderCount, TotalCount).ToString();
-                mainForm.UpdateLabel2(s);
+                mainForm.UpdateLabelFrameCount(s);
                 lastTime = Time.TotalTime;
                 PreRenderCount = 0;
                 RenderCount = 0;

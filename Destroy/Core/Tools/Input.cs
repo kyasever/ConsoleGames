@@ -112,14 +112,7 @@
         {
             get
             {
-                Vector2 posPixel = MousePositionInPixel;
-                Vector2 pos = new Vector2(posPixel.X / Config.RendererSize.X,
-                    posPixel.Y / Config.RendererSize.Y);
-                //改变坐标系
-                pos.Y = Config.ScreenHeight - pos.Y - 1;
-                //加上摄像机的坐标
-                pos += Camera.Main.Position;
-                return pos;
+                return Utils.Screen2World(MousePositionInPixel);
             }
         }
 

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Destroy", "Destroy\Destroy.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealerSimulator", "HealerSimulator\HealerSimulator.csproj", "{F1A3EC9C-1340-4E7F-A778-63D1C687853E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiceBattle", "DiceBattle\DiceBattle.csproj", "{1255AF3C-3D78-4F64-B5CE-113BC335DA03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{F1A3EC9C-1340-4E7F-A778-63D1C687853E}.Release|x64.Build.0 = Release|Any CPU
 		{F1A3EC9C-1340-4E7F-A778-63D1C687853E}.Release|x86.ActiveCfg = Release|Any CPU
 		{F1A3EC9C-1340-4E7F-A778-63D1C687853E}.Release|x86.Build.0 = Release|Any CPU
+		{1255AF3C-3D78-4F64-B5CE-113BC335DA03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1255AF3C-3D78-4F64-B5CE-113BC335DA03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1255AF3C-3D78-4F64-B5CE-113BC335DA03}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1255AF3C-3D78-4F64-B5CE-113BC335DA03}.Debug|x64.Build.0 = Debug|Any CPU
+		{1255AF3C-3D78-4F64-B5CE-113BC335DA03}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1255AF3C-3D78-4F64-B5CE-113BC335DA03}.Debug|x86.Build.0 = Debug|Any CPU
+		{1255AF3C-3D78-4F64-B5CE-113BC335DA03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1255AF3C-3D78-4F64-B5CE-113BC335DA03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1255AF3C-3D78-4F64-B5CE-113BC335DA03}.Release|x64.ActiveCfg = Release|Any CPU
+		{1255AF3C-3D78-4F64-B5CE-113BC335DA03}.Release|x64.Build.0 = Release|Any CPU
+		{1255AF3C-3D78-4F64-B5CE-113BC335DA03}.Release|x86.ActiveCfg = Release|Any CPU
+		{1255AF3C-3D78-4F64-B5CE-113BC335DA03}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

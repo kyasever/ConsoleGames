@@ -58,11 +58,10 @@
         /// <summary>
         /// 发生移动时在系统中对应的产生移动
         /// </summary>
-        private bool MoveTo(Vector2 from, Vector2 to)
+        private void MoveTo(Vector2 from, Vector2 to)
         {
             system.RemoveFromSystem(this, from);
             system.AddToSystem(this, to);
-            return true;
         }
     }
 }

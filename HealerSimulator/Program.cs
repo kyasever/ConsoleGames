@@ -14,7 +14,7 @@ namespace HealerSimulator
         private static void Main()
         {
             Config.TickPerSecond = 120;
-            Config.ScreenWidth = 70;
+            Config.ScreenWidth = 60;
             Config.ScreenHeight = 40;
             Config.CharWidth = CharWidthEnum.Double;
             //用编辑器模式开始游戏

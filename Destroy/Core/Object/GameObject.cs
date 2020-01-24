@@ -223,7 +223,7 @@
         /// 当发生坐标改变时产生的回调事件,将自己的Position告诉组件,组件自行管理
         /// 参数一 发生改变之前所处的位置 参数二 发生改变之后所处的位置
         /// </summary>
-        public event Func<Vector2, Vector2, bool> ChangePositionEvent;
+        public event Action<Vector2, Vector2> ChangePositionEvent;
 
         /// <summary>
         /// 世界坐标

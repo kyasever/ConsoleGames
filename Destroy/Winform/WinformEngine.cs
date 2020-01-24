@@ -11,8 +11,8 @@
     /// </summary>
     public class WinformEngine
     {
-        public static Thread FormThread;
-        public static Thread EditorThread;
+        internal static Thread FormThread;
+        internal static Thread EditorThread;
 
         /// <summary>
         /// 使用Winform渲染,但是不打开Editor组件.目前实现的有点偷懒
@@ -72,7 +72,7 @@
             //留给开发者的初始化接口,由中间层封装控制
             action.Invoke();
 
-
+            //一共有三个线程 winform，winform渲染，引擎核心
             //开启Editor线程
             FormThread = new Thread(() => { Application.Run(mainForm); });
             FormThread.Start();
