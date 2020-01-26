@@ -155,33 +155,44 @@ namespace Destroy.Winform
                 }
             }
 
+            void DrawPoint(RenderPoint rp,Point point) {
+                solidBrushFore.Color = rp.ForeColor.ToColor();
+                solidBrushBack.Color = rp.BackColor.ToColor();
+
+
+                g.FillRectangle(solidBrushBack, new RectangleF(new Point(point.X + 3, point.Y),
+                    new SizeF(Config.RendererSize.X, Config.RendererSize.Y)));
+                //if (CharUtils.GetCharWidth(rp.Str[0]) == 2)
+                if (rp.Str.Length == 1) {
+                    g.DrawString(rp.Str, fontCn, solidBrushFore, point);
+                }
+                else {
+                    g.DrawString(rp.Str[0].ToString(), fontEn, solidBrushFore, point);
+                    g.DrawString(rp.Str[1].ToString(), fontEn, solidBrushFore, new Point(point.X + 8, point.Y));
+                }
+            }
 
             foreach (int index in diffIndex)
             {
                 RenderPoint rp = buffer[index];
 
-                solidBrushFore.Color = rp.ForeColor.ToColor();
-                solidBrushBack.Color = rp.BackColor.ToColor();
-
                 int pixelX = index % (Config.ScreenWidth) * Config.RendererSize.X;
                 int pixelY = index / (Config.ScreenWidth) * Config.RendererSize.Y;
-                //DebugLog(new Vector2Int(pixelX, pixelY).ToString());
                 Point point = new Point(pixelX, pixelY);
-
-                g.FillRectangle(solidBrushBack, new RectangleF(new Point(point.X + 3, point.Y),
-                    new SizeF(Config.RendererSize.X, Config.RendererSize.Y)));
-                //if (CharUtils.GetCharWidth(rp.Str[0]) == 2)
-                if(rp.Str.Length == 1)
-                {
-                    g.DrawString(rp.Str, fontCn, solidBrushFore, point);
-                }
-                else
-                {
-                    g.DrawString(rp.Str[0].ToString(), fontEn, solidBrushFore, point);
-                    g.DrawString(rp.Str[1].ToString(), fontEn, solidBrushFore, new Point(pixelX + 8, pixelY));
-                }
-
+                
+                DrawPoint(rp, point);
             }
+
+            //GameObject obj = FormEditor.Instanse.CurrertGameObject;
+            //if (obj != null) {
+            //    Vector2 pos = Utils.World2Screen(obj.Position);
+            //    Point center = new Point(pos.X + 8, pos.Y + 8);
+            //    Pen linePen = new Pen(System.Drawing.Color.Red);
+            //    g.DrawLine(linePen, center, new Point(center.X + 100, center.Y));
+            //    linePen.Color = System.Drawing.Color.Blue;
+            //    g.DrawLine(linePen, center, new Point(center.X, center.Y + 100));
+            //}
+            //firstLoad = true;
 
             //复制缓存
             for (int i = 0; i < buffer.Count; i++)
@@ -189,15 +200,6 @@ namespace Destroy.Winform
                 bufferbuffer[i] = buffer[i];
             }
             EditorSystem.PreRenderCount++;
-        }
-
-        /// <summary>
-        /// 将编辑器调试数据也绘制到图片上。 Editor信息最后绘制，位于最上层
-        /// </summary>
-        public static void EditorDraw() {
-            GameObject obj = FormEditor.Instanse.CurrertGameObject;
-            //Input.MousePositionInPixel;
-            //Vector2 screenV = EditorSyste
         }
 
     }
