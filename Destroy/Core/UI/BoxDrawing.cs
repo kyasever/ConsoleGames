@@ -23,10 +23,25 @@
         /// '▋'
         /// </summary>
         public static char Block5_8 = '▋';
+        /// <summary>
+        /// ▌
+        /// </summary>
         public static char Block4_8 = '▌';
+        /// <summary>
+        /// ▍
+        /// </summary>
         public static char Block3_8 = '▍';
+        /// <summary>
+        /// ▎
+        /// </summary>
         public static char Block2_8 = '▎';
+        /// <summary>
+        /// ▏
+        /// </summary>
         public static char Block1_8 = '▏';
+        /// <summary>
+        ///  
+        /// </summary>
         public static char Block0_8 = ' ';
     }
 

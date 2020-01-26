@@ -60,9 +60,11 @@
     <Compile Include="Core\Tools\Maze.cs" />
     <Compile Include="Core\Tools\Utils\Utils.cs" />
     <Compile Include="Core\UI\BoxDrawing.cs" />
+    <Compile Include="Core\UI\ProgressBar.cs" />
     <Compile Include="Core\UI\SystemUI.cs" />
     <Compile Include="Core\Core\StandardIO.cs" />
     <Compile Include="Core\Core\Enums.cs" />
+    <Compile Include="Core\UI\UIUtils.cs" />
     <Compile Include="Standard\Box-TPS\CameraController.cs" />
     <Compile Include="Standard\Box-TPS\Shooter.cs" />
     <Compile Include="Standard\Box-TPS\TPSScene.cs" />

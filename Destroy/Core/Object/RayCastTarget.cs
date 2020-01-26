@@ -12,7 +12,7 @@
      */
 
     /// <summary>
-    /// 通过挂载这个组件来接收UI点击事件.
+    /// 通过挂载这个组件来接收UI鼠标点击事件.
     /// 其实这种实现方法是尤其优越性的.不过应该考虑一下更改mesh会产生的问题
     /// </summary>
     public class RayCastTarget : Component

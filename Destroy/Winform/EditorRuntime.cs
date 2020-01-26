@@ -22,6 +22,8 @@ namespace Destroy.Winform
             var form = FormEditor.Instanse;
             while (true)
             {
+                if (!RuntimeEngine.Enabled)
+                    break;
                 Thread.Sleep(0);
                 //将引擎提供的原始数据绘制到图片上
                 PreDraw();

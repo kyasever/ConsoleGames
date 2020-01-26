@@ -77,7 +77,7 @@
             FormThread = new Thread(() => { Application.Run(mainForm); });
             FormThread.Start();
             //这个解决方法很不优雅,但是必须等这个窗口创建完成了才能开始编辑器生命周期
-            Thread.Sleep(10);
+            Thread.Sleep(30);
             //这个线程负责进行无缝渲染,不和引擎同步
             EditorThread = new Thread(EditorRuntime.Run);
             EditorThread.Start();

@@ -342,6 +342,14 @@
     }
 
     /// <summary>
+    /// 像素化渲染组件.用于进行精细渲染. 可以精细到像素进行渲染.
+    /// </summary>
+    public class PixelRenderer
+    {
+
+    }
+
+    /// <summary>
     /// 标准输出点结构.所有的Renderer组件都会被处理为RenderPos的集合
     /// </summary>
     public struct RenderPoint

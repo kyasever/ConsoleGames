@@ -107,6 +107,15 @@
             set => GameObject.LocalPosition = value;
         }
 
+        /// <summary>
+        /// 设置父物体
+        /// </summary>
+        public void SetParent(GameObject parent) {
+            GameObject.Parent = parent;
+        }
+
+
+
         #endregion
     }
 }

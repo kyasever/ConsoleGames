@@ -103,9 +103,9 @@
                 rpListC2.Add(GetARandomPoint());
             }
 
-            RendererTestScript script = AddComponent<RendererTestScript>();
-            script.R1 = CreateChildR(posListC1, rpListC1);
-            script.R2 = CreateChildR(posListC2, rpListC2);
+            //RendererTestScript script = AddComponent<RendererTestScript>();
+            R1 = CreateChildR(posListC1, rpListC1);
+            R2 = CreateChildR(posListC2, rpListC2);
 
             RenderPoint GetARandomPoint()
             {
