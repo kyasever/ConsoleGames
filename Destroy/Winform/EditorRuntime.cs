@@ -33,6 +33,7 @@ namespace Destroy.Winform
             }
         }
 
+
         /// <summary>
         /// 当前渲染的数据来源，先将其复制进一级缓存
         /// </summary>

@@ -12,7 +12,7 @@ namespace WizardAdvanture
             level1,
             level2,
         }
-        public State state = State.begin;
+        public State state = State.level2;
 
         Scene scene;
         public BossCollection bossCollection;
