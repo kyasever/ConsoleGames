@@ -20,6 +20,10 @@ namespace Destroy.Winform
         public static void Run()
         {
             var form = FormEditor.Instanse;
+
+            bufferBitmap = new Bitmap(Config.WindowsSize.X, Config.WindowsSize.Y);
+            editorBitmap = new Bitmap(Config.WindowsSize.X, Config.WindowsSize.Y);
+
             while (true)
             {
                 if (!RuntimeEngine.Enabled)
@@ -27,9 +31,11 @@ namespace Destroy.Winform
                 Thread.Sleep(0);
                 //将引擎提供的原始数据绘制到图片上
                 PreDraw();
+                //DrawEditor();
                 //将图片绘制到界面上
-                if (bufferBitmap != null)
+                if (bufferBitmap != null) {
                     form.Draw(bufferBitmap);
+                }
             }
         }
 
@@ -59,13 +65,42 @@ namespace Destroy.Winform
         /// </summary>
         public static Bitmap bufferBitmap;
 
+        /// <summary>
+        /// editor渲染map
+        /// </summary>
+        public static Bitmap editorBitmap;
 
+
+
+        private static GameObject lastObj;
+
+        //好尴尬啊.. 还真就拿他没什么办法了. 这一套渲染不兼容之前的双缓冲方案. 除非取消双缓冲方案...
+        //之后有机会可能试一试不用双缓冲的新渲染计划
+        private static void DrawEditor() {
+            GameObject obj = FormEditor.Instanse.CurrertGameObject;
+            if (obj != lastObj) {
+                Debug.Log("refresh");
+                editorBitmap = new Bitmap(Config.WindowsSize.X, Config.WindowsSize.Y);
+                Graphics g = Graphics.FromImage(editorBitmap);
+
+
+                Vector2 pos = Utils.World2Screen(obj.Position);
+                Point center = new Point(pos.X + 8, pos.Y + 8);
+                Pen linePen = new Pen(System.Drawing.Color.Red);
+                linePen.Width = 5;
+                g.DrawLine(linePen, center, new Point(center.X + 100, center.Y));
+                linePen.Color = System.Drawing.Color.Blue;
+                g.DrawLine(linePen, center, new Point(center.X, center.Y - 100));
+            }
+            lastObj = obj;
+        }
 
         /// <summary>
         /// 将引擎提供的原始数据绘制到图片上
         /// </summary>
         public static void PreDraw()
         {
+            //将带渲染内容复制进缓存
             if (renderList.Count == 0)
             {
                 return;
@@ -82,20 +117,20 @@ namespace Destroy.Winform
 
 
             Graphics g;
+
             if (firstLoad)
             {
                 bufferBitmap = new Bitmap(Config.WindowsSize.X, Config.WindowsSize.Y);
-
                 g = Graphics.FromImage(bufferBitmap);
                 g.FillRectangle(new SolidBrush(Config.DefaultBackColor.ToColor()),
                     new RectangleF(new Point(0, 0), new SizeF(Config.WindowsSize.X, Config.WindowsSize.Y)));
+                bufferbuffer = new List<RenderPoint>();
                 foreach (var r in buffer)
                 {
                     bufferbuffer.Add(new RenderPoint());
                 }
                 firstLoad = false;
             }
-
             g = Graphics.FromImage(bufferBitmap);
 
             //初始化刷子
@@ -184,16 +219,7 @@ namespace Destroy.Winform
                 DrawPoint(rp, point);
             }
 
-            //GameObject obj = FormEditor.Instanse.CurrertGameObject;
-            //if (obj != null) {
-            //    Vector2 pos = Utils.World2Screen(obj.Position);
-            //    Point center = new Point(pos.X + 8, pos.Y + 8);
-            //    Pen linePen = new Pen(System.Drawing.Color.Red);
-            //    g.DrawLine(linePen, center, new Point(center.X + 100, center.Y));
-            //    linePen.Color = System.Drawing.Color.Blue;
-            //    g.DrawLine(linePen, center, new Point(center.X, center.Y + 100));
-            //}
-            //firstLoad = true;
+           
 
             //复制缓存
             for (int i = 0; i < buffer.Count; i++)

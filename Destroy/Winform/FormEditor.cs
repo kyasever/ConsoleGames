@@ -200,6 +200,7 @@ namespace Destroy.Winform
             using (Graphics graphics = panelGameWindow.CreateGraphics())
             {
                 graphics.DrawImage(map, new PointF(0, 0));
+                //graphics.DrawImage(EditorRuntime.editorBitmap, new PointF(0, 0));
                 EditorSystem.RenderCount++;
             }
         }
